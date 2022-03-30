@@ -1,5 +1,6 @@
 ﻿using MarvelousConfigs.BLL.Services;
 using MarvelousConfigs.DAL.Repositories;
+using MassTransit;
 using NLog.Extensions.Logging;
 
 namespace MarvelousConfigs.API.Extensions
@@ -26,6 +27,28 @@ namespace MarvelousConfigs.API.Extensions
                 loggingBuilder.ClearProviders();
                 loggingBuilder.SetMinimumLevel(LogLevel.Information);
                 loggingBuilder.AddNLog(config);
+            });
+        }
+
+        public static void AddMassTransit(this IServiceCollection services)
+        {
+            services.AddMassTransit(x =>
+            {
+                //x.AddConsumer<>();
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host("rabbitmq://80.78.240.16", hst =>
+                    {
+                        hst.Username("nafanya");
+                        hst.Password("qwe!23");
+                    });
+
+                    //cfg.ReceiveEndpoint("", x =>
+                    //{
+                    //    x.ConfigureConsumer<>(context);
+                    //});
+
+                });
             });
         }
     }

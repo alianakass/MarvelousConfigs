@@ -35,6 +35,7 @@ builder.Services.AddMemoryCache();
 builder.Services.RegisterRepositories();
 builder.Services.RegisterServices();
 builder.Services.RegisterLogger(config);
+builder.Services.AddMassTransit();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
