@@ -19,7 +19,7 @@ namespace MarvelousConfigs.BLL.Services
             _map = mapper;
             _cache = cache;
             SetCache().Wait();
-        }      
+        }
 
         public async Task<int> AddMicroservice(MicroserviceModel microservice)
         {

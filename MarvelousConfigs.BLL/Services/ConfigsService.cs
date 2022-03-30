@@ -19,7 +19,7 @@ namespace MarvelousConfigs.BLL.Services
             _map = mapper;
             _cache = cache;
             SetCache().Wait();
-        }       
+        }
 
         public async Task<int> AddConfig(ConfigModel config)
         {
@@ -28,7 +28,7 @@ namespace MarvelousConfigs.BLL.Services
 
             if (id > 0)
             {
-               await Set(id, config);
+                await Set(id, config);
             }
 
             return id;
