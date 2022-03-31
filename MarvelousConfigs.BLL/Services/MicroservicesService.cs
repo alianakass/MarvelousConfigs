@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
-using MarvelousConfigs.BLL.Exeptions;
+using MarvelousConfigs.BLL.Cache;
 using MarvelousConfigs.BLL.Models;
 using MarvelousConfigs.DAL.Entities;
 using MarvelousConfigs.DAL.Repositories;
-using Microsoft.Extensions.Caching.Memory;
 
 namespace MarvelousConfigs.BLL.Services
 {
@@ -11,14 +10,13 @@ namespace MarvelousConfigs.BLL.Services
     {
         private readonly IMicroserviceRepository _rep;
         private readonly IMapper _map;
-        private IMemoryCache _cache;
+        private IMicroserviceCache _cache;
 
-        public MicroservicesService(IMicroserviceRepository repository, IMapper mapper, IMemoryCache cache)
+        public MicroservicesService(IMicroserviceRepository repository, IMapper mapper, IMicroserviceCache cache)
         {
             _rep = repository;
             _map = mapper;
             _cache = cache;
-            SetCache().Wait();
         }
 
         public async Task<int> AddMicroservice(MicroserviceModel microservice)
@@ -26,7 +24,7 @@ namespace MarvelousConfigs.BLL.Services
             int id = await _rep.AddMicroservice(_map.Map<Microservice>(microservice));
             if (id > 0)
             {
-                await Set(id, microservice);
+                await _cache.Set(id, microservice);
             }
             return id;
         }
@@ -34,10 +32,10 @@ namespace MarvelousConfigs.BLL.Services
         public async Task UpdateMicroservice(int id, MicroserviceModel microservice)
         {
             MicroserviceModel service = null;
-            await TryGetValue(id, service);
+            await _cache.TryGetValue(id, service);
             await _rep.UpdateMicroserviceById(id, _map.Map<Microservice>(microservice));
-            _cache.Remove(id);
-            await Set(id, _map.Map<MicroserviceModel>(await _rep.GetMicroserviceById(id)));
+            //_cache.Remove(id);
+            await _cache.Set(id, _map.Map<MicroserviceModel>(await _rep.GetMicroserviceById(id)));
         }
 
         public async Task<List<MicroserviceModel>> GetAllMicroservices()
@@ -53,7 +51,7 @@ namespace MarvelousConfigs.BLL.Services
         public async Task<MicroserviceWithConfigsModel> GetMicroserviceWithConfigsById(int id)
         {
             MicroserviceModel service = null;
-            await TryGetValue(id, service);
+            await _cache.TryGetValue(id, service);
             var serviceWithConfigs = await _rep.GetMicroserviceWithConfigsById(id);
             return _map.Map<MicroserviceWithConfigsModel>(serviceWithConfigs);
         }
@@ -61,7 +59,7 @@ namespace MarvelousConfigs.BLL.Services
         public async Task DeleteMicroservice(int id)
         {
             MicroserviceModel service = null;
-            await TryGetValue(id, service);
+            await _cache.TryGetValue(id, service);
             await _rep.DeleteOrRestoreMicroserviceById(id, true);
             _cache.Remove(id);
         }
@@ -69,40 +67,9 @@ namespace MarvelousConfigs.BLL.Services
         public async Task RestoreMicroservice(int id)
         {
             MicroserviceModel service = null;
-            await TryGetValue(id, service);
+            await _cache.TryGetValue(id, service);
             await _rep.DeleteOrRestoreMicroserviceById(id, false);
-            await Set(id, service);
-        }
-
-        private async Task SetCache()
-        {
-            var microservices = _map.Map<List<MicroserviceModel>>(await GetAllMicroservices());
-            foreach (var microservice in microservices)
-            {
-                MicroserviceModel microserviceModel = microservice;
-                if (!_cache.TryGetValue(microservice.Id, out microserviceModel))
-                {
-                    await Set(microservice.Id, microservice);
-                }
-            }
-        }
-
-        private async Task Set(int id, object service)
-        {
-            _cache.Set(id, service, new MemoryCacheEntryOptions().
-                 SetSlidingExpiration(TimeSpan.FromHours(24)));
-        }
-
-        private async Task TryGetValue(int id, object service)
-        {
-            if (!_cache.TryGetValue(id, out service))
-            {
-                service = _map.Map<MicroserviceModel>(await _rep.GetMicroserviceById(id));
-                if (service == null)
-                {
-                    throw new EntityNotFoundException($"microservice {id} not found");
-                }
-            }
+            await _cache.Set(id, service);
         }
     }
 }

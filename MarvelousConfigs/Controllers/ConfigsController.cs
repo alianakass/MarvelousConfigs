@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MarvelousConfigs.API.Attributes;
 using MarvelousConfigs.API.Models;
+using MarvelousConfigs.BLL.Cache;
 using MarvelousConfigs.BLL.Models;
 using MarvelousConfigs.BLL.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -15,12 +16,14 @@ namespace MarvelousConfigs.API.Controllers
         private readonly IConfigsService _service;
         private readonly IMapper _map;
         private readonly ILogger<ConfigsController> _logger;
-
-        public ConfigsController(IMapper mapper, IConfigsService service, ILogger<ConfigsController> logger)
+        private readonly IConfigCache _cache;
+        public ConfigsController(IMapper mapper, IConfigsService service, ILogger<ConfigsController> logger, IConfigCache cache)
         {
             _map = mapper;
             _service = service;
             _logger = logger;
+            _cache = cache;
+            _cache.SetCache().Wait();
         }
 
         [HttpPost]

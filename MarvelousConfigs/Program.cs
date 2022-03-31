@@ -31,7 +31,7 @@ builder.Services.AddControllers()
                     opts.JsonSerializerOptions.Converters.Add(enumConverter);
                 });
 
-builder.Services.AddMemoryCache();
+builder.Services.AddCache();
 builder.Services.RegisterRepositories();
 builder.Services.RegisterServices();
 builder.Services.RegisterLogger(config);

@@ -1,4 +1,5 @@
-﻿using MarvelousConfigs.BLL.Services;
+﻿using MarvelousConfigs.BLL.Cache;
+using MarvelousConfigs.BLL.Services;
 using MarvelousConfigs.DAL.Repositories;
 using MassTransit;
 using NLog.Extensions.Logging;
@@ -11,6 +12,8 @@ namespace MarvelousConfigs.API.Extensions
         {
             services.AddScoped<IMicroservicesService, MicroservicesService>();
             services.AddScoped<IConfigsService, ConfigsService>();
+            services.AddScoped<IConfigCache, ConfigCache>();
+            services.AddScoped<IMicroserviceCache, MicroserviceCache>();
         }
 
         public static void RegisterRepositories(this IServiceCollection services)
@@ -27,6 +30,15 @@ namespace MarvelousConfigs.API.Extensions
                 loggingBuilder.ClearProviders();
                 loggingBuilder.SetMinimumLevel(LogLevel.Information);
                 loggingBuilder.AddNLog(config);
+            });
+        }
+
+        public static void AddCache(this IServiceCollection services)
+        {
+            services.AddMemoryCache(options =>
+            {
+                options.CompactionPercentage = 0.02d;
+                options.ExpirationScanFrequency = TimeSpan.FromHours(12);
             });
         }
 
