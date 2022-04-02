@@ -10,7 +10,7 @@ namespace MarvelousConfigs.BLL.Services
     {
         private readonly IConfigsRepository _rep;
         private readonly IMapper _map;
-        private IConfigCache _cache;
+        private readonly IConfigCache _cache;
         public delegate Task<Config> GetById(int id);
         public GetById getById;
 

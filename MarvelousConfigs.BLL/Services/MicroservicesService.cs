@@ -10,7 +10,7 @@ namespace MarvelousConfigs.BLL.Services
     {
         private readonly IMicroserviceRepository _rep;
         private readonly IMapper _map;
-        private IMicroserviceCache _cache;
+        private readonly IMicroserviceCache _cache;
         public delegate Task<Microservice> GetById(int id);
         public GetById getById;
 
