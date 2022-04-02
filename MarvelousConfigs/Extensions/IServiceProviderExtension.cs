@@ -1,6 +1,7 @@
 ﻿using MarvelousConfigs.BLL.Cache;
 using MarvelousConfigs.BLL.Services;
 using MarvelousConfigs.DAL.Repositories;
+using MassTransit;
 using NLog.Extensions.Logging;
 
 namespace MarvelousConfigs.API.Extensions
@@ -32,35 +33,26 @@ namespace MarvelousConfigs.API.Extensions
             });
         }
 
-        public static void AddCache(this IServiceCollection services)
-        {
-            services.AddMemoryCache(options =>
-            {
-                options.CompactionPercentage = 0.02d;
-                options.ExpirationScanFrequency = TimeSpan.FromHours(12);
-            });
-        }
-
         public static void AddMassTransit(this IServiceCollection services)
         {
-            //services.AddMassTransit(x =>
-            //{
-            //    //x.AddConsumer<>();
-            //    x.UsingRabbitMq((context, cfg) =>
-            //    {
-            //        cfg.Host("rabbitmq://80.78.240.16", hst =>
-            //        {
-            //            hst.Username("nafanya");
-            //            hst.Password("qwe!23");
-            //        });
+            services.AddMassTransit(x =>
+            {
+                //x.AddConsumer<>();
+                x.UsingRabbitMq((context, cfg) =>
+                {
+                    cfg.Host("rabbitmq://80.78.240.16", hst =>
+                    {
+                        hst.Username("nafanya");
+                        hst.Password("qwe!23");
+                    });
 
-            //        //cfg.ReceiveEndpoint("", x =>
-            //        //{
-            //        //    x.ConfigureConsumer<>(context);
-            //        //});
+                    //cfg.ReceiveEndpoint("", x =>
+                    //{
+                    //    x.ConfigureConsumer<>(context);
+                    //});
 
-            //    });
-            //});
+                });
+            });
         }
     }
 }

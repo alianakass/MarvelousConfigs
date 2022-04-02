@@ -32,15 +32,14 @@ namespace MarvelousConfigs.BLL.Cache
 
         public async Task Set(int id, object service)
         {
-            _cache.Set(id, service, new MemoryCacheEntryOptions().
-                 SetSlidingExpiration(TimeSpan.FromHours(24)));
+            _cache.Set(id, service);
         }
 
         public async Task TryGetValue(int id, object service, GetById getById)
         {
             if (!_cache.TryGetValue(id, out service))
             {
-                service = _map.Map<MicroserviceModel>(getById(id));
+                service = _map.Map<MicroserviceModel>(await getById(id));
                 if (service == null)
                 {
                     throw new EntityNotFoundException($"microservice {id} not found");

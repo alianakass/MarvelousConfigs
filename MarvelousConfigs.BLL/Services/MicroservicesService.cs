@@ -59,7 +59,7 @@ namespace MarvelousConfigs.BLL.Services
         public async Task<List<MicroserviceModel>> GetAllMicroservices()
         {
             var services = _map.Map<List<MicroserviceModel>>(await _rep.GetAllMicroservices());
-            await _cache.SetCache(services);
+            _cache.SetCache(services);
             return services;
         }
 

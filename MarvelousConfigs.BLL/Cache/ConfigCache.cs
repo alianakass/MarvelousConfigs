@@ -31,12 +31,7 @@ namespace MarvelousConfigs.BLL.Cache
 
         public void Set(int id, object config)
         {
-            var options = new MemoryCacheEntryOptions()
-            {
-                SlidingExpiration = TimeSpan.FromHours(12),
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(24),
-            };
-            _cache.Set(id, config, options);
+            _cache.Set(id, config);
         }
 
         public async Task TryGetValue(int id, object conf, GetById getById)

@@ -52,13 +52,6 @@ namespace MarvelousConfigs.BLL.Services
             _cache.Set(id, _map.Map<ConfigModel>(((_rep.GetConfigById(id).Result))));
         }
 
-        public async Task<List<ConfigModel>> GetAllConfigs()
-        {
-            var cfg = _map.Map<List<ConfigModel>>(await _rep.GetAllConfigs());
-            _cache.SetCache(cfg);
-            return cfg;
-        }
-
         public async Task DeleteConfigById(int id)
         {
             ConfigModel conf = _map.Map<ConfigModel>(getById);
@@ -77,5 +70,11 @@ namespace MarvelousConfigs.BLL.Services
             _cache.Set(id, conf);
         }
 
+        public async Task<List<ConfigModel>> GetAllConfigs()
+        {
+            var cfg = _map.Map<List<ConfigModel>>(await _rep.GetAllConfigs());
+            _cache.SetCache(cfg);
+            return cfg;
+        }
     }
 }
