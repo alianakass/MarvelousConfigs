@@ -36,6 +36,8 @@
 
   <ItemGroup>
     <Folder Include="RMQ\Consumers\" />
+    <Folder Include="RMQ\" />
+    <Folder Include="RMQ\Producers\" />
   </ItemGroup>
 
 </Project>

@@ -13,7 +13,7 @@ namespace MarvelousConfigs.API.Controllers
     {
         private readonly IMicroservicesService _service;
         private readonly IMapper _map;
-        private readonly ILogger _logger;
+        private readonly ILogger<MicroservicesController> _logger;
 
         public MicroservicesController(IMapper mapper, IMicroservicesService service, ILogger<MicroservicesController> logger)
         {
