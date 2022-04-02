@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MarvelousConfigs.API.Attributes;
 using MarvelousConfigs.API.Models;
+using MarvelousConfigs.BLL.Cache;
 using MarvelousConfigs.BLL.Models;
 using MarvelousConfigs.BLL.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -15,8 +16,7 @@ namespace MarvelousConfigs.API.Controllers
         private readonly IConfigsService _service;
         private readonly IMapper _map;
         private readonly ILogger<ConfigsController> _logger;
-
-        public ConfigsController(IMapper mapper, IConfigsService service, ILogger<ConfigsController> logger)
+        public ConfigsController(IMapper mapper, IConfigsService service, ILogger<ConfigsController> logger, IConfigCache cache)
         {
             _map = mapper;
             _service = service;
@@ -31,7 +31,7 @@ namespace MarvelousConfigs.API.Controllers
         {
             _logger.LogInformation($"Request to add new config");
             int id = await _service.AddConfig(_map.Map<ConfigModel>(model));
-            _logger.LogInformation($"Response to a request for add new config");
+            _logger.LogInformation($"Response to a request for add new config id {id}");
             return Ok(id);
         }
 

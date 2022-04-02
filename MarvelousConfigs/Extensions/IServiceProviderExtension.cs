@@ -1,4 +1,5 @@
-﻿using MarvelousConfigs.BLL.Services;
+﻿using MarvelousConfigs.BLL.Cache;
+using MarvelousConfigs.BLL.Services;
 using MarvelousConfigs.DAL.Repositories;
 using MassTransit;
 using NLog.Extensions.Logging;
@@ -11,6 +12,8 @@ namespace MarvelousConfigs.API.Extensions
         {
             services.AddScoped<IMicroservicesService, MicroservicesService>();
             services.AddScoped<IConfigsService, ConfigsService>();
+            services.AddSingleton<IConfigCache, ConfigCache>();
+            services.AddSingleton<IMicroserviceCache, MicroserviceCache>();
         }
 
         public static void RegisterRepositories(this IServiceCollection services)

@@ -37,6 +37,17 @@
         "CONFIG_CONNECTION_STRING": "Data Source = 80.78.240.16; Initial Catalog = ConfigDB; Persist Security Info=True; User ID = student; Password = qwe!23; Pooling = False; MultipleActiveResultSets = False; Connect Timeout = 60; Encrypt = False; TrustServerCertificate = False",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
+    },
+    "MyLocal": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "LOG_DIRECTORY": "C:/Users/alian/source/repos/MarvelousConfigs",
+        "CONFIG_CONNECTION_STRING": "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Config;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False",
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
     }
   }
 }
