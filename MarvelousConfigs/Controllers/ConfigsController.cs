@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using MarvelousConfigs.API.Attributes;
 using MarvelousConfigs.API.Models;
+using MarvelousConfigs.API.RMQ.Producers;
+using MarvelousConfigs.BLL.Cache;
 using MarvelousConfigs.BLL.Models;
 using MarvelousConfigs.BLL.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -8,37 +9,45 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace MarvelousConfigs.API.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/configs")]
     public class ConfigsController : ControllerBase
     {
         private readonly IConfigsService _service;
         private readonly IMapper _map;
         private readonly ILogger<ConfigsController> _logger;
+        private readonly IMarvelousConfigsProducer _prod;
 
-        public ConfigsController(IMapper mapper, IConfigsService service, ILogger<ConfigsController> logger)
+        public ConfigsController(IMapper mapper, IConfigsService service,
+            ILogger<ConfigsController> logger, IConfigCache cache, IMarvelousConfigsProducer producer)
         {
             _map = mapper;
             _service = service;
             _logger = logger;
+            _prod = producer;
         }
 
+        //api/configs
         [HttpPost]
-        [SwaggerResponse(200, "OK", typeof(MicroserviceWithConfigsResponceModel))]
-        [SwaggerResponse(400, "Bad Request", typeof(ExceptionResponse))]
-        [SwaggerResponse(404, "NotFound", typeof(ExceptionResponse))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [SwaggerOperation("Add config")]
         public async Task<ActionResult<int>> AddConfig([FromBody] ConfigInputModel model)
         {
             _logger.LogInformation($"Request to add new config");
             int id = await _service.AddConfig(_map.Map<ConfigModel>(model));
-            _logger.LogInformation($"Response to a request for add new config");
-            return Ok(id);
+            _logger.LogInformation($"Response to a request for add new config id {id}");
+            //await _prod.NotifyConfigurationAdded(id);
+            return StatusCode(StatusCodes.Status201Created, id);
         }
 
+        //api/configs/42
         [HttpDelete("{id}")]
-        [SwaggerResponse(204, "NoContent")]
-        [SwaggerResponse(400, "Bad Request", typeof(ExceptionResponse))]
-        [SwaggerResponse(404, "NotFound", typeof(ExceptionResponse))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [SwaggerOperation("Delete config by id")]
         public async Task<ActionResult> DeleteConfigById(int id)
         {
             _logger.LogInformation($"Request to delete config by id{id}");
@@ -47,10 +56,12 @@ namespace MarvelousConfigs.API.Controllers
             return NoContent();
         }
 
+        //api/configs/42
         [HttpPatch("{id}")]
-        [SwaggerResponse(204, "NoContent")]
-        [SwaggerResponse(400, "Bad Request", typeof(ExceptionResponse))]
-        [SwaggerResponse(404, "NotFound", typeof(ExceptionResponse))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [SwaggerOperation("Restore config by id")]
         public async Task<ActionResult> RestoreConfigById(int id)
         {
             _logger.LogInformation($"Request to restore config by id{id}");
@@ -59,9 +70,11 @@ namespace MarvelousConfigs.API.Controllers
             return NoContent();
         }
 
+        //api/configs
         [HttpGet]
-        [SwaggerResponse(200, "OK", typeof(MicroserviceWithConfigsResponceModel))]
-        [SwaggerResponse(400, "Bad Request", typeof(ExceptionResponse))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [SwaggerOperation("Get all configs")]
         public async Task<ActionResult<List<ConfigResponceModel>>> GetAllConfigs()
         {
             _logger.LogInformation($"Request to get all configs");
@@ -70,10 +83,12 @@ namespace MarvelousConfigs.API.Controllers
             return Ok(configs);
         }
 
+        //api/configs/42
         [HttpPut("{id}")]
-        [SwaggerResponse(204, "NoContent")]
-        [SwaggerResponse(400, "Bad Request", typeof(ExceptionResponse))]
-        [SwaggerResponse(404, "NotFound", typeof(ExceptionResponse))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [SwaggerOperation("Update config by id")]
         public async Task<ActionResult<List<ConfigResponceModel>>> UpdateConfigById(int id, [FromBody] ConfigInputModel model)
         {
             _logger.LogInformation($"Request to update config by id{id}");
