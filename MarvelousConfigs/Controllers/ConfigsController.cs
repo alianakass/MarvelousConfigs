@@ -16,14 +16,11 @@ namespace MarvelousConfigs.API.Controllers
         private readonly IConfigsService _service;
         private readonly IMapper _map;
         private readonly ILogger<ConfigsController> _logger;
-        private readonly IConfigCache _cache;
         public ConfigsController(IMapper mapper, IConfigsService service, ILogger<ConfigsController> logger, IConfigCache cache)
         {
             _map = mapper;
             _service = service;
             _logger = logger;
-            _cache = cache;
-            _cache.SetCache().Wait();
         }
 
         [HttpPost]
@@ -34,7 +31,7 @@ namespace MarvelousConfigs.API.Controllers
         {
             _logger.LogInformation($"Request to add new config");
             int id = await _service.AddConfig(_map.Map<ConfigModel>(model));
-            _logger.LogInformation($"Response to a request for add new config");
+            _logger.LogInformation($"Response to a request for add new config id {id}");
             return Ok(id);
         }
 

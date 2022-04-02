@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using MarvelousConfigs.BLL.Exeptions;
 using MarvelousConfigs.BLL.Models;
-using MarvelousConfigs.DAL.Repositories;
 using Microsoft.Extensions.Caching.Memory;
+using static MarvelousConfigs.BLL.Services.ConfigsService;
 
 namespace MarvelousConfigs.BLL.Cache
 {
@@ -10,22 +10,22 @@ namespace MarvelousConfigs.BLL.Cache
     {
         private readonly IMemoryCache _cache;
         private readonly IMapper _map;
-        private readonly IConfigsRepository _rep;
-        public ConfigCache(IMemoryCache cache, IMapper mapper, IConfigsRepository repository)
+
+        public ConfigCache(IMemoryCache cache, IMapper mapper)
         {
             _cache = cache;
             _map = mapper;
-            _rep = repository;
         }
 
-        public async Task SetCache()
+        public void SetCache(List<ConfigModel> configs)
         {
-            var configs = _map.Map<List<ConfigModel>>(await _rep.GetAllConfigs());
             foreach (ConfigModel config in configs)
             {
-                ConfigModel configModel = config;
-                await TryGetValue(config.Id, config);
-                Set(config.Id, config);
+                MicroserviceModel microserviceModel = null;
+                if (!_cache.TryGetValue(config.Id, out microserviceModel))
+                {
+                    Set(config.Id, config);
+                }
             }
         }
 
@@ -39,11 +39,11 @@ namespace MarvelousConfigs.BLL.Cache
             _cache.Set(id, config, options);
         }
 
-        public async Task TryGetValue(int id, object conf)
+        public async Task TryGetValue(int id, object conf, GetById getById)
         {
             if (!_cache.TryGetValue(id, out conf))
             {
-                conf = _map.Map<ConfigModel>(await _rep.GetConfigById(id));
+                conf = _map.Map<ConfigModel>(await getById(id));
                 if (conf == null)
                 {
                     throw new EntityNotFoundException($"configuration {id} not found");

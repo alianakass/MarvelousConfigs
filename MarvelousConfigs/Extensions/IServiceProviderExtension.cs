@@ -1,7 +1,6 @@
 ﻿using MarvelousConfigs.BLL.Cache;
 using MarvelousConfigs.BLL.Services;
 using MarvelousConfigs.DAL.Repositories;
-using MassTransit;
 using NLog.Extensions.Logging;
 
 namespace MarvelousConfigs.API.Extensions
@@ -12,8 +11,8 @@ namespace MarvelousConfigs.API.Extensions
         {
             services.AddScoped<IMicroservicesService, MicroservicesService>();
             services.AddScoped<IConfigsService, ConfigsService>();
-            services.AddScoped<IConfigCache, ConfigCache>();
-            services.AddScoped<IMicroserviceCache, MicroserviceCache>();
+            services.AddSingleton<IConfigCache, ConfigCache>();
+            services.AddSingleton<IMicroserviceCache, MicroserviceCache>();
         }
 
         public static void RegisterRepositories(this IServiceCollection services)
@@ -44,24 +43,24 @@ namespace MarvelousConfigs.API.Extensions
 
         public static void AddMassTransit(this IServiceCollection services)
         {
-            services.AddMassTransit(x =>
-            {
-                //x.AddConsumer<>();
-                x.UsingRabbitMq((context, cfg) =>
-                {
-                    cfg.Host("rabbitmq://80.78.240.16", hst =>
-                    {
-                        hst.Username("nafanya");
-                        hst.Password("qwe!23");
-                    });
+            //services.AddMassTransit(x =>
+            //{
+            //    //x.AddConsumer<>();
+            //    x.UsingRabbitMq((context, cfg) =>
+            //    {
+            //        cfg.Host("rabbitmq://80.78.240.16", hst =>
+            //        {
+            //            hst.Username("nafanya");
+            //            hst.Password("qwe!23");
+            //        });
 
-                    //cfg.ReceiveEndpoint("", x =>
-                    //{
-                    //    x.ConfigureConsumer<>(context);
-                    //});
+            //        //cfg.ReceiveEndpoint("", x =>
+            //        //{
+            //        //    x.ConfigureConsumer<>(context);
+            //        //});
 
-                });
-            });
+            //    });
+            //});
         }
     }
 }

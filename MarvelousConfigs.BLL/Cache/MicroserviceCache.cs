@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using MarvelousConfigs.BLL.Exeptions;
 using MarvelousConfigs.BLL.Models;
-using MarvelousConfigs.DAL.Repositories;
 using Microsoft.Extensions.Caching.Memory;
+using static MarvelousConfigs.BLL.Services.MicroservicesService;
 
 namespace MarvelousConfigs.BLL.Cache
 {
@@ -11,18 +11,15 @@ namespace MarvelousConfigs.BLL.Cache
 
         private readonly IMemoryCache _cache;
         private readonly IMapper _map;
-        private readonly IMicroserviceRepository _rep;
 
-        public MicroserviceCache(IMemoryCache cache, IMapper mapper, IMicroserviceRepository repository)
+        public MicroserviceCache(IMemoryCache cache, IMapper mapper)
         {
             _cache = cache;
             _map = mapper;
-            _rep = repository;
         }
 
-        public async Task SetCache()
+        public async Task SetCache(List<MicroserviceModel> microservices)
         {
-            var microservices = _map.Map<List<MicroserviceModel>>(await _rep.GetAllMicroservices());
             foreach (var microservice in microservices)
             {
                 MicroserviceModel microserviceModel = microservice;
@@ -39,11 +36,11 @@ namespace MarvelousConfigs.BLL.Cache
                  SetSlidingExpiration(TimeSpan.FromHours(24)));
         }
 
-        public async Task TryGetValue(int id, object service)
+        public async Task TryGetValue(int id, object service, GetById getById)
         {
             if (!_cache.TryGetValue(id, out service))
             {
-                service = _map.Map<MicroserviceModel>(await _rep.GetMicroserviceById(id));
+                service = _map.Map<MicroserviceModel>(getById(id));
                 if (service == null)
                 {
                     throw new EntityNotFoundException($"microservice {id} not found");

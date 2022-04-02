@@ -14,7 +14,7 @@ namespace MarvelousConfigs.API.Controllers
     {
         private readonly IMicroservicesService _service;
         private readonly IMapper _map;
-        private readonly ILogger _logger;
+        private readonly ILogger<MicroservicesController> _logger;
 
         public MicroservicesController(IMapper mapper, IMicroservicesService service, ILogger<MicroservicesController> logger)
         {
@@ -31,7 +31,7 @@ namespace MarvelousConfigs.API.Controllers
         {
             _logger.LogInformation($"Request to add new microservice");
             int id = await _service.AddMicroservice(_map.Map<MicroserviceModel>(model));
-            _logger.LogInformation($"Response to a request for add new microservice");
+            _logger.LogInformation($"Response to a request for add new microservice id {id}");
             return Ok(id);
         }
 
