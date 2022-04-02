@@ -2,7 +2,7 @@
 	@Key nvarchar(max), 
 	@Value nvarchar(50),  
 	@ServiceId integer,
-	@Created DateTime
+	@Created DateTime = GETDATE
 	as
 	insert into dbo.[Configs]
 	values

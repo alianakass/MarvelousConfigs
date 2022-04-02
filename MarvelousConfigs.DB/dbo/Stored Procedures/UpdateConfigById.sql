@@ -3,7 +3,7 @@
 	@Key nvarchar(max), 
 	@Value nvarchar(50),
 	@ServiceId integer,
-	@Updated DateTime
+	@Updated DateTime = GETDATE
 	as
 	update dbo.[Configs]
 	set

@@ -24,7 +24,6 @@ namespace MarvelousConfigs.BLL.Services
 
         public async Task<int> AddConfig(ConfigModel config)
         {
-            config.Created = DateTime.Now;
             int id = await _rep.AddConfig(_map.Map<Config>(config));
 
             if (id > 0)
@@ -46,7 +45,6 @@ namespace MarvelousConfigs.BLL.Services
             ConfigModel conf = null;
             await _cache.TryGetValue(id, conf, getById);
 
-            config.Updated = DateTime.Now;
             await _rep.UpdateConfigById(id, _map.Map<Config>(config));
 
             _cache.Set(id, _map.Map<ConfigModel>(((_rep.GetConfigById(id).Result))));
@@ -56,8 +54,7 @@ namespace MarvelousConfigs.BLL.Services
         {
             ConfigModel conf = _map.Map<ConfigModel>(getById);
             await _cache.TryGetValue(id, conf, getById);
-            DateTime updated = DateTime.Now;
-            await _rep.DeleteOrRestoreConfigById(id, true, updated);
+            await _rep.DeleteOrRestoreConfigById(id, true);
             _cache.Remove(id);
         }
 
@@ -65,8 +62,7 @@ namespace MarvelousConfigs.BLL.Services
         {
             ConfigModel conf = _map.Map<ConfigModel>(getById);
             await _cache.TryGetValue(id, conf, getById);
-            DateTime updated = DateTime.Now;
-            await _rep.DeleteOrRestoreConfigById(id, false, updated);
+            await _rep.DeleteOrRestoreConfigById(id, false);
             _cache.Set(id, conf);
         }
 
