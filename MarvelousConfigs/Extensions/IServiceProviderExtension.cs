@@ -46,6 +46,12 @@ namespace MarvelousConfigs.API.Extensions
                         hst.Password("qwe!23");
                     });
 
+                    //cfg.Host("rabbitmq://localhost", hst =>
+                    //{
+                    //    hst.Username("guest");
+                    //    hst.Password("guest");
+                    //});
+
                     //cfg.ReceiveEndpoint("", x =>
                     //{
                     //    x.ConfigureConsumer<>(context);
