@@ -48,7 +48,7 @@ namespace MarvelousConfigs.DAL.Repositories
                 commandType: CommandType.StoredProcedure);
         }
 
-        public async Task DeleteOrRestoreConfigById(int id, bool isDeleted, DateTime date)
+        public async Task DeleteOrRestoreConfigById(int id, bool isDeleted)
         {
             using IDbConnection connection = ProvideConnection();
 

@@ -25,7 +25,6 @@ namespace MarvelousConfigs.BLL.Services
 
         public async Task<int> AddConfig(ConfigModel config)
         {
-            config.Created = DateTime.Now;
             int id = await _rep.AddConfig(_map.Map<Config>(config));
 
             if (id > 0)
