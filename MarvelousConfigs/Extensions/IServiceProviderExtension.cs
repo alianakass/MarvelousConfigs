@@ -12,14 +12,18 @@ namespace MarvelousConfigs.API.Extensions
         {
             services.AddScoped<IMicroservicesService, MicroservicesService>();
             services.AddScoped<IConfigsService, ConfigsService>();
-            services.AddSingleton<IConfigCache, ConfigCache>();
-            services.AddSingleton<IMicroserviceCache, MicroserviceCache>();
+            services.AddTransient<IMemoryCacheExtentions, MemoryCacheExtentions>();
         }
 
         public static void RegisterRepositories(this IServiceCollection services)
         {
             services.AddScoped<IMicroserviceRepository, MicroservicesRepository>();
             services.AddScoped<IConfigsRepository, ConfigsRepository>();
+        }
+
+        public static void SetMemoryCache(this WebApplication app)
+        {
+            app.Services.CreateScope().ServiceProvider.GetRequiredService<IMemoryCacheExtentions>().SetMemoryCache();
         }
 
         public static void RegisterLogger(this IServiceCollection service, IConfiguration config)

@@ -37,7 +37,7 @@ namespace MarvelousConfigs.API.Controllers
 
         //api/microservices/42
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [SwaggerOperation("Delete microservice by id")]
@@ -51,7 +51,7 @@ namespace MarvelousConfigs.API.Controllers
 
         //api/microservices/42
         [HttpPatch("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [SwaggerOperation("Restore microservice by id")]
@@ -78,7 +78,7 @@ namespace MarvelousConfigs.API.Controllers
 
         //api/microservices/42
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [SwaggerOperation("Update microservice by id")]

@@ -1,11 +1,11 @@
 using AutoMapper;
-using MarvelousConfigs.BLL.Cache;
 using MarvelousConfigs.BLL.Configuration;
 using MarvelousConfigs.BLL.Exeptions;
 using MarvelousConfigs.BLL.Models;
 using MarvelousConfigs.BLL.Services;
 using MarvelousConfigs.DAL.Entities;
 using MarvelousConfigs.DAL.Repositories;
+using Microsoft.Extensions.Caching.Memory;
 using Moq;
 using NUnit.Framework;
 using System;
@@ -19,13 +19,13 @@ namespace MarvelousConfig.BLL.Tests
         private Mock<IConfigsRepository> _repositoryMock;
         private IMapper _map;
         private IConfigsService _service;
-        private Mock<IConfigCache> _cache;
+        private Mock<IMemoryCache> _cache;
 
         [SetUp]
         public void Setup()
         {
             _repositoryMock = new Mock<IConfigsRepository>();
-            _cache = new Mock<IConfigCache>();
+            _cache = new Mock<IMemoryCache>();
             _map = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<CustomMapperBLL>()));
             _service = new ConfigsService(_repositoryMock.Object, _map, _cache.Object);
         }
@@ -88,14 +88,14 @@ namespace MarvelousConfig.BLL.Tests
         {
             //given
             _repositoryMock.Setup(x => x.GetConfigById(It.IsAny<int>())).ReturnsAsync(config);
-            _repositoryMock.Setup(x => x.DeleteOrRestoreConfigById(It.IsAny<int>(), true, It.IsAny<DateTime>()));
+            _repositoryMock.Setup(x => x.DeleteOrRestoreConfigById(It.IsAny<int>(), true));
 
             //then
             await _service.DeleteConfigById(It.IsAny<int>());
 
             //when
             _repositoryMock.Verify(x => x.GetConfigById(It.IsAny<int>()), Times.Once);
-            _repositoryMock.Verify(x => x.DeleteOrRestoreConfigById(It.IsAny<int>(), true, It.IsAny<DateTime>()), Times.Once);
+            _repositoryMock.Verify(x => x.DeleteOrRestoreConfigById(It.IsAny<int>(), true), Times.Once);
         }
 
         [Test]
@@ -103,7 +103,7 @@ namespace MarvelousConfig.BLL.Tests
         {
             //given
             _repositoryMock.Setup(x => x.GetConfigById(It.IsAny<int>()));
-            _repositoryMock.Setup(x => x.DeleteOrRestoreConfigById(It.IsAny<int>(), true, It.IsAny<DateTime>()));
+            _repositoryMock.Setup(x => x.DeleteOrRestoreConfigById(It.IsAny<int>(), true));
 
             //then
 
@@ -111,7 +111,7 @@ namespace MarvelousConfig.BLL.Tests
             //when
             Assert.ThrowsAsync<EntityNotFoundException>(async () => await _service.DeleteConfigById(It.IsAny<int>()));
             _repositoryMock.Verify(x => x.GetConfigById(It.IsAny<int>()), Times.Once);
-            _repositoryMock.Verify(x => x.DeleteOrRestoreConfigById(It.IsAny<int>(), true, It.IsAny<DateTime>()), Times.Never);
+            _repositoryMock.Verify(x => x.DeleteOrRestoreConfigById(It.IsAny<int>(), true), Times.Never);
         }
 
         [TestCaseSource(typeof(DeleteOrRestoreConfigTestCaseSource))]
@@ -119,14 +119,14 @@ namespace MarvelousConfig.BLL.Tests
         {
             //given
             _repositoryMock.Setup(x => x.GetConfigById(It.IsAny<int>())).ReturnsAsync(config);
-            _repositoryMock.Setup(x => x.DeleteOrRestoreConfigById(It.IsAny<int>(), false, It.IsAny<DateTime>()));
+            _repositoryMock.Setup(x => x.DeleteOrRestoreConfigById(It.IsAny<int>(), false));
 
             //then
             await _service.RestoreConfigById(It.IsAny<int>());
 
             //when
             _repositoryMock.Verify(x => x.GetConfigById(It.IsAny<int>()), Times.Once);
-            _repositoryMock.Verify(x => x.DeleteOrRestoreConfigById(It.IsAny<int>(), false, It.IsAny<DateTime>()), Times.Once);
+            _repositoryMock.Verify(x => x.DeleteOrRestoreConfigById(It.IsAny<int>(), false), Times.Once);
         }
 
         [Test]
@@ -134,7 +134,7 @@ namespace MarvelousConfig.BLL.Tests
         {
             //given
             _repositoryMock.Setup(x => x.GetConfigById(It.IsAny<int>()));
-            _repositoryMock.Setup(x => x.DeleteOrRestoreConfigById(It.IsAny<int>(), false, It.IsAny<DateTime>()));
+            _repositoryMock.Setup(x => x.DeleteOrRestoreConfigById(It.IsAny<int>(), false));
 
             //then
 
@@ -142,7 +142,7 @@ namespace MarvelousConfig.BLL.Tests
             //when
             Assert.ThrowsAsync<EntityNotFoundException>(async () => await _service.RestoreConfigById(It.IsAny<int>()));
             _repositoryMock.Verify(x => x.GetConfigById(It.IsAny<int>()), Times.Once);
-            _repositoryMock.Verify(x => x.DeleteOrRestoreConfigById(It.IsAny<int>(), false, It.IsAny<DateTime>()), Times.Never);
+            _repositoryMock.Verify(x => x.DeleteOrRestoreConfigById(It.IsAny<int>(), false), Times.Never);
         }
     }
 }

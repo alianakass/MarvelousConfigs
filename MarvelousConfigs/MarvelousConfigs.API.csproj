@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Marvelous.Contracts" Version="1.1.19" />
+    <PackageReference Include="Marvelous.Contracts" Version="1.1.23" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.7" />
     <PackageReference Include="NLog" Version="4.7.15" />
@@ -32,12 +32,6 @@
     <None Update="C:\Users\alian\.nuget\packages\nlog.config\4.7.15\contentFiles\any\any\NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="RMQ\Consumers\" />
-    <Folder Include="RMQ\" />
-    <Folder Include="RMQ\Producers\" />
   </ItemGroup>
 
 </Project>

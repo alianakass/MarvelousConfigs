@@ -8,7 +8,6 @@ namespace MarvelousConfigs.BLL.Services
         Task DeleteConfigById(int id);
         Task<List<ConfigModel>> GetAllConfigs();
         Task RestoreConfigById(int id);
-        Task SetCache();
         Task UpdateConfigById(int id, ConfigModel config);
     }
 }

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using MarvelousConfigs.BLL.Cache;
 using MarvelousConfigs.BLL.Configuration;
 using MarvelousConfigs.BLL.Exeptions;
 using MarvelousConfigs.BLL.Models;
@@ -7,6 +6,7 @@ using MarvelousConfigs.BLL.Services;
 using MarvelousConfigs.DAL;
 using MarvelousConfigs.DAL.Entities;
 using MarvelousConfigs.DAL.Repositories;
+using Microsoft.Extensions.Caching.Memory;
 using Moq;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -19,13 +19,13 @@ namespace MarvelousConfigs.BLL.Tests
         private Mock<IMicroserviceRepository> _repositoryMock;
         private IMapper _map;
         private IMicroservicesService _service;
-        private Mock<IMicroserviceCache> _cache;
+        private Mock<IMemoryCache> _cache;
 
         [SetUp]
         public void Setup()
         {
             _repositoryMock = new Mock<IMicroserviceRepository>();
-            _cache = new Mock<IMicroserviceCache>();
+            _cache = new Mock<IMemoryCache>();
             _map = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<CustomMapperBLL>()));
             _service = new MicroservicesService(_repositoryMock.Object, _map, _cache.Object);
         }

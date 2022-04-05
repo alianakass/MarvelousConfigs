@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using MarvelousConfigs.API.Models;
-using MarvelousConfigs.API.RMQ.Producers;
-using MarvelousConfigs.BLL.Cache;
 using MarvelousConfigs.BLL.Models;
 using MarvelousConfigs.BLL.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -16,15 +14,15 @@ namespace MarvelousConfigs.API.Controllers
         private readonly IConfigsService _service;
         private readonly IMapper _map;
         private readonly ILogger<ConfigsController> _logger;
-        private readonly IMarvelousConfigsProducer _prod;
+        //private readonly IMarvelousConfigsProducer _prod;
 
         public ConfigsController(IMapper mapper, IConfigsService service,
-            ILogger<ConfigsController> logger, IConfigCache cache, IMarvelousConfigsProducer producer)
+            ILogger<ConfigsController> logger) //, IMarvelousConfigsProducer producer)
         {
             _map = mapper;
             _service = service;
             _logger = logger;
-            _prod = producer;
+            //_prod = producer;
         }
 
         //api/configs
@@ -44,7 +42,7 @@ namespace MarvelousConfigs.API.Controllers
 
         //api/configs/42
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [SwaggerOperation("Delete config by id")]
@@ -58,7 +56,7 @@ namespace MarvelousConfigs.API.Controllers
 
         //api/configs/42
         [HttpPatch("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [SwaggerOperation("Restore config by id")]
@@ -85,12 +83,13 @@ namespace MarvelousConfigs.API.Controllers
 
         //api/configs/42
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [SwaggerOperation("Update config by id")]
         public async Task<ActionResult<List<ConfigResponceModel>>> UpdateConfigById(int id, [FromBody] ConfigInputModel model)
         {
+            //var ip = HttpContext.Connection.RemoteIpAddress!.ToString();
             _logger.LogInformation($"Request to update config by id{id}");
             await _service.UpdateConfigById(id, _map.Map<ConfigModel>(model));
             _logger.LogInformation($"Response to a request for update config by id{id}");
