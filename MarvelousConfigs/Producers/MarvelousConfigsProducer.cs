@@ -27,7 +27,7 @@ namespace MarvelousConfigs.API.RMQ.Producers
 
             _logger.LogInformation($"Try publish config");
             ConfigModel config = new ConfigModel() { Id = 1, Key = "TestKey", Value = "TestValue" };
-            // var config = await _configService.GetById(id); by key?? 
+            // var config = await _configService.GetById(id);
 
             await _bus.Publish<ConfigExchangeModel>(new
             {

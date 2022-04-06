@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
-using MarvelousConfigs.BLL.Cache;
+using MarvelousConfigs.BLL.Exeptions;
 using MarvelousConfigs.BLL.Models;
 using MarvelousConfigs.DAL.Entities;
 using MarvelousConfigs.DAL.Repositories;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace MarvelousConfigs.BLL.Services
 {
@@ -10,11 +11,11 @@ namespace MarvelousConfigs.BLL.Services
     {
         private readonly IConfigsRepository _rep;
         private readonly IMapper _map;
-        private readonly IConfigCache _cache;
+        private readonly IMemoryCache _cache;
         public delegate Task<Config> GetById(int id);
         public GetById getById;
 
-        public ConfigsService(IConfigsRepository repository, IMapper mapper, IConfigCache cache)
+        public ConfigsService(IConfigsRepository repository, IMapper mapper, IMemoryCache cache)
         {
             _rep = repository;
             _map = mapper;
@@ -34,16 +35,15 @@ namespace MarvelousConfigs.BLL.Services
             return id;
         }
 
-        public async Task SetCache()
-        {
-            List<ConfigModel> conf = _map.Map<List<ConfigModel>>(await _rep.GetAllConfigs());
-            _cache.SetCache(conf);
-        }
-
         public async Task UpdateConfigById(int id, ConfigModel config)
         {
-            ConfigModel conf = null;
-            await _cache.TryGetValue(id, conf, getById);
+            Config conf = await _cache.GetOrCreateAsync(id, (ICacheEntry _)
+                => _rep.GetConfigById(id));
+
+            if (conf == null)
+            {
+                throw new EntityNotFoundException("");
+            }
 
             await _rep.UpdateConfigById(id, _map.Map<Config>(config));
 
@@ -52,16 +52,29 @@ namespace MarvelousConfigs.BLL.Services
 
         public async Task DeleteConfigById(int id)
         {
-            ConfigModel conf = _map.Map<ConfigModel>(getById);
-            await _cache.TryGetValue(id, conf, getById);
+
+            Config conf = await _cache.GetOrCreateAsync(id, (ICacheEntry _)
+                => _rep.GetConfigById(id));
+
+            if (conf == null)
+            {
+                throw new EntityNotFoundException("");
+            }
+
             await _rep.DeleteOrRestoreConfigById(id, true);
             _cache.Remove(id);
         }
 
         public async Task RestoreConfigById(int id)
         {
-            ConfigModel conf = _map.Map<ConfigModel>(getById);
-            await _cache.TryGetValue(id, conf, getById);
+            Config conf = await _cache.GetOrCreateAsync(id, (ICacheEntry _)
+                => _rep.GetConfigById(id));
+
+            if (conf == null)
+            {
+                throw new EntityNotFoundException("");
+            }
+
             await _rep.DeleteOrRestoreConfigById(id, false);
             _cache.Set(id, conf);
         }
@@ -69,7 +82,6 @@ namespace MarvelousConfigs.BLL.Services
         public async Task<List<ConfigModel>> GetAllConfigs()
         {
             var cfg = _map.Map<List<ConfigModel>>(await _rep.GetAllConfigs());
-            _cache.SetCache(cfg);
             return cfg;
         }
     }

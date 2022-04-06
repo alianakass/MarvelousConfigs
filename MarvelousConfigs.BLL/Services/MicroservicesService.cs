@@ -1,25 +1,23 @@
 ﻿using AutoMapper;
-using MarvelousConfigs.BLL.Cache;
+using MarvelousConfigs.BLL.Exeptions;
 using MarvelousConfigs.BLL.Models;
-using MarvelousConfigs.DAL.Entities;
 using MarvelousConfigs.DAL.Repositories;
+using Microsoft.Extensions.Caching.Memory;
+using Microservice = MarvelousConfigs.DAL.Entities.Microservice;
 
 namespace MarvelousConfigs.BLL.Services
 {
     public class MicroservicesService : IMicroservicesService
     {
         private readonly IMicroserviceRepository _rep;
+        private readonly IMemoryCache _cache;
         private readonly IMapper _map;
-        private readonly IMicroserviceCache _cache;
-        public delegate Task<Microservice> GetById(int id);
-        public GetById getById;
 
-        public MicroservicesService(IMicroserviceRepository repository, IMapper mapper, IMicroserviceCache cache)
+        public MicroservicesService(IMicroserviceRepository repository, IMapper mapper, IMemoryCache cache)
         {
             _rep = repository;
             _map = mapper;
             _cache = cache;
-            getById = new GetById(_rep.GetMicroserviceById);
         }
 
         public async Task<int> AddMicroservice(MicroserviceModel microservice)
@@ -27,39 +25,56 @@ namespace MarvelousConfigs.BLL.Services
             int id = await _rep.AddMicroservice(_map.Map<Microservice>(microservice));
             if (id > 0)
             {
-                await _cache.Set(id, microservice);
+                _cache.Set((Marvelous.Contracts.Enums.Microservice)id, microservice);
             }
             return id;
         }
 
         public async Task UpdateMicroservice(int id, MicroserviceModel microservice)
         {
-            MicroserviceModel service = null;
-            await _cache.TryGetValue(id, service, getById);
+            Microservice service = await _cache.GetOrCreateAsync(id, (ICacheEntry _)
+                => _rep.GetMicroserviceById(id));
+
+            if (service == null)
+            {
+                throw new EntityNotFoundException("");
+            }
+
             await _rep.UpdateMicroserviceById(id, _map.Map<Microservice>(microservice));
-            await _cache.Set(id, _map.Map<MicroserviceModel>(await _rep.GetMicroserviceById(id)));
+            _cache.Set((Marvelous.Contracts.Enums.Microservice)id, _map.Map<MicroserviceModel>(await _rep.GetMicroserviceById(id)));
         }
 
         public async Task DeleteMicroservice(int id)
         {
-            MicroserviceModel service = null;
-            await _cache.TryGetValue(id, service, getById);
+            Microservice service = await _cache.GetOrCreateAsync(id, (ICacheEntry _)
+                => _rep.GetMicroserviceById(id));
+
+            if (service == null)
+            {
+                throw new EntityNotFoundException("");
+            }
+
             await _rep.DeleteOrRestoreMicroserviceById(id, true);
             _cache.Remove(id);
         }
 
         public async Task RestoreMicroservice(int id)
         {
-            MicroserviceModel service = null;
-            await _cache.TryGetValue(id, service, getById);
+            Microservice service = await _cache.GetOrCreateAsync(id, (ICacheEntry _)
+                 => _rep.GetMicroserviceById(id));
+
+            if (service == null)
+            {
+                throw new EntityNotFoundException("");
+            }
+
             await _rep.DeleteOrRestoreMicroserviceById(id, false);
-            await _cache.Set(id, service);
+            _cache.Set((Marvelous.Contracts.Enums.Microservice)id, service);
         }
 
         public async Task<List<MicroserviceModel>> GetAllMicroservices()
         {
             var services = _map.Map<List<MicroserviceModel>>(await _rep.GetAllMicroservices());
-            _cache.SetCache(services);
             return services;
         }
 
@@ -70,8 +85,14 @@ namespace MarvelousConfigs.BLL.Services
 
         public async Task<MicroserviceWithConfigsModel> GetMicroserviceWithConfigsById(int id)
         {
-            MicroserviceModel service = null;
-            await _cache.TryGetValue(id, service, getById);
+            Microservice service = await _cache.GetOrCreateAsync(id, (ICacheEntry _)
+                => _rep.GetMicroserviceById(id));
+
+            if (service == null)
+            {
+                throw new EntityNotFoundException("");
+            }
+
             var serviceWithConfigs = await _rep.GetMicroserviceWithConfigsById(id);
             return _map.Map<MicroserviceWithConfigsModel>(serviceWithConfigs);
         }

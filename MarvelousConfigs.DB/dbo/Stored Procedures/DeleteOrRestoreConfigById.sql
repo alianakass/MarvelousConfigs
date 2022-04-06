@@ -1,8 +1,7 @@
 ﻿create procedure DeleteOrRestoreConfigById
 	@Id integer,
-	@IsDeleted bit,
-	@Updated DateTime = GETDATE
+	@IsDeleted bit
 	as
 	update dbo.[Configs]
-	set IsDeleted = @IsDeleted, Updated = @Updated
+	set IsDeleted = @IsDeleted, Updated = SYSDATETIME()
 	where Id = @Id

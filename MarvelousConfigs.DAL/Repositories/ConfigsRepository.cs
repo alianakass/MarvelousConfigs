@@ -34,7 +34,7 @@ namespace MarvelousConfigs.DAL.Repositories
             using IDbConnection connection = ProvideConnection();
 
             return await connection.QuerySingleAsync<int>
-                (Queries.AddConfig, new { Key = config.Key, Value = config.Value, ServiceId = config.ServiceId},
+                (Queries.AddConfig, new { Key = config.Key, Value = config.Value, ServiceId = config.ServiceId },
                 commandType: CommandType.StoredProcedure);
         }
 
@@ -44,7 +44,7 @@ namespace MarvelousConfigs.DAL.Repositories
 
             await connection.QueryAsync
                 (Queries.UpdateConfigById,
-                new { Id = id, Key = config.Key, Value = config.Value, ServiceId = config.ServiceId},
+                new { Id = id, Key = config.Key, Value = config.Value, ServiceId = config.ServiceId },
                 commandType: CommandType.StoredProcedure);
         }
 
@@ -53,7 +53,7 @@ namespace MarvelousConfigs.DAL.Repositories
             using IDbConnection connection = ProvideConnection();
 
             await connection.QueryAsync
-                (Queries.DeleteOrRestoreConfigById, new { Id = id, IsDeleted = isDeleted}, commandType: CommandType.StoredProcedure);
+                (Queries.DeleteOrRestoreConfigById, new { Id = id, IsDeleted = isDeleted }, commandType: CommandType.StoredProcedure);
         }
     }
 }
