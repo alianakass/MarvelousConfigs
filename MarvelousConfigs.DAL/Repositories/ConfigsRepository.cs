@@ -29,6 +29,14 @@ namespace MarvelousConfigs.DAL.Repositories
                 (Queries.GetAllConfigs, commandType: CommandType.StoredProcedure)).ToList();
         }
 
+        public async Task<List<Config>> GetConfigsByServiceId(int id)
+        {
+            using IDbConnection connection = ProvideConnection();
+
+            return (await connection.QueryAsync<Config>
+                (Queries.GetConfigsByServiceId, new { ServiceId = id }, commandType: CommandType.StoredProcedure)).ToList();
+        }
+
         public async Task<int> AddConfig(Config config)
         {
             using IDbConnection connection = ProvideConnection();

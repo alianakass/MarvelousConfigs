@@ -1,4 +1,5 @@
-﻿using MarvelousConfigs.BLL.Cache;
+﻿using MarvelousConfigs.API.RMQ.Producers;
+using MarvelousConfigs.BLL.Cache;
 using MarvelousConfigs.BLL.Services;
 using MarvelousConfigs.DAL.Repositories;
 using MassTransit;
@@ -13,6 +14,7 @@ namespace MarvelousConfigs.API.Extensions
             services.AddScoped<IMicroservicesService, MicroservicesService>();
             services.AddScoped<IConfigsService, ConfigsService>();
             services.AddTransient<IMemoryCacheExtentions, MemoryCacheExtentions>();
+            services.AddScoped<IMarvelousConfigsProducer, MarvelousConfigsProducer>();
         }
 
         public static void RegisterRepositories(this IServiceCollection services)
@@ -41,7 +43,6 @@ namespace MarvelousConfigs.API.Extensions
         {
             services.AddMassTransit(x =>
             {
-                //x.AddConsumer<>();
                 x.UsingRabbitMq((context, cfg) =>
                 {
                     cfg.Host("rabbitmq://80.78.240.16", hst =>
@@ -49,18 +50,6 @@ namespace MarvelousConfigs.API.Extensions
                         hst.Username("nafanya");
                         hst.Password("qwe!23");
                     });
-
-                    //cfg.Host("rabbitmq://localhost", hst =>
-                    //{
-                    //    hst.Username("guest");
-                    //    hst.Password("guest");
-                    //});
-
-                    //cfg.ReceiveEndpoint("", x =>
-                    //{
-                    //    x.ConfigureConsumer<>(context);
-                    //});
-
                 });
             });
         }
