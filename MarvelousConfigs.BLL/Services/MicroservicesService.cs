@@ -74,11 +74,8 @@ namespace MarvelousConfigs.BLL.Services
             _cache.Set((Marvelous.Contracts.Enums.Microservice)id, service);
         }
 
-        public async Task<List<MicroserviceModel>> GetAllMicroservices() //(string token)
+        public async Task<List<MicroserviceModel>> GetAllMicroservices() 
         {
-            //var response = _rest.GetRestResponse(token).Result;
-            //if (!response)
-            //    throw new Exception();
             var services = _map.Map<List<MicroserviceModel>>(await _rep.GetAllMicroservices());
             return services;
         }
