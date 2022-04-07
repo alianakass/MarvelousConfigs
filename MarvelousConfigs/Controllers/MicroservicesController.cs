@@ -77,6 +77,7 @@ namespace MarvelousConfigs.API.Controllers
             _logger.LogInformation($"Request to get all microservices");
             var services = _map.Map<List<MicroserviceOutputModel>>(await _service.GetAllMicroservices());
             _logger.LogInformation($"Response to a request for get all microservices");
+
             return Ok(services);
         }
 

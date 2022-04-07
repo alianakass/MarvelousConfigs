@@ -89,9 +89,8 @@ namespace MarvelousConfigs.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [SwaggerOperation("Update config by id")]
-        public async Task<ActionResult<List<ConfigResponceModel>>> UpdateConfigById(int id, [FromBody] ConfigInputModel model)
+        public async Task<ActionResult> UpdateConfigById(int id, [FromBody] ConfigInputModel model)
         {
-            //var ip = HttpContext.Connection.RemoteIpAddress!.ToString();
             _logger.LogInformation($"Request to update config by id{id}");
             await _service.UpdateConfigById(id, _map.Map<ConfigModel>(model));
             // await _prod.NotifyConfigurationAdded(id);

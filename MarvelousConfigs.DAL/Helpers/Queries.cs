@@ -5,6 +5,7 @@
         public const string AddConfig = "AddConfig";
         public const string DeleteOrRestoreConfigById = "DeleteOrRestoreConfigById";
         public const string GetAllConfigs = "GetAllConfigs";
+        public const string GetConfigsByServiceId = "GetConfigsByServiceId";
         public const string GetConfigById = "GetConfigById";
         public const string GetConfigsByServiceAddress = "GetConfigsByServiceAddress";
         public const string GetConfigsByServiceId = "GetConfigsByServiceId";
