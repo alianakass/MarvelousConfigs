@@ -6,7 +6,7 @@ namespace MarvelousConfigs.DAL
     {
         public int Id { get; set; }
         public string ServiceName { get; set; }
-        public string URL { get; set; }
+        public string Url { get; set; }
         public List<Config> Configs { get; set; }
     }
 }
