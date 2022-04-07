@@ -13,8 +13,8 @@ namespace MarvelousConfigs.API.Extensions
         {
             services.AddScoped<IMicroservicesService, MicroservicesService>();
             services.AddScoped<IConfigsService, ConfigsService>();
-            services.AddTransient<IMemoryCacheExtentions, MemoryCacheExtentions>();
             services.AddScoped<IMarvelousConfigsProducer, MarvelousConfigsProducer>();
+            services.AddTransient<IMemoryCacheExtentions, MemoryCacheExtentions>();
         }
 
         public static void RegisterRepositories(this IServiceCollection services)

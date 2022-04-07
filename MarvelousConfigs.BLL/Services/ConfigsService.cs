@@ -12,15 +12,12 @@ namespace MarvelousConfigs.BLL.Services
         private readonly IConfigsRepository _rep;
         private readonly IMapper _map;
         private readonly IMemoryCache _cache;
-        public delegate Task<Config> GetById(int id);
-        public GetById getById;
 
         public ConfigsService(IConfigsRepository repository, IMapper mapper, IMemoryCache cache)
         {
             _rep = repository;
             _map = mapper;
             _cache = cache;
-            getById = new GetById(_rep.GetConfigById);
         }
 
         public async Task<int> AddConfig(ConfigModel config)
@@ -106,8 +103,9 @@ namespace MarvelousConfigs.BLL.Services
 
         public async Task<List<ConfigModel>> GetConfigsByServiceAddress(string ip)
         {
-            var configs = _map.Map<List<ConfigModel>>(await _rep.GetConfigsByServiceAddress(ip));
-            return configs;
+            List<Config> configs = await _cache.GetOrCreateAsync(ip, (ICacheEntry _)
+               => _rep.GetConfigsByServiceAddress(ip));
+            return _map.Map<List<ConfigModel>>(configs);
         }
     }
 }

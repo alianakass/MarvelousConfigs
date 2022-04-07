@@ -65,7 +65,7 @@ namespace MarvelousConfigs.API.Controllers
         {
             _logger.LogInformation($"Request to restore config by id{id}");
             await _service.RestoreConfigById(id);
-            // await _prod.NotifyConfigurationAddedOrUpdated(id);
+            await _prod.NotifyConfigurationAddedOrUpdated(id);
             _logger.LogInformation($"Response to a request for restore config by id{id}");
             return NoContent();
         }
@@ -93,14 +93,15 @@ namespace MarvelousConfigs.API.Controllers
         {
             _logger.LogInformation($"Request to update config by id{id}");
             await _service.UpdateConfigById(id, _map.Map<ConfigModel>(model));
-            // await _prod.NotifyConfigurationAdded(id);
+            await _prod.NotifyConfigurationAddedOrUpdated(id);
             _logger.LogInformation($"Response to a request for update config by id{id}");
             return NoContent();
         }
 
         [HttpGet("service/{id}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [SwaggerOperation("Get configs by service id")]
         public async Task<ActionResult<List<ConfigOutputModel>>> GetConfigsByServiceId(int id)
         {
@@ -111,14 +112,15 @@ namespace MarvelousConfigs.API.Controllers
         }
 
         [HttpGet("by-serviceIP")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [SwaggerOperation("Get configs by service IP")]
-        public async Task<ActionResult<List<ConfigOutputModel>>> GetConfigsByServiceIP(string ip)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [SwaggerOperation("Get configs by service address")]
+        public async Task<ActionResult<List<ConfigOutputModel>>> GetConfigsByServiceAddress()
         {
-            _logger.LogInformation($"Request to get configs by service {ip}");
-            var configs = _map.Map<List<ConfigOutputModel>>(await _service.GetConfigsByServiceAddress(ip));
-            _logger.LogInformation($"Response to a request for get configs by service {ip}");
+            _logger.LogInformation($"Request to get configs by service {"test data"}");
+            var configs = _map.Map<List<ConfigOutputModel>>(await _service.GetConfigsByServiceAddress(""));
+            _logger.LogInformation($"Response to a request for get configs by service {"test data"}");
             return Ok(configs);
         }
 
