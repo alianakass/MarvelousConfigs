@@ -10,14 +10,16 @@ namespace MarvelousConfigs.BLL.Services
     public class MicroservicesService : IMicroservicesService
     {
         private readonly IMicroserviceRepository _rep;
+        // private readonly IAuthRequestClient _rest;
         private readonly IMemoryCache _cache;
         private readonly IMapper _map;
 
-        public MicroservicesService(IMicroserviceRepository repository, IMapper mapper, IMemoryCache cache)
+        public MicroservicesService(IMicroserviceRepository repository, IMapper mapper, IMemoryCache cache) //,IAuthRequestClient client)
         {
             _rep = repository;
             _map = mapper;
             _cache = cache;
+            // _rest = client;
         }
 
         public async Task<int> AddMicroservice(MicroserviceModel microservice)
@@ -72,8 +74,11 @@ namespace MarvelousConfigs.BLL.Services
             _cache.Set((Marvelous.Contracts.Enums.Microservice)id, service);
         }
 
-        public async Task<List<MicroserviceModel>> GetAllMicroservices()
+        public async Task<List<MicroserviceModel>> GetAllMicroservices() //(string token)
         {
+            //var response = _rest.GetRestResponse(token).Result;
+            //if (!response)
+            //    throw new Exception();
             var services = _map.Map<List<MicroserviceModel>>(await _rep.GetAllMicroservices());
             return services;
         }

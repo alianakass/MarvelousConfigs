@@ -1,4 +1,4 @@
-﻿using Marvelous.Contracts.ExchangeModels;
+﻿using Marvelous.Contracts.Configurations;
 using MarvelousConfigs.BLL.Models;
 using MarvelousConfigs.BLL.Services;
 using MassTransit;
@@ -29,7 +29,7 @@ namespace MarvelousConfigs.API.RMQ.Producers
             ConfigModel config = new ConfigModel() { Id = 1, Key = "TestKey", Value = "TestValue" };
             // var config = await _configService.GetById(id);
 
-            await _bus.Publish<ConfigExchangeModel>(new
+            await _bus.Publish<EmailSendlerCfg>(new
             {
                 config.Id,
                 config.Key,

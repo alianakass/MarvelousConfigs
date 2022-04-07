@@ -4,6 +4,7 @@
     {
         public const string AddConfig = "AddConfig";
         public const string GetAllConfigs = "GetAllConfigs";
+        public const string GetConfigsByServiceId = "GetConfigsByServiceId";
         public const string GetConfigById = "GetConfigById";
         public const string GetConfigsByMicroserviceId = "GetConfigsByMicroserviceId";
         public const string UpdateConfigById = "UpdateConfigById";

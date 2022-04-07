@@ -68,11 +68,12 @@ namespace MarvelousConfigs.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [SwaggerOperation("Get all microservices")]
-        public async Task<ActionResult<List<MicroserviceResponceModel>>> GetAllMicroservices()
+        public async Task<ActionResult<List<MicroserviceResponceModel>>> GetAllMicroservices(string token)
         {
             _logger.LogInformation($"Request to get all microservices");
-            var services = _map.Map<List<MicroserviceResponceModel>>(await _service.GetAllMicroservices());
+            var services = _map.Map<List<MicroserviceResponceModel>>(await _service.GetAllMicroservices()); //(token));
             _logger.LogInformation($"Response to a request for get all microservices");
+
             return Ok(services);
         }
 

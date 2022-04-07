@@ -84,5 +84,11 @@ namespace MarvelousConfigs.BLL.Services
             var cfg = _map.Map<List<ConfigModel>>(await _rep.GetAllConfigs());
             return cfg;
         }
+
+        public async Task<List<ConfigModel>> GetConfigsByServiceId(int id)
+        {
+            var configs = _map.Map<List<ConfigModel>>(await _rep.GetConfigsByServiceId(id));
+            return configs;
+        }
     }
 }
