@@ -28,7 +28,7 @@ namespace MarvelousConfigs.API.Controllers
 
         //api/configs
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [SwaggerOperation("Add config")]
@@ -37,7 +37,7 @@ namespace MarvelousConfigs.API.Controllers
             _logger.LogInformation($"Request to add new config");
             int id = await _service.AddConfig(_map.Map<ConfigModel>(model));
             _logger.LogInformation($"Response to a request for add new config id {id}");
-           // await _prod.NotifyConfigurationAdded(id);
+            await _prod.NotifyConfigurationAddedOrUpdated(id);
             return StatusCode(StatusCodes.Status201Created, id);
         }
 
@@ -65,6 +65,7 @@ namespace MarvelousConfigs.API.Controllers
         {
             _logger.LogInformation($"Request to restore config by id{id}");
             await _service.RestoreConfigById(id);
+            // await _prod.NotifyConfigurationAddedOrUpdated(id);
             _logger.LogInformation($"Response to a request for restore config by id{id}");
             return NoContent();
         }
@@ -74,10 +75,10 @@ namespace MarvelousConfigs.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [SwaggerOperation("Get all configs")]
-        public async Task<ActionResult<List<ConfigResponceModel>>> GetAllConfigs()
+        public async Task<ActionResult<List<ConfigOutputModel>>> GetAllConfigs()
         {
             _logger.LogInformation($"Request to get all configs");
-            var configs = await _service.GetAllConfigs();
+            var configs = _map.Map<List<MicroserviceOutputModel>>(await _service.GetAllConfigs());
             _logger.LogInformation($"Response to a request for all configs");
             return Ok(configs);
         }
@@ -92,6 +93,7 @@ namespace MarvelousConfigs.API.Controllers
         {
             _logger.LogInformation($"Request to update config by id{id}");
             await _service.UpdateConfigById(id, _map.Map<ConfigModel>(model));
+            // await _prod.NotifyConfigurationAdded(id);
             _logger.LogInformation($"Response to a request for update config by id{id}");
             return NoContent();
         }
@@ -99,13 +101,24 @@ namespace MarvelousConfigs.API.Controllers
         [HttpGet("service/{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [SwaggerOperation("Get configs by service id")]
-        public async Task<ActionResult<List<ConfigResponceModel>>> GetConfigsByServiceId(int id)
+        public async Task<ActionResult<List<ConfigOutputModel>>> GetConfigsByServiceId(int id)
         {
             _logger.LogInformation($"Request to get configs by service id{id}");
-            var configs = _map.Map<List<ConfigResponceModel>>(await _service.GetConfigsByServiceId(id));
+            var configs = _map.Map<List<ConfigOutputModel>>(await _service.GetConfigsByServiceId(id));
             _logger.LogInformation($"Response to a request for get configs by service id{id}");
+            return Ok(configs);
+        }
+
+        [HttpGet("by-serviceIP")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [SwaggerOperation("Get configs by service IP")]
+        public async Task<ActionResult<List<ConfigOutputModel>>> GetConfigsByServiceIP(string ip)
+        {
+            _logger.LogInformation($"Request to get configs by service {ip}");
+            var configs = _map.Map<List<ConfigOutputModel>>(await _service.GetConfigsByServiceAddress(ip));
+            _logger.LogInformation($"Response to a request for get configs by service {ip}");
             return Ok(configs);
         }
 

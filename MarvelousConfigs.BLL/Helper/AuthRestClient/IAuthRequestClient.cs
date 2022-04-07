@@ -1,4 +1,4 @@
-﻿namespace MarvelousConfigs.BLL.AuthRequestClient
+namespace MarvelousConfigs.BLL.AuthRequestClient
 {
     public interface IAuthRequestClient
     {

@@ -3,6 +3,7 @@
     [ServiceName] NVARCHAR (50)  NULL,
     [URL]         NVARCHAR (MAX) NULL,
     [IsDeleted]   BIT            NULL,
+    [Address]     NVARCHAR (20)  NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC)
 );
 

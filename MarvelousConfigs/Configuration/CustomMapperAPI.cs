@@ -8,13 +8,13 @@ namespace MarvelousConfigs.API.Configuration
     {
         public CustomMapperAPI()
         {
-            CreateMap<ConfigModel, ConfigResponceModel>();
             CreateMap<ConfigInputModel, ConfigModel>();
+            CreateMap<ConfigModel, ConfigOutputModel>();
 
-            CreateMap<MicroserviceModel, MicroserviceResponceModel>();
             CreateMap<MicroserviceInputModel, MicroserviceModel>();
+            CreateMap<MicroserviceModel, MicroserviceOutputModel>();
 
-            CreateMap<MicroserviceWithConfigsModel, MicroserviceWithConfigsResponceModel>()
+            CreateMap<MicroserviceWithConfigsModel, MicroserviceWithConfigsOutputModel>()
                 .ForMember(m => m.Configs, opt => opt.MapFrom(o => o.Configs));
         }
     }

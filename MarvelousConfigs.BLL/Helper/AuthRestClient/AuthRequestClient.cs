@@ -22,7 +22,7 @@ namespace MarvelousConfigs.BLL.AuthRequestClient
             bool response = false;
             try
             {
-                response = await SendRequestWithTokenAsync(token);
+                response = await SendRequestWithToken(token);
             }
             catch (Exception ex)
             {
@@ -32,7 +32,7 @@ namespace MarvelousConfigs.BLL.AuthRequestClient
             return response;
         }
 
-        private async Task<bool> SendRequestWithTokenAsync(string token)
+        private async Task<bool> SendRequestWithToken(string token)
         {
             var client = new RestClient(new RestClientOptions(_url)
             {

@@ -74,18 +74,23 @@ namespace MarvelousConfigs.BLL.Services
             _cache.Set((Marvelous.Contracts.Enums.Microservice)id, service);
         }
 
-        public async Task<List<MicroserviceModel>> GetAllMicroservices() //(string token)
+        public async Task<List<MicroserviceModel>> GetAllMicroservices() 
         {
-            //var response = _rest.GetRestResponse(token).Result;
-            //if (!response)
-            //    throw new Exception();
             var services = _map.Map<List<MicroserviceModel>>(await _rep.GetAllMicroservices());
             return services;
         }
 
-        public async Task<List<MicroserviceWithConfigsModel>> GetAllMicroservicesWithConfigs()
+        public async Task<MicroserviceModel> GetMicroserviceById(int id)
         {
-            return _map.Map<List<MicroserviceWithConfigsModel>>(await _rep.GetAllMicroservicesWithConfigs());
+            Microservice service = await _cache.GetOrCreateAsync(id, (ICacheEntry _)
+                => _rep.GetMicroserviceById(id));
+
+            if (service == null)
+            {
+                throw new EntityNotFoundException("");
+            }
+
+            return _map.Map<MicroserviceModel>(service);
         }
 
         public async Task<MicroserviceWithConfigsModel> GetMicroserviceWithConfigsById(int id)

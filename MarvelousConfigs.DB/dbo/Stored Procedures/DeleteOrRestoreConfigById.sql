@@ -1,4 +1,4 @@
-﻿create procedure DeleteOrRestoreConfigById
+﻿CREATE procedure [dbo].[DeleteOrRestoreConfigById]
 	@Id integer,
 	@IsDeleted bit
 	as
