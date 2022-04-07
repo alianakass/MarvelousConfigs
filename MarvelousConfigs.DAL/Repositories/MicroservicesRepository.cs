@@ -34,7 +34,7 @@ namespace MarvelousConfigs.DAL.Repositories
             using IDbConnection connection = ProvideConnection();
 
             return await connection.QuerySingleAsync<int>
-                (Queries.AddMicroservice, new { ServiceName = microservice.ServiceName, URL = microservice.URL },
+                (Queries.AddMicroservice, new { ServiceName = microservice.ServiceName, Url = microservice.Url, Address = microservice.Address },
                 commandType: CommandType.StoredProcedure);
         }
 
@@ -43,7 +43,7 @@ namespace MarvelousConfigs.DAL.Repositories
             using IDbConnection connection = ProvideConnection();
 
             var microservices = await connection.QueryAsync
-                (Queries.UpdateMicroserviceById, new { Id = id, ServiceName = microservice.ServiceName, URL = microservice.URL },
+                (Queries.UpdateMicroserviceById, new { Id = id, ServiceName = microservice.ServiceName, Url = microservice.Url, Address = microservice.Address },
                 commandType: CommandType.StoredProcedure);
         }
 
@@ -53,31 +53,6 @@ namespace MarvelousConfigs.DAL.Repositories
 
             await connection.QueryAsync
                 (Queries.DeleteOrRestoreMicroserviceById, new { id, isDeleted }, commandType: CommandType.StoredProcedure);
-        }
-
-        public async Task<List<MicroserviceWithConfigs>> GetAllMicroservicesWithConfigs()
-        {
-            using IDbConnection connection = ProvideConnection();
-            Dictionary<int, MicroserviceWithConfigs> dict = new Dictionary<int, MicroserviceWithConfigs>();
-            int serviceId = 0;
-
-            var services = await connection.QueryAsync<MicroserviceWithConfigs, Config, MicroserviceWithConfigs>(
-                Queries.GetAllMicroservicesWithConfigs, (service, conf) =>
-                {
-                    if (serviceId != service.Id)
-                    {
-                        dict.Add(service.Id, service);
-                        serviceId = service.Id;
-                        dict[serviceId].Configs = new List<Config>();
-                    }
-
-                    dict[serviceId].Configs.Add(conf);
-                    return dict[serviceId];
-                },
-                splitOn: "Id",
-                commandType: CommandType.StoredProcedure);
-
-            return dict.Values.ToList();
         }
 
         public async Task<MicroserviceWithConfigs> GetMicroserviceWithConfigsById(int id)

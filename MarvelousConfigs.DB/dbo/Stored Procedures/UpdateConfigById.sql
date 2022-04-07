@@ -1,4 +1,4 @@
-﻿	create procedure [dbo].[UpdateConfigById]
+﻿	CREATE procedure [dbo].[UpdateConfigById]
 	@Id integer,
 	@Key nvarchar(max), 
 	@Value nvarchar(50),

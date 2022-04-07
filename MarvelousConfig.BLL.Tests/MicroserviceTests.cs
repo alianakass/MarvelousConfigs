@@ -146,19 +146,6 @@ namespace MarvelousConfigs.BLL.Tests
             _repositoryMock.Verify(x => x.GetMicroserviceById(It.IsAny<int>()), Times.Once);
         }
 
-        [Test]
-        public async Task GetAllMicroservicesWithConfigsTest()
-        {
-            //given
-            _repositoryMock.Setup(x => x.GetAllMicroservicesWithConfigs()).ReturnsAsync(It.IsAny<List<MicroserviceWithConfigs>>());
-
-            //then
-            var actual = await _service.GetAllMicroservicesWithConfigs();
-
-            //when
-            _repositoryMock.Verify(x => x.GetAllMicroservicesWithConfigs(), Times.Once);
-        }
-
         [TestCaseSource(typeof(GetMicroserviceWithConfigsByIdTestCaseSource))]
         public async Task GetMicroserviceWithConfigsByIdTest(int id, Microservice microservice)
         {

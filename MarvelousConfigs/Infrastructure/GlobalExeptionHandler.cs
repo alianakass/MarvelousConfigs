@@ -25,10 +25,10 @@ namespace MarvelousConfigs.API.Infrastructure
             {
                 await HandleExceptionAsync(context, HttpStatusCode.NotFound, ex.Message);
             }
-            //catch (Microsoft.Data.SqlClient.SqlException)
-            //{
-            //    await HandleExceptionAsync(context, HttpStatusCode.ServiceUnavailable, "Не возможно связаться с сервером и обработать запрос");
-            //}
+            catch (Microsoft.Data.SqlClient.SqlException)
+            {
+                await HandleExceptionAsync(context, HttpStatusCode.ServiceUnavailable, "Не возможно связаться с сервером и обработать запрос");
+            }
             catch (Exception ex)
             {
                 await HandleExceptionAsync(context, HttpStatusCode.BadRequest, ex.Message);

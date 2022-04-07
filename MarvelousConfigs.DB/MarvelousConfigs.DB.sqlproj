@@ -6,7 +6,7 @@
     <Name>MarvelousConfigs.DB</Name>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
-    <ProjectGuid>{0216225a-9def-4b4a-b1d1-6b5b9304df33}</ProjectGuid>
+    <ProjectGuid>{c79cd559-071d-4ecb-802b-639496410256}</ProjectGuid>
     <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
@@ -75,9 +75,8 @@
     <Build Include="dbo\Stored Procedures\GetMicroserviceById.sql" />
     <Build Include="dbo\Stored Procedures\DeleteOrRestoreMicroserviceById.sql" />
     <Build Include="dbo\Stored Procedures\DeleteOrRestoreConfigById.sql" />
-    <Build Include="dbo\Stored Procedures\GetAllMicroservicesWithConfigs.sql" />
     <Build Include="dbo\Stored Procedures\UpdateConfigById.sql" />
     <Build Include="dbo\Stored Procedures\GetMicroserviceWithConfigsById.sql" />
-    <Build Include="dbo\Stored Procedures\GetConfigByKey.sql" />
+    <Build Include="dbo\Stored Procedures\GetConfigsByServiceAddress.sql" />
   </ItemGroup>
 </Project>

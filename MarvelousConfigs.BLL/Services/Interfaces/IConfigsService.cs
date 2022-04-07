@@ -7,6 +7,9 @@ namespace MarvelousConfigs.BLL.Services
         Task<int> AddConfig(ConfigModel config);
         Task DeleteConfigById(int id);
         Task<List<ConfigModel>> GetAllConfigs();
+        Task<ConfigModel> GetConfigById(int id);
+        Task<List<ConfigModel>> GetConfigsByServiceId(int id);
+        Task<List<ConfigModel>> GetConfigsByServiceAddress(string ip);
         Task RestoreConfigById(int id);
         Task UpdateConfigById(int id, ConfigModel config);
     }

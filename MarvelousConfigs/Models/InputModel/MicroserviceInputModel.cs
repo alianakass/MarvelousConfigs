@@ -7,7 +7,8 @@ namespace MarvelousConfigs.API.Models
         [Required]
         public string ServiceName { get; set; }
         [Required]
-        [Url]
-        public string URL { get; set; }
+        public string Url { get; set; }
+        [Required]
+        public string Address { get; set; }
     }
 }

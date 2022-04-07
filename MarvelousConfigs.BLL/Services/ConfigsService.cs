@@ -79,10 +79,35 @@ namespace MarvelousConfigs.BLL.Services
             _cache.Set(id, conf);
         }
 
+        public async Task<ConfigModel> GetConfigById(int id)
+        {
+            Config conf = await _cache.GetOrCreateAsync(id, (ICacheEntry _)
+                 => _rep.GetConfigById(id));
+
+            if (conf == null)
+            {
+                throw new EntityNotFoundException("");
+            }
+
+            return _map.Map<ConfigModel>(conf);
+        }
+
         public async Task<List<ConfigModel>> GetAllConfigs()
         {
             var cfg = _map.Map<List<ConfigModel>>(await _rep.GetAllConfigs());
             return cfg;
+        }
+
+        public async Task<List<ConfigModel>> GetConfigsByServiceId(int id)
+        {
+            var configs = _map.Map<List<ConfigModel>>(await _rep.GetConfigsByServiceId(id));
+            return configs;
+        }
+
+        public async Task<List<ConfigModel>> GetConfigsByServiceAddress(string ip)
+        {
+            var configs = _map.Map<List<ConfigModel>>(await _rep.GetConfigsByServiceAddress(ip));
+            return configs;
         }
     }
 }

@@ -29,12 +29,34 @@ namespace MarvelousConfigs.DAL.Repositories
                 (Queries.GetAllConfigs, commandType: CommandType.StoredProcedure)).ToList();
         }
 
+        public async Task<List<Config>> GetConfigsByServiceId(int id)
+        {
+            using IDbConnection connection = ProvideConnection();
+
+            return (await connection.QueryAsync<Config>
+                (Queries.GetConfigsByServiceId, new { ServiceId = id }, commandType: CommandType.StoredProcedure)).ToList();
+        }
+
+        public async Task<List<Config>> GetConfigsByServiceAddress(string ip)
+        {
+            using IDbConnection connection = ProvideConnection();
+
+            return (await connection.QueryAsync<Config>
+                (Queries.GetConfigsByServiceAddress, new { IP = ip }, commandType: CommandType.StoredProcedure)).ToList();
+        }
+
         public async Task<int> AddConfig(Config config)
         {
             using IDbConnection connection = ProvideConnection();
 
             return await connection.QuerySingleAsync<int>
-                (Queries.AddConfig, new { Key = config.Key, Value = config.Value, ServiceId = config.ServiceId },
+                (Queries.AddConfig, new
+                {
+                    Key = config.Key,
+                    Value = config.Value,
+                    ServiceId = config.ServiceId,
+                    Description = config.Description
+                },
                 commandType: CommandType.StoredProcedure);
         }
 
@@ -44,7 +66,14 @@ namespace MarvelousConfigs.DAL.Repositories
 
             await connection.QueryAsync
                 (Queries.UpdateConfigById,
-                new { Id = id, Key = config.Key, Value = config.Value, ServiceId = config.ServiceId },
+                new
+                {
+                    Id = id,
+                    Key = config.Key,
+                    Value = config.Value,
+                    ServiceId = config.ServiceId,
+                    Description = config.Description
+                },
                 commandType: CommandType.StoredProcedure);
         }
 
