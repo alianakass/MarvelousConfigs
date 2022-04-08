@@ -13,7 +13,7 @@ namespace MarvelousConfig.BLL.Tests
                 Id = 1,
                 Key = "KEY",
                 Value = "VALUE",
-                Created = System.DateTime.Now
+                //Created = System.DateTime.Now
             };
 
             ConfigModel model = new ConfigModel()
@@ -21,7 +21,7 @@ namespace MarvelousConfig.BLL.Tests
                 Id = 1,
                 Key = "KEY",
                 Value = "VALUE",
-                Created = System.DateTime.Now
+                // Created = System.DateTime.Now
             };
 
             int id = 1;

@@ -12,14 +12,14 @@ namespace MarvelousConfigs.BLL.Tests
             {
                 Id = 1,
                 ServiceName = "Name1",
-                URL = "URL1"
+                Url = "URL1"
             };
 
             MicroserviceModel model = new MicroserviceModel()
             {
                 Id = 1,
                 ServiceName = "Name1",
-                URL = "URL1"
+                Url = "URL1"
             };
 
             int id = 1;

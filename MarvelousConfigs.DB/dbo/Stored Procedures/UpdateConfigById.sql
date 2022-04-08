@@ -1,11 +1,10 @@
-﻿	create procedure [dbo].[UpdateConfigById]
+﻿	CREATE procedure [dbo].[UpdateConfigById]
 	@Id integer,
 	@Key nvarchar(max), 
 	@Value nvarchar(50),
-	@ServiceId integer,
-	@Updated DateTime
+	@ServiceId integer
 	as
 	update dbo.[Configs]
 	set
-	[Key] = @Key, [Value] = @Value, ServiceId = @ServiceId, Updated = @Updated
+	[Key] = @Key, [Value] = @Value, ServiceId = @ServiceId, Updated = SYSDATETIME()
 	where Id = @Id

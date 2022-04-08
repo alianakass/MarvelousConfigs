@@ -6,6 +6,8 @@ using MarvelousConfigs.BLL.Services;
 using MarvelousConfigs.DAL;
 using MarvelousConfigs.DAL.Entities;
 using MarvelousConfigs.DAL.Repositories;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -18,13 +20,17 @@ namespace MarvelousConfigs.BLL.Tests
         private Mock<IMicroserviceRepository> _repositoryMock;
         private IMapper _map;
         private IMicroservicesService _service;
+        private IMemoryCache _cache;
+        private Mock<ILogger<MicroservicesService>> _logger;
 
         [SetUp]
         public void Setup()
         {
             _repositoryMock = new Mock<IMicroserviceRepository>();
+            _cache = new MemoryCache(new MemoryCacheOptions());
+            _logger = new Mock<ILogger<MicroservicesService>>();
             _map = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<CustomMapperBLL>()));
-            _service = new MicroservicesService(_repositoryMock.Object, _map);
+            _service = new MicroservicesService(_repositoryMock.Object, _map, _cache, _logger.Object);
         }
 
         [Test]
@@ -65,7 +71,7 @@ namespace MarvelousConfigs.BLL.Tests
 
             //when
             _repositoryMock.Verify(x => x.UpdateMicroserviceById(id, It.IsAny<Microservice>()), Times.Once);
-            _repositoryMock.Verify(x => x.GetMicroserviceById(id), Times.Once);
+            _repositoryMock.Verify(x => x.GetMicroserviceById(id));
         }
 
         [Test]
@@ -141,19 +147,6 @@ namespace MarvelousConfigs.BLL.Tests
             Assert.ThrowsAsync<EntityNotFoundException>(async () => await _service.RestoreMicroservice(It.IsAny<int>()));
             _repositoryMock.Verify(x => x.DeleteOrRestoreMicroserviceById(It.IsAny<int>(), false), Times.Never);
             _repositoryMock.Verify(x => x.GetMicroserviceById(It.IsAny<int>()), Times.Once);
-        }
-
-        [Test]
-        public async Task GetAllMicroservicesWithConfigsTest()
-        {
-            //given
-            _repositoryMock.Setup(x => x.GetAllMicroservicesWithConfigs()).ReturnsAsync(It.IsAny<List<MicroserviceWithConfigs>>());
-
-            //then
-            var actual = await _service.GetAllMicroservicesWithConfigs();
-
-            //when
-            _repositoryMock.Verify(x => x.GetAllMicroservicesWithConfigs(), Times.Once);
         }
 
         [TestCaseSource(typeof(GetMicroserviceWithConfigsByIdTestCaseSource))]

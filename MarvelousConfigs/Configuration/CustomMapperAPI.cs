@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Marvelous.Contracts.ExchangeModels;
 using MarvelousConfigs.API.Models;
 using MarvelousConfigs.BLL.Models;
 
@@ -8,13 +9,14 @@ namespace MarvelousConfigs.API.Configuration
     {
         public CustomMapperAPI()
         {
-            CreateMap<ConfigModel, ConfigResponceModel>();
             CreateMap<ConfigInputModel, ConfigModel>();
+            CreateMap<ConfigModel, ConfigOutputModel>();
+            CreateMap<ConfigModel, ConfigExchangeModel>();
 
-            CreateMap<MicroserviceModel, MicroserviceResponceModel>();
             CreateMap<MicroserviceInputModel, MicroserviceModel>();
+            CreateMap<MicroserviceModel, MicroserviceOutputModel>();
 
-            CreateMap<MicroserviceWithConfigsModel, MicroserviceWithConfigsResponceModel>()
+            CreateMap<MicroserviceWithConfigsModel, MicroserviceWithConfigsOutputModel>()
                 .ForMember(m => m.Configs, opt => opt.MapFrom(o => o.Configs));
         }
     }

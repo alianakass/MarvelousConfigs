@@ -1,10 +1,10 @@
-﻿CREATE procedure [dbo].[AddConfig]
+﻿CREATE procedure [dbo].[AddConfig] 
 	@Key nvarchar(max), 
 	@Value nvarchar(50),  
 	@ServiceId integer,
-	@Created DateTime
+	@Description nvarchar(20)
 	as
 	insert into dbo.[Configs]
 	values
-	(@Key, @Value, @ServiceId, @Created, null, 0)
+	(@Key, @Value, @ServiceId, SYSDATETIME(), null, 0, @Description)
 	select SCOPE_IDENTITY()

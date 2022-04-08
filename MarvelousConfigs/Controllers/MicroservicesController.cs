@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
-using MarvelousConfigs.API.Attributes;
+using Marvelous.Contracts.Enums;
+using MarvelousConfigs.API.Attribute;
 using MarvelousConfigs.API.Models;
+using MarvelousConfigs.API.RMQ.Producers;
 using MarvelousConfigs.BLL.Models;
 using MarvelousConfigs.BLL.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -8,37 +10,44 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace MarvelousConfigs.API.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    //[AuthorizeEnum(Role.Admin)]
+    [Route("api/microservices")]
     public class MicroservicesController : ControllerBase
     {
         private readonly IMicroservicesService _service;
         private readonly IMapper _map;
-        private readonly ILogger _logger;
+        private readonly ILogger<MicroservicesController> _logger;
+        private readonly IMarvelousConfigsProducer _prod;
 
-        public MicroservicesController(IMapper mapper, IMicroservicesService service, ILogger<MicroservicesController> logger)
+        public MicroservicesController(IMapper mapper, IMicroservicesService service, ILogger<MicroservicesController> logger,
+            IMarvelousConfigsProducer producer)
         {
             _map = mapper;
             _service = service;
             _logger = logger;
+            _prod = producer;
         }
 
+        //api/microservices
         [HttpPost]
-        [SwaggerResponse(200, "OK", typeof(MicroserviceResponceModel))]
-        [SwaggerResponse(400, "Bad Request", typeof(ExceptionResponse))]
-        [SwaggerResponse(404, "NotFound", typeof(ExceptionResponse))]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [SwaggerOperation("Add microservice")]
         public async Task<ActionResult<int>> AddMicroservice([FromBody] MicroserviceInputModel model)
         {
             _logger.LogInformation($"Request to add new microservice");
             int id = await _service.AddMicroservice(_map.Map<MicroserviceModel>(model));
-            _logger.LogInformation($"Response to a request for add new microservice");
-            return Ok(id);
+            _logger.LogInformation($"Response to a request for add new microservice id {id}");
+            return StatusCode(StatusCodes.Status201Created, id);
         }
 
+        //api/microservices/42
         [HttpDelete("{id}")]
-        [SwaggerResponse(204, "NoContent")]
-        [SwaggerResponse(400, "Bad Request", typeof(ExceptionResponse))]
-        [SwaggerResponse(404, "NotFound", typeof(ExceptionResponse))]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [SwaggerOperation("Delete microservice by id")]
         public async Task<ActionResult> DeleteMicroserviceById(int id)
         {
             _logger.LogInformation($"Request to delete microservice by id{id}");
@@ -47,10 +56,12 @@ namespace MarvelousConfigs.API.Controllers
             return NoContent();
         }
 
+        //api/microservices/42
         [HttpPatch("{id}")]
-        [SwaggerResponse(204, "NoContent")]
-        [SwaggerResponse(400, "Bad Request", typeof(ExceptionResponse))]
-        [SwaggerResponse(404, "NotFound", typeof(ExceptionResponse))]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [SwaggerOperation("Restore microservice by id")]
         public async Task<ActionResult> RestoreMicroserviceById(int id)
         {
             _logger.LogInformation($"Request to restore microservice by id{id}");
@@ -59,22 +70,27 @@ namespace MarvelousConfigs.API.Controllers
             return NoContent();
         }
 
+        //api/microservices
         [HttpGet]
-        [SwaggerResponse(200, "OK", typeof(MicroserviceResponceModel))]
-        [SwaggerResponse(400, "Bad Request", typeof(ExceptionResponse))]
-        public async Task<ActionResult<List<MicroserviceResponceModel>>> GetAllMicroservices()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [SwaggerOperation("Get all microservices")]
+        public async Task<ActionResult<List<MicroserviceOutputModel>>> GetAllMicroservices()
         {
             _logger.LogInformation($"Request to get all microservices");
-            var services = _map.Map<List<MicroserviceResponceModel>>(await _service.GetAllMicroservices());
+            var services = _map.Map<List<MicroserviceOutputModel>>(await _service.GetAllMicroservices());
             _logger.LogInformation($"Response to a request for get all microservices");
+
             return Ok(services);
         }
 
+        //api/microservices/42
         [HttpPut("{id}")]
-        [SwaggerResponse(204, "NoContent")]
-        [SwaggerResponse(400, "Bad Request", typeof(ExceptionResponse))]
-        [SwaggerResponse(404, "NotFound", typeof(ExceptionResponse))]
-        public async Task<ActionResult<List<MicroserviceResponceModel>>> UpdateMicroserviceById(int id, [FromBody] MicroserviceInputModel model)
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [SwaggerOperation("Update microservice by id")]
+        public async Task<ActionResult> UpdateMicroserviceById(int id, [FromBody] MicroserviceInputModel model)
         {
             _logger.LogInformation($"Request to update microservice by id{id}");
             await _service.UpdateMicroservice(id, _map.Map<MicroserviceModel>(model));
@@ -82,25 +98,16 @@ namespace MarvelousConfigs.API.Controllers
             return NoContent();
         }
 
-        [HttpGet("with-configs")]
-        [SwaggerResponse(200, "OK", typeof(MicroserviceWithConfigsResponceModel))]
-        [SwaggerResponse(400, "Bad Request", typeof(ExceptionResponse))]
-        public async Task<ActionResult<List<MicroserviceWithConfigsResponceModel>>> GetAllMicroservicesWithConfigs()
-        {
-            _logger.LogInformation($"Request to get all microservices with configs");
-            var services = _map.Map<List<MicroserviceWithConfigsResponceModel>>(await _service.GetAllMicroservicesWithConfigs());
-            _logger.LogInformation($"Response to a request for get all microservices with configs");
-            return Ok(services);
-        }
-
+        //api/microservices/42
         [HttpGet("{id}")]
-        [SwaggerResponse(200, "OK", typeof(MicroserviceWithConfigsResponceModel))]
-        [SwaggerResponse(400, "Bad Request", typeof(ExceptionResponse))]
-        [SwaggerResponse(404, "NotFound", typeof(ExceptionResponse))]
-        public async Task<ActionResult<MicroserviceWithConfigsResponceModel>> GetMicroserviceWithConfigsById(int id)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [SwaggerOperation("Get microservices with configs by id")]
+        public async Task<ActionResult<MicroserviceWithConfigsOutputModel>> GetMicroserviceWithConfigsById(int id)
         {
             _logger.LogInformation($"Request to get microservice with configs by id{id}");
-            var services = _map.Map<MicroserviceWithConfigsResponceModel>(await _service.GetMicroserviceWithConfigsById(id));
+            var services = _map.Map<MicroserviceWithConfigsOutputModel>(await _service.GetMicroserviceWithConfigsById(id));
             _logger.LogInformation($"Response to a request for get microservice with configs by id{id}");
             return Ok(services);
         }

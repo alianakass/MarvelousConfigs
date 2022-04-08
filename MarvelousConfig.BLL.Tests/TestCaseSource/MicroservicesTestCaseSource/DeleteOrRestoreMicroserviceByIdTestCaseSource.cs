@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace MarvelousConfigs.BLL.Tests
 {
-    public class GetMicroserviceWithConfigsByIdTestCaseSource : IEnumerable
+    public class DeleteOrRestoreMicroserviceByIdTestCaseSource : IEnumerable
     {
         public IEnumerator GetEnumerator()
         {
@@ -11,7 +11,7 @@ namespace MarvelousConfigs.BLL.Tests
             {
                 Id = 1,
                 ServiceName = "Name1",
-                URL = "URL1"
+                Url = "URL1"
             };
 
             int id = 1;

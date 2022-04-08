@@ -4,6 +4,7 @@ using MarvelousConfigs.BLL.Models;
 using MarvelousConfigs.DAL.Entities;
 using MarvelousConfigs.DAL.Repositories;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 
 namespace MarvelousConfigs.BLL.Services
 {
@@ -11,91 +12,117 @@ namespace MarvelousConfigs.BLL.Services
     {
         private readonly IConfigsRepository _rep;
         private readonly IMapper _map;
-        private IMemoryCache _cache;
+        private readonly IMemoryCache _cache;
+        private readonly ILogger<ConfigsService> _logger;
 
-        public ConfigsService(IConfigsRepository repository, IMapper mapper, IMemoryCache cache)
+        public ConfigsService(IConfigsRepository repository, IMapper mapper, IMemoryCache cache, ILogger<ConfigsService> logger)
         {
             _rep = repository;
             _map = mapper;
             _cache = cache;
-            SetCache().Wait();
+            _logger = logger;
         }
 
         public async Task<int> AddConfig(ConfigModel config)
         {
-            config.Created = DateTime.Now;
+            _logger.LogInformation("Adding a new configuration");
             int id = await _rep.AddConfig(_map.Map<Config>(config));
+            _logger.LogInformation($"Сonfiguration { id } has been added");
 
             if (id > 0)
             {
-                await Set(id, config);
+                _cache.Set(id, config);
+                _logger.LogInformation($"Configuration { id } caching");
             }
-
             return id;
         }
 
         public async Task UpdateConfigById(int id, ConfigModel config)
         {
-            ConfigModel conf = null;
-            await TryGetValue(id, conf);
+            Config conf = await _cache.GetOrCreateAsync(id, (ICacheEntry _)
+                => _rep.GetConfigById(id));
 
-            config.Updated = DateTime.Now;
+            if (conf == null)
+            {
+                throw new EntityNotFoundException($"Configuration { id } not found");
+            }
+            _logger.LogInformation($"Changing configuration { id }");
             await _rep.UpdateConfigById(id, _map.Map<Config>(config));
-
-            _cache.Remove(id);
-            await Set(id, _map.Map<ConfigModel>(_rep.GetConfigById(id)));
-        }
-
-        public async Task<List<ConfigModel>> GetAllConfigs()
-        {
-            return _map.Map<List<ConfigModel>>(await _rep.GetAllConfigs());
+            _logger.LogInformation($"Сonfiguration { id } has been updated");
+            _cache.Set(id, _map.Map<ConfigModel>(((_rep.GetConfigById(id).Result))));
+            _logger.LogInformation($"Configuration { id } caching");
         }
 
         public async Task DeleteConfigById(int id)
         {
-            ConfigModel conf = null;
-            await TryGetValue(id, conf);
-            DateTime updated = DateTime.Now;
-            await _rep.DeleteOrRestoreConfigById(id, true, updated);
+
+            Config conf = await _cache.GetOrCreateAsync(id, (ICacheEntry _)
+                => _rep.GetConfigById(id));
+
+            if (conf == null)
+            {
+                throw new EntityNotFoundException($"Configuration { id } not found");
+            }
+            _logger.LogInformation($"Delete configuration { id }");
+            await _rep.DeleteOrRestoreConfigById(id, true);
+            _logger.LogInformation($"Сonfiguration { id } has been deleted");
             _cache.Remove(id);
+            _logger.LogInformation($"Configuration { id } delete from cach");
         }
 
         public async Task RestoreConfigById(int id)
         {
-            ConfigModel conf = null;
-            await TryGetValue(id, conf);
-            DateTime updated = DateTime.Now;
-            await _rep.DeleteOrRestoreConfigById(id, false, updated);
-            await Set(id, conf);
-        }
+            Config conf = await _cache.GetOrCreateAsync(id, (ICacheEntry _)
+                => _rep.GetConfigById(id));
 
-        private async Task SetCache()
-        {
-            var configs = _map.Map<List<ConfigModel>>(await _rep.GetAllConfigs());
-            foreach (ConfigModel config in configs)
+            if (conf == null)
             {
-                ConfigModel configModel = config;
-                await TryGetValue(config.Id, config);
-                await Set(config.Id, config);
+                throw new EntityNotFoundException($"Configuration { id } not found");
             }
+            _logger.LogInformation($"Restore configuration { id }");
+            await _rep.DeleteOrRestoreConfigById(id, false);
+            _logger.LogInformation($"Сonfiguration { id } has been restored");
+            _cache.Set(id, conf);
+            _logger.LogInformation($"Configuration { id } caching");
         }
 
-        private async Task Set(int id, object config)
+        public async Task<ConfigModel> GetConfigById(int id)
         {
-            _cache.Set(id, config, new MemoryCacheEntryOptions().
-                 SetSlidingExpiration(TimeSpan.FromHours(24)));
-        }
+            _logger.LogInformation($"Get configuration { id }");
+            Config conf = await _cache.GetOrCreateAsync(id, (ICacheEntry _)
+                 => _rep.GetConfigById(id));
 
-        private async Task TryGetValue(int id, object conf)
-        {
-            if (!_cache.TryGetValue(id, out conf))
+            if (conf == null)
             {
-                conf = _map.Map<ConfigModel>(await _rep.GetConfigById(id));
-                if (conf == null)
-                {
-                    throw new EntityNotFoundException($"configuration {id} not found");
-                }
+                throw new EntityNotFoundException($"Configuration { id } not found");
             }
+            _logger.LogInformation($"Configuration { id } has been received");
+            return _map.Map<ConfigModel>(conf);
+        }
+
+        public async Task<List<ConfigModel>> GetAllConfigs()
+        {
+            _logger.LogInformation($"Getting all configurations");
+            var cfg = _map.Map<List<ConfigModel>>(await _rep.GetAllConfigs());
+            _logger.LogInformation($"Сonfigurations has been received");
+            return cfg;
+        }
+
+        public async Task<List<ConfigModel>> GetConfigsByServiceId(int id)
+        {
+            _logger.LogInformation($"Getting configurations by service id{ id }");
+            var configs = _map.Map<List<ConfigModel>>(await _rep.GetConfigsByServiceId(id));
+            _logger.LogInformation($"Сonfigurations has been received");
+            return configs;
+        }
+
+        public async Task<List<ConfigModel>> GetConfigsByServiceAddress(string ip)
+        {
+            _logger.LogInformation($"Getting configurations by service address { ip }");
+            List<Config> configs = await _cache.GetOrCreateAsync(ip, (ICacheEntry _)
+               => _rep.GetConfigsByServiceAddress(ip));
+            _logger.LogInformation($"Сonfigurations has been received");
+            return _map.Map<List<ConfigModel>>(configs);
         }
     }
 }

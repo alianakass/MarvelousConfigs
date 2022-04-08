@@ -7,7 +7,7 @@ namespace MarvelousConfigs.BLL.Services
         Task<int> AddMicroservice(MicroserviceModel microservice);
         Task DeleteMicroservice(int id);
         Task<List<MicroserviceModel>> GetAllMicroservices();
-        Task<List<MicroserviceWithConfigsModel>> GetAllMicroservicesWithConfigs();
+        Task<MicroserviceModel> GetMicroserviceById(int id);
         Task<MicroserviceWithConfigsModel> GetMicroserviceWithConfigsById(int id);
         Task RestoreMicroservice(int id);
         Task UpdateMicroservice(int id, MicroserviceModel microservice);
