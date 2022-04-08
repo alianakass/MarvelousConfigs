@@ -1,4 +1,5 @@
 ﻿using MarvelousConfigs.API.RMQ.Producers;
+using MarvelousConfigs.BLL.AuthRequestClient;
 using MarvelousConfigs.BLL.Cache;
 using MarvelousConfigs.BLL.Services;
 using MarvelousConfigs.DAL.Repositories;
@@ -14,6 +15,7 @@ namespace MarvelousConfigs.API.Extensions
         {
             services.AddScoped<IMicroservicesService, MicroservicesService>();
             services.AddScoped<IConfigsService, ConfigsService>();
+            services.AddScoped<IAuthRequestClient, AuthRequestClient>();
             services.AddScoped<IMarvelousConfigsProducer, MarvelousConfigsProducer>();
             services.AddTransient<IMemoryCacheExtentions, MemoryCacheExtentions>();
         }

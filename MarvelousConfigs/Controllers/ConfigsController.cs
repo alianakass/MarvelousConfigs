@@ -119,17 +119,20 @@ namespace MarvelousConfigs.API.Controllers
             return Ok(configs);
         }
 
-        //api/configs/by-serviceAddress
-        [HttpGet("by-serviceAddress")]
+        //api/configs/by-service
+        [HttpGet("by-service")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [SwaggerOperation("Get configs by service address")]
-        public async Task<ActionResult<List<ConfigOutputModel>>> GetConfigsByServiceAddress(string address)
+        public async Task<ActionResult<List<ConfigExchangeModel>>> GetConfigsByService()
         {
-            _logger.LogInformation($"Request to get configs by service {"test data"}");
-            var configs = _map.Map<List<ConfigOutputModel>>(await _service.GetConfigsByServiceAddress(address));
-            _logger.LogInformation($"Response to a request for get configs by service {address}");
+            _logger.LogInformation($"Request to get configs by service");
+            var a = HttpContext.Request.Headers.Authorization;
+            var name = HttpContext.Request.Headers[nameof(Microservice)][0];
+            _logger.LogInformation($"Сall belongs to the service {$"{name}"}");
+            var configs = _map.Map<List<ConfigExchangeModel>>(await _service.GetConfigsByService(a, name));
+            _logger.LogInformation($"Response to a request for get configs by service {name}");
             return Ok(configs);
         }
 
