@@ -1,4 +1,6 @@
-﻿using MarvelousConfigs.API.Models;
+﻿using Marvelous.Contracts.RequestModels;
+using MarvelousConfigs.API.Models;
+using MarvelousConfigs.BLL.AuthRequestClient;
 using MarvelousConfigs.BLL.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,23 +13,22 @@ namespace MarvelousConfigs.API.Controllers
     [AllowAnonymous]
     public class AuthController : Controller
     {
-        private readonly IAuthService _authService;
+        private readonly IAuthRequestClient _auth;
         private readonly ILogger<AuthController> _logger;
 
-
-        public AuthController(IAuthService authService, ILogger<AuthController> logger)
+        public AuthController(IAuthRequestClient auth, ILogger<AuthController> logger)
         {
-            _authService = authService;
+            _auth = auth;
             _logger = logger;
         }
 
         [HttpPost("login")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [SwaggerOperation("Authentication")]
-        public async Task<ActionResult<string>> Login([FromBody] AdminLoginInputModel auth)
+        public async Task<ActionResult<string>> Login([FromBody] AuthRequestModel auth)
         {
             _logger.LogInformation($"Trying to login with email {auth.Email}");
-            string token = await _authService.GetToken(auth.Email, auth.Password);
+            string token = await _auth.GetToken(auth);
             _logger.LogInformation($"Admin with email {auth.Email} successfully logged in");
             return Ok(token);
         }

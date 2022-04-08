@@ -2,18 +2,18 @@
 
 namespace MarvelousConfigs.BLL.Crypter
 {
-    public static class Crypter
+    public class Crypter
     {
-        private static Aes _handler { get; }
+        private Aes _handler { get; }
 
-        static Crypter()
+        public Crypter(string key, string iv)
         {
             _handler = Aes.Create();
-            _handler.Key = Convert.FromBase64String("lB2BxrJdI4UUjK3KEZyQ0obuSgavB1SYJuAFq9oVw0Y=");
-            _handler.IV = Convert.FromBase64String("6lra6ceX26Fazwj1R4PCOg==");
+            _handler.Key = Convert.FromBase64String(key);
+            _handler.IV = Convert.FromBase64String(iv);
         }
 
-        public static string Encrypt(string source)
+        public string Encrypt(string source)
         {
             using (var mem = new MemoryStream())
             using (var stream = new CryptoStream(mem, _handler.CreateEncryptor(_handler.Key, _handler.IV),
@@ -25,10 +25,9 @@ namespace MarvelousConfigs.BLL.Crypter
                 }
                 return Convert.ToBase64String(mem.ToArray());
             }
-
         }
 
-        public static string Decrypt(string source)
+        public string Decrypt(string source)
         {
             var data = Convert.FromBase64String(source);
             using (var mem = new MemoryStream(data))

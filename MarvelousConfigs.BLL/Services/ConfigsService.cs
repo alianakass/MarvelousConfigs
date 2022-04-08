@@ -123,12 +123,12 @@ namespace MarvelousConfigs.BLL.Services
         {
             if (!await _auth.GetRestResponse(token))
             {
-                throw new Exception();
+                throw new Exception($"Token for {ip} validation failed");
             }
             _logger.LogInformation($"Getting configurations by service address { ip }");
             List<Config> configs = await _cache.GetOrCreateAsync(ip, (ICacheEntry _)
                => _rep.GetConfigsByService(ip));
-            _logger.LogInformation($"Сonfigurations has been received");
+            _logger.LogInformation($"Configurations has been received");
             return _map.Map<List<ConfigModel>>(configs);
 
         }
