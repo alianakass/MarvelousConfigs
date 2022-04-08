@@ -6,6 +6,7 @@ using MarvelousConfigs.BLL.Services;
 using MarvelousConfigs.DAL.Entities;
 using MarvelousConfigs.DAL.Repositories;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -18,15 +19,17 @@ namespace MarvelousConfig.BLL.Tests
         private Mock<IConfigsRepository> _repositoryMock;
         private IMapper _map;
         private IConfigsService _service;
-        private Mock<IMemoryCache> _cache;
+        private IMemoryCache _cache;
+        private Mock<ILogger<ConfigsService>> _logger;
 
         [SetUp]
         public void Setup()
         {
+            _cache = new MemoryCache(new MemoryCacheOptions());
             _repositoryMock = new Mock<IConfigsRepository>();
-            _cache = new Mock<IMemoryCache>();
+            _logger = new Mock<ILogger<ConfigsService>>();
             _map = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<CustomMapperBLL>()));
-            _service = new ConfigsService(_repositoryMock.Object, _map, _cache.Object);
+            _service = new ConfigsService(_repositoryMock.Object, _map, _cache, _logger.Object);
         }
 
         [TestCaseSource(typeof(AddConfigTestCaseSource))]
@@ -65,7 +68,7 @@ namespace MarvelousConfig.BLL.Tests
             await _service.UpdateConfigById(id, model);
 
             //when
-            _repositoryMock.Verify(x => x.GetConfigById(id), Times.Once);
+            _repositoryMock.Verify(x => x.GetConfigById(id));
             _repositoryMock.Verify(x => x.UpdateConfigById(id, It.IsAny<Config>()), Times.Once);
         }
 
