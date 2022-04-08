@@ -125,11 +125,11 @@ namespace MarvelousConfigs.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [SwaggerOperation("Get configs by service address")]
-        public async Task<ActionResult<List<ConfigOutputModel>>> GetConfigsByServiceAddress()
+        public async Task<ActionResult<List<ConfigOutputModel>>> GetConfigsByServiceAddress(string address)
         {
             _logger.LogInformation($"Request to get configs by service {"test data"}");
-            var configs = _map.Map<List<ConfigOutputModel>>(await _service.GetConfigsByServiceAddress(""));
-            _logger.LogInformation($"Response to a request for get configs by service {"test data"}");
+            var configs = _map.Map<List<ConfigOutputModel>>(await _service.GetConfigsByServiceAddress(address));
+            _logger.LogInformation($"Response to a request for get configs by service {address}");
             return Ok(configs);
         }
 
