@@ -21,6 +21,7 @@ namespace MarvelousConfig.BLL.Tests
         private IConfigsService _service;
         private IMemoryCache _cache;
         private Mock<ILogger<ConfigsService>> _logger;
+        private readonly Mock<IAuthRequestClient
 
         [SetUp]
         public void Setup()
@@ -30,6 +31,7 @@ namespace MarvelousConfig.BLL.Tests
             _logger = new Mock<ILogger<ConfigsService>>();
             _map = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<CustomMapperBLL>()));
             _service = new ConfigsService(_repositoryMock.Object, _map, _cache, _logger.Object);
+            
         }
 
         [TestCaseSource(typeof(AddConfigTestCaseSource))]

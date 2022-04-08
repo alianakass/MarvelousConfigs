@@ -47,14 +47,14 @@ namespace MarvelousConfigs.DAL.Repositories
                 (Queries.GetConfigsByServiceId, new { ServiceId = id }, commandType: CommandType.StoredProcedure)).ToList();
         }
 
-        public async Task<List<Config>> GetConfigsByServiceAddress(string ip)
+        public async Task<List<Config>> GetConfigsByService(string name)
         {
-            _logger.LogInformation($"Request to get configs by microservice address {ip} to DB");
+            _logger.LogInformation($"Request to get configs by microservice address {name} to DB");
 
             using IDbConnection connection = ProvideConnection();
 
             return (await connection.QueryAsync<Config>
-                (Queries.GetConfigsByServiceAddress, new { IP = ip }, commandType: CommandType.StoredProcedure)).ToList();
+                (Queries.GetConfigsByServiceAddress, new { Address = name }, commandType: CommandType.StoredProcedure)).ToList();
         }
 
         public async Task<int> AddConfig(Config config)

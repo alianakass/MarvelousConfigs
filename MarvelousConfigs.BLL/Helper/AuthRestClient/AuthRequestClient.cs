@@ -1,15 +1,17 @@
 ﻿using Marvelous.Contracts.Enums;
+using Marvelous.Contracts.Urls;
 using Microsoft.Extensions.Logging;
 using RestSharp;
 using RestSharp.Authenticators;
+using RestSharp.Authenticators.OAuth2;
 
 namespace MarvelousConfigs.BLL.AuthRequestClient
 {
-    public class AuthRequestClient
+    public class AuthRequestClient : IAuthRequestClient
     {
         private readonly ILogger<AuthRequestClient> _logger;
-        private readonly string _path = "check-validate-token-microservices";
-        private readonly string _url = "https://80.78.240.16:7086";
+        private readonly string _path = "/api/auth/check-validate-token-microservices";
+        private readonly string _url = "https://piter-education.ru:6042";
 
         public AuthRequestClient(ILogger<AuthRequestClient> logger)
         {
@@ -38,7 +40,8 @@ namespace MarvelousConfigs.BLL.AuthRequestClient
             {
                 Timeout = 300000
             });
-            client.Authenticator = new JwtAuthenticator(token);
+            client.Authenticator = new JwtAuthenticator(token.Split(" ")[1]);
+            client.AddDefaultHeader(nameof(Microservice), value: Microservice.MarvelousConfigs.ToString());
             var request = new RestRequest(_path, Method.Get);
             _logger.LogInformation($"Getting a response from {Microservice.MarvelousAuth}");
             var response = await client.ExecuteAsync(request);
@@ -50,8 +53,7 @@ namespace MarvelousConfigs.BLL.AuthRequestClient
             bool result = false;
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
             {
-                _logger.LogError($"{response.StatusCode} {response.ErrorException.Message}");
-                throw new HttpRequestException(response.ErrorException.Message);
+                throw new Exception(response.ErrorException.Message);
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
