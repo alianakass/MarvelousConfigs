@@ -43,14 +43,7 @@ namespace MarvelousConfigs.API.Extensions
         {
             services.AddMassTransit(x =>
             {
-                x.UsingRabbitMq((context, cfg) =>
-                {
-                    cfg.Host("rabbitmq://80.78.240.16", hst =>
-                    {
-                        hst.Username("nafanya");
-                        hst.Password("qwe!23");
-                    });
-                });
+                x.UsingRabbitMq((context, cfg) =>{});
             });
         }
     }

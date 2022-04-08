@@ -34,7 +34,7 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "LOG_DIRECTORY": "C:/Users/alian/source/repos/MarvelousConfigs",
-        "CONFIG_CONNECTION_STRING": "Data Source = 80.78.240.16; Initial Catalog = ConfigDB; Persist Security Info=True; User ID = student; Password = qwe!23; Pooling = False; MultipleActiveResultSets = False; Connect Timeout = 60; Encrypt = False; TrustServerCertificate = False",
+        "CONFIG_CONNECTION_STRING": "Data Source=80.78.240.16;Initial Catalog = ConfigDB; User ID = student;Password=qwe!23;TrustServerCertificate=True;",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },

@@ -2,6 +2,7 @@
 using MarvelousConfigs.DAL.Configuration;
 using MarvelousConfigs.DAL.Entities;
 using MarvelousConfigs.DAL.Helpers;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Data;
 
@@ -9,12 +10,17 @@ namespace MarvelousConfigs.DAL.Repositories
 {
     public class MicroservicesRepository : BaseRepository, IMicroserviceRepository
     {
-        public MicroservicesRepository(IOptions<DbConfiguration> options) : base(options)
+        private readonly ILogger<MicroservicesRepository> _logger;
+
+        public MicroservicesRepository(IOptions<DbConfiguration> options, ILogger<MicroservicesRepository> logger) : base(options)
         {
+            _logger = logger;
         }
 
         public async Task<Microservice> GetMicroserviceById(int id)
         {
+            _logger.LogInformation($"Request to get microservice by id{id} to DB");
+
             using IDbConnection connection = ProvideConnection();
 
             return await connection.QueryFirstOrDefaultAsync<Microservice>
@@ -23,6 +29,8 @@ namespace MarvelousConfigs.DAL.Repositories
 
         public async Task<List<Microservice>> GetAllMicroservices()
         {
+            _logger.LogInformation($"Request to get all microservices to DB");
+
             using IDbConnection connection = ProvideConnection();
 
             return (await connection.QueryAsync<Microservice>
@@ -31,6 +39,8 @@ namespace MarvelousConfigs.DAL.Repositories
 
         public async Task<int> AddMicroservice(Microservice microservice)
         {
+            _logger.LogInformation($"Request to add a new microservice to DB");
+
             using IDbConnection connection = ProvideConnection();
 
             return await connection.QuerySingleAsync<int>
@@ -40,6 +50,8 @@ namespace MarvelousConfigs.DAL.Repositories
 
         public async Task UpdateMicroserviceById(int id, Microservice microservice)
         {
+            _logger.LogInformation($"Request to update microservice by id{id} to DB");
+
             using IDbConnection connection = ProvideConnection();
 
             var microservices = await connection.QueryAsync
@@ -49,6 +61,8 @@ namespace MarvelousConfigs.DAL.Repositories
 
         public async Task DeleteOrRestoreMicroserviceById(int id, bool isDeleted)
         {
+            _logger.LogInformation($"Request to update microservice by id{id} to DB");
+
             using IDbConnection connection = ProvideConnection();
 
             await connection.QueryAsync
@@ -57,6 +71,8 @@ namespace MarvelousConfigs.DAL.Repositories
 
         public async Task<MicroserviceWithConfigs> GetMicroserviceWithConfigsById(int id)
         {
+            _logger.LogInformation($"Request to get microservice with configs by id{id} to DB");
+
             using IDbConnection connection = ProvideConnection();
 
             Dictionary<int, MicroserviceWithConfigs> dict = new Dictionary<int, MicroserviceWithConfigs>();

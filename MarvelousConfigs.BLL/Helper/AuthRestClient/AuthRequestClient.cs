@@ -5,7 +5,7 @@ using RestSharp.Authenticators;
 
 namespace MarvelousConfigs.BLL.AuthRequestClient
 {
-    public class AuthRequestClient : IAuthRequestClient
+    public class AuthRequestClient
     {
         private readonly ILogger<AuthRequestClient> _logger;
         private readonly string _path = "check-validate-token-microservices";
@@ -42,11 +42,26 @@ namespace MarvelousConfigs.BLL.AuthRequestClient
             var request = new RestRequest(_path, Method.Get);
             _logger.LogInformation($"Getting a response from {Microservice.MarvelousAuth}");
             var response = await client.ExecuteAsync(request);
+            return CheckTransactionError(response);
+        }
 
-            if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                return true;
-            else
-                return false;
+        private bool CheckTransactionError(RestResponse response)
+        {
+            bool result = false;
+            if (response.StatusCode != System.Net.HttpStatusCode.OK)
+            {
+                _logger.LogError($"{response.StatusCode} {response.ErrorException.Message}");
+                throw new HttpRequestException(response.ErrorException.Message);
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                result = true;
+            }
+            if (response.Content == null)
+            {
+                throw new NullReferenceException(response.ErrorException.Message);
+            }
+            return result;
         }
     }
 }

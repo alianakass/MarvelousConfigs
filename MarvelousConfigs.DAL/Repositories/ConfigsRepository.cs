@@ -2,6 +2,7 @@
 using MarvelousConfigs.DAL.Configuration;
 using MarvelousConfigs.DAL.Entities;
 using MarvelousConfigs.DAL.Helpers;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Data;
 
@@ -9,12 +10,17 @@ namespace MarvelousConfigs.DAL.Repositories
 {
     public class ConfigsRepository : BaseRepository, IConfigsRepository
     {
-        public ConfigsRepository(IOptions<DbConfiguration> options) : base(options)
+        private readonly ILogger<ConfigsRepository> _logger;
+
+        public ConfigsRepository(IOptions<DbConfiguration> options, ILogger<ConfigsRepository> logger) : base(options)
         {
+            _logger = logger;
         }
 
         public async Task<Config> GetConfigById(int id)
         {
+            _logger.LogInformation($"Request to get config by id{id} to DB");
+
             using IDbConnection connection = ProvideConnection();
 
             return await connection.QueryFirstOrDefaultAsync<Config>
@@ -23,6 +29,8 @@ namespace MarvelousConfigs.DAL.Repositories
 
         public async Task<List<Config>> GetAllConfigs()
         {
+            _logger.LogInformation($"Request to get all configs to DB");
+
             using IDbConnection connection = ProvideConnection();
 
             return (await connection.QueryAsync<Config>
@@ -31,6 +39,8 @@ namespace MarvelousConfigs.DAL.Repositories
 
         public async Task<List<Config>> GetConfigsByServiceId(int id)
         {
+            _logger.LogInformation($"Request to get configs by service id{id} to DB");
+
             using IDbConnection connection = ProvideConnection();
 
             return (await connection.QueryAsync<Config>
@@ -39,6 +49,8 @@ namespace MarvelousConfigs.DAL.Repositories
 
         public async Task<List<Config>> GetConfigsByServiceAddress(string ip)
         {
+            _logger.LogInformation($"Request to get configs by microservice address {ip} to DB");
+
             using IDbConnection connection = ProvideConnection();
 
             return (await connection.QueryAsync<Config>
@@ -47,6 +59,8 @@ namespace MarvelousConfigs.DAL.Repositories
 
         public async Task<int> AddConfig(Config config)
         {
+            _logger.LogInformation("Request to add a new configuration to DB");
+
             using IDbConnection connection = ProvideConnection();
 
             return await connection.QuerySingleAsync<int>
@@ -62,6 +76,8 @@ namespace MarvelousConfigs.DAL.Repositories
 
         public async Task UpdateConfigById(int id, Config config)
         {
+            _logger.LogInformation($"Request to update config by id{id} to DB");
+
             using IDbConnection connection = ProvideConnection();
 
             await connection.QueryAsync
@@ -79,6 +95,8 @@ namespace MarvelousConfigs.DAL.Repositories
 
         public async Task DeleteOrRestoreConfigById(int id, bool isDeleted)
         {
+            _logger.LogInformation($"Request to update config by id{id} to DB");
+
             using IDbConnection connection = ProvideConnection();
 
             await connection.QueryAsync
