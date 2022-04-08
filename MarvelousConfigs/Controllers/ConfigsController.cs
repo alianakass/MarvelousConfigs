@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Marvelous.Contracts.Enums;
+using MarvelousConfigs.API.Attribute;
 using MarvelousConfigs.API.Models;
 using MarvelousConfigs.API.RMQ.Producers;
 using MarvelousConfigs.BLL.Models;
@@ -31,6 +33,7 @@ namespace MarvelousConfigs.API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        //[AuthorizeEnum(Role.Admin)]
         [SwaggerOperation("Add config")]
         public async Task<ActionResult<int>> AddConfig([FromBody] ConfigInputModel model)
         {
@@ -46,6 +49,7 @@ namespace MarvelousConfigs.API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        //[AuthorizeEnum(Role.Admin)]
         [SwaggerOperation("Delete config by id")]
         public async Task<ActionResult> DeleteConfigById(int id)
         {
@@ -60,6 +64,7 @@ namespace MarvelousConfigs.API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        //[AuthorizeEnum(Role.Admin)]
         [SwaggerOperation("Restore config by id")]
         public async Task<ActionResult> RestoreConfigById(int id)
         {
@@ -74,6 +79,7 @@ namespace MarvelousConfigs.API.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        //[AuthorizeEnum(Role.Admin)]
         [SwaggerOperation("Get all configs")]
         public async Task<ActionResult<List<ConfigOutputModel>>> GetAllConfigs()
         {
@@ -88,6 +94,7 @@ namespace MarvelousConfigs.API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        //[AuthorizeEnum(Role.Admin)]
         [SwaggerOperation("Update config by id")]
         public async Task<ActionResult> UpdateConfigById(int id, [FromBody] ConfigInputModel model)
         {
@@ -98,10 +105,12 @@ namespace MarvelousConfigs.API.Controllers
             return NoContent();
         }
 
+        //api/configs/42
         [HttpGet("service/{id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        //[AuthorizeEnum(Role.Admin)]
         [SwaggerOperation("Get configs by service id")]
         public async Task<ActionResult<List<ConfigOutputModel>>> GetConfigsByServiceId(int id)
         {
@@ -111,7 +120,8 @@ namespace MarvelousConfigs.API.Controllers
             return Ok(configs);
         }
 
-        [HttpGet("by-serviceIP")]
+        //api/configs/by-serviceAddress
+        [HttpGet("by-serviceAddress")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

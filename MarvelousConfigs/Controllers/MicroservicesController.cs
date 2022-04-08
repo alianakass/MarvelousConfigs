@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Marvelous.Contracts.Enums;
+using MarvelousConfigs.API.Attribute;
 using MarvelousConfigs.API.Models;
 using MarvelousConfigs.API.RMQ.Producers;
 using MarvelousConfigs.BLL.Models;
@@ -9,6 +11,7 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace MarvelousConfigs.API.Controllers
 {
     [ApiController]
+    //[AuthorizeEnum(Role.Admin)]
     [Route("api/microservices")]
     public class MicroservicesController : ControllerBase
     {
@@ -28,7 +31,7 @@ namespace MarvelousConfigs.API.Controllers
 
         //api/microservices
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)] //
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [SwaggerOperation("Add microservice")]
         public async Task<ActionResult<int>> AddMicroservice([FromBody] MicroserviceInputModel model)
