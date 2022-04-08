@@ -48,7 +48,7 @@ namespace MarvelousConfigs.BLL.Services
             }
             _logger.LogInformation($"Changing configuration { id }");
             await _rep.UpdateConfigById(id, _map.Map<Config>(config));
-            _logger.LogInformation($"Сonfiguration { id } has been updated");
+            _logger.LogInformation($"Configuration { id } has been updated");
             _cache.Set(id, (_rep.GetConfigById(id).Result));
             _logger.LogInformation($"Configuration { id } caching");
         }
