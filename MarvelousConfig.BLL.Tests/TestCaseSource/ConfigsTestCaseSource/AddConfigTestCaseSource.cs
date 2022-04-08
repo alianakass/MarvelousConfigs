@@ -10,7 +10,7 @@ namespace MarvelousConfig.BLL.Tests
             ConfigModel model = new ConfigModel()
             {
                 Key = "KEY",
-                Value = "VALUE",
+                Value = "VALUE"
             };
 
             yield return new object[] { model };

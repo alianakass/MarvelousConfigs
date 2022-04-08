@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Marvelous.Contracts.Enums;
 using MarvelousConfigs.API.Attribute;
+using Marvelous.Contracts.ExchangeModels;
 using MarvelousConfigs.API.Models;
 using MarvelousConfigs.API.RMQ.Producers;
 using MarvelousConfigs.BLL.Models;
@@ -84,7 +85,7 @@ namespace MarvelousConfigs.API.Controllers
         public async Task<ActionResult<List<ConfigOutputModel>>> GetAllConfigs()
         {
             _logger.LogInformation($"Request to get all configs");
-            var configs = _map.Map<List<MicroserviceOutputModel>>(await _service.GetAllConfigs());
+            var configs = _map.Map<List<ConfigOutputModel>>(await _service.GetAllConfigs());
             _logger.LogInformation($"Response to a request for all configs");
             return Ok(configs);
         }
@@ -105,17 +106,17 @@ namespace MarvelousConfigs.API.Controllers
             return NoContent();
         }
 
-        //api/configs/42
+        //api/configs/service/42
         [HttpGet("service/{id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         //[AuthorizeEnum(Role.Admin)]
         [SwaggerOperation("Get configs by service id")]
-        public async Task<ActionResult<List<ConfigOutputModel>>> GetConfigsByServiceId(int id)
+        public async Task<ActionResult<List<ConfigExchangeModel>>> GetConfigsByServiceId(int id)
         {
             _logger.LogInformation($"Request to get configs by service id{id}");
-            var configs = _map.Map<List<ConfigOutputModel>>(await _service.GetConfigsByServiceId(id));
+            var configs = _map.Map<List<ConfigExchangeModel>>(await _service.GetConfigsByServiceId(id));
             _logger.LogInformation($"Response to a request for get configs by service id{id}");
             return Ok(configs);
         }

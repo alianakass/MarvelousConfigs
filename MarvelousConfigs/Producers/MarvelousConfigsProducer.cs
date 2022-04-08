@@ -9,15 +9,12 @@ namespace MarvelousConfigs.API.RMQ.Producers
     public class MarvelousConfigsProducer : IMarvelousConfigsProducer
     {
         private readonly IConfigsService _config;
-        private readonly IMicroservicesService _microservice;
         private readonly ILogger<MarvelousConfigsProducer> _logger;
         private readonly IBus _bus;
 
-        public MarvelousConfigsProducer(IConfigsService configsService, IMicroservicesService microservicesService,
-            ILogger<MarvelousConfigsProducer> logger, IBus bus)
+        public MarvelousConfigsProducer(IConfigsService configsService, ILogger<MarvelousConfigsProducer> logger, IBus bus)
         {
             _config = configsService;
-            _microservice = microservicesService;
             _logger = logger;
             _bus = bus;
         }
@@ -27,11 +24,11 @@ namespace MarvelousConfigs.API.RMQ.Producers
             var source = new CancellationTokenSource(TimeSpan.FromSeconds(10));
 
             ConfigModel config = new ConfigModel() { Id = 1, Key = "TestKey", Value = "TestValue", ServiceId = 100 };
-            _logger.LogInformation($"Try publish config id{id} for {((Microservice)config.ServiceId)}");
+            _logger.LogInformation($"Try publish config id{id} for {(((Microservice)config.ServiceId).ToString())}");
             //var config = _ await _config.GetConfigById(id);
 
             await CheckMicroserviceAndPublish(config, source);
-            _logger.LogInformation($"Config id{config.Id} for {((Microservice)config.ServiceId)} published");
+            _logger.LogInformation($"Config id{config.Id} for {(((Microservice)config.ServiceId).ToString())} published");
         }
 
         private async Task CheckMicroserviceAndPublish(ConfigModel config, CancellationTokenSource source)

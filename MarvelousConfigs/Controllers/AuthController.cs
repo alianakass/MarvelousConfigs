@@ -29,7 +29,7 @@ namespace MarvelousConfigs.API.Controllers
             _logger.LogInformation($"Trying to login with email {auth.Email}");
             string token = await _authService.GetToken(auth.Email, auth.Password);
             _logger.LogInformation($"Admin with email {auth.Email} successfully logged in");
-            return Ok(token); 
+            return Ok(token);
         }
     }
 }
