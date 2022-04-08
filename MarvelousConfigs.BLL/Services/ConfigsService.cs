@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MarvelousConfigs.BLL.AuthRequestClient;
 using MarvelousConfigs.BLL.Exeptions;
 using MarvelousConfigs.BLL.Models;
 using MarvelousConfigs.DAL.Entities;
@@ -14,13 +15,15 @@ namespace MarvelousConfigs.BLL.Services
         private readonly IMapper _map;
         private readonly IMemoryCache _cache;
         private readonly ILogger<ConfigsService> _logger;
+        private readonly IAuthRequestClient _auth;
 
-        public ConfigsService(IConfigsRepository repository, IMapper mapper, IMemoryCache cache, ILogger<ConfigsService> logger)
+        public ConfigsService(IConfigsRepository repository, IMapper mapper, IMemoryCache cache, ILogger<ConfigsService> logger, IAuthRequestClient auth)
         {
             _rep = repository;
             _map = mapper;
             _cache = cache;
             _logger = logger;
+            _auth = auth;
         }
 
         public async Task<int> AddConfig(ConfigModel config)
@@ -116,13 +119,18 @@ namespace MarvelousConfigs.BLL.Services
             return configs;
         }
 
-        public async Task<List<ConfigModel>> GetConfigsByServiceAddress(string ip)
+        public async Task<List<ConfigModel>> GetConfigsByService(string token, string ip)
         {
+            if (!await _auth.GetRestResponse(token))
+            {
+                throw new Exception();
+            }
             _logger.LogInformation($"Getting configurations by service address { ip }");
             List<Config> configs = await _cache.GetOrCreateAsync(ip, (ICacheEntry _)
-               => _rep.GetConfigsByServiceAddress(ip));
+               => _rep.GetConfigsByService(ip));
             _logger.LogInformation($"Сonfigurations has been received");
             return _map.Map<List<ConfigModel>>(configs);
+
         }
     }
 }

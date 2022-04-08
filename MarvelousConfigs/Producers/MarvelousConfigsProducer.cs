@@ -1,4 +1,5 @@
 ﻿using Marvelous.Contracts.Configurations;
+using Marvelous.Contracts.EmailMessageModels;
 using Marvelous.Contracts.Enums;
 using MarvelousConfigs.BLL.Models;
 using MarvelousConfigs.BLL.Services;
@@ -17,6 +18,19 @@ namespace MarvelousConfigs.API.RMQ.Producers
             _config = configsService;
             _logger = logger;
             _bus = bus;
+        }
+
+        public async Task NotifyError(string mess)
+        {
+            var source = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+
+            await _bus.Publish<EmailErrorMessage>(new
+            {
+                ServiceName = Microservice.MarvelousConfigs.ToString(),
+                TextMessage = mess
+            },
+               source.Token) ;
+
         }
 
         public async Task NotifyConfigurationAddedOrUpdated(int id)
