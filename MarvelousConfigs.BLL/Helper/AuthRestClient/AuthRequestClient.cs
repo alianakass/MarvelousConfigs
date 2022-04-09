@@ -31,6 +31,7 @@ namespace MarvelousConfigs.BLL.AuthRequestClient
                 _logger.LogError(ex, $"Error while validating token");
             }
 
+            _logger.LogInformation($"Response from {Microservice.MarvelousAuth} was received");
             return response;
         }
 
