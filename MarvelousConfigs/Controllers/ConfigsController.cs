@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using Marvelous.Contracts.Endpoints;
 using Marvelous.Contracts.Enums;
 using Marvelous.Contracts.ResponseModels;
 using MarvelousConfigs.API.Models;
 using MarvelousConfigs.API.RMQ.Producers;
+using MarvelousConfigs.BLL.AuthRequestClient;
 using MarvelousConfigs.BLL.Models;
 using MarvelousConfigs.BLL.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -18,14 +20,16 @@ namespace MarvelousConfigs.API.Controllers
         private readonly IMapper _map;
         private readonly ILogger<ConfigsController> _logger;
         private readonly IMarvelousConfigsProducer _prod;
+        private readonly IAuthRequestClient _auth;
 
         public ConfigsController(IMapper mapper, IConfigsService service,
-            ILogger<ConfigsController> logger, IMarvelousConfigsProducer producer)
+            ILogger<ConfigsController> logger, IMarvelousConfigsProducer producer, IAuthRequestClient auth)
         {
             _map = mapper;
             _service = service;
             _logger = logger;
             _prod = producer;
+            _auth = auth;
         }
 
         //api/configs
@@ -112,16 +116,16 @@ namespace MarvelousConfigs.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         //[AuthorizeEnum(Role.Admin)]
         [SwaggerOperation("Get configs by service id")]
-        public async Task<ActionResult<List<ConfigResponseModel>>> GetConfigsByServiceId(int id)
+        public async Task<ActionResult<List<ConfigOutputModel>>> GetConfigsByServiceId(int id)
         {
             _logger.LogInformation($"Request to get configs by service id{id}");
-            var configs = _map.Map<List<ConfigResponseModel>>(await _service.GetConfigsByServiceId(id));
+            var configs = _map.Map<List<ConfigOutputModel>>(await _service.GetConfigsByServiceId(id));
             _logger.LogInformation($"Response to a request for get configs by service id{id}");
             return Ok(configs);
         }
 
         //api/configs/by-service
-        [HttpGet("by-service")]
+        [HttpGet(ConfigsEndpoints.Configs)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

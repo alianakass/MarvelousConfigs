@@ -48,12 +48,13 @@ namespace MarvelousConfigs.BLL.Cache
                             cfgs.Add(c);
                         }
                     }
-                    _cache.Set(s.Address, cfgs);
+                    _cache.Set(s.ServiceName, cfgs);
                 }
+                _logger.LogInformation("Objects were successfully loaded into the cache");
             }
             catch (Exception ex)
             {
-                _logger.LogCritical($"Error loading objects in cache. {ex}");
+                _logger.LogCritical($"Error loading objects into the cache. {ex}");
             }
         }
     }
