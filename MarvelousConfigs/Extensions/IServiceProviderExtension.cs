@@ -1,9 +1,12 @@
 ﻿using MarvelousConfigs.API.RMQ.Producers;
 using MarvelousConfigs.BLL.AuthRequestClient;
 using MarvelousConfigs.BLL.Cache;
+using MarvelousConfigs.BLL.Configuration;
 using MarvelousConfigs.BLL.Services;
 using MarvelousConfigs.DAL.Repositories;
 using MassTransit;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NLog.Extensions.Logging;
 
@@ -15,6 +18,7 @@ namespace MarvelousConfigs.API.Extensions
         {
             services.AddScoped<IMicroservicesService, MicroservicesService>();
             services.AddScoped<IConfigsService, ConfigsService>();
+            services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IAuthRequestClient, AuthRequestClient>();
             services.AddScoped<IMarvelousConfigsProducer, MarvelousConfigsProducer>();
             services.AddTransient<IMemoryCacheExtentions, MemoryCacheExtentions>();
@@ -42,11 +46,29 @@ namespace MarvelousConfigs.API.Extensions
             });
         }
 
+        public static void AddCustomAuth(this IServiceCollection services)
+        {
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = AuthOptions.Issuer,
+                        ValidateAudience = true,
+                        ValidAudience = AuthOptions.Audience,
+                        ValidateLifetime = true,
+                        IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                        ValidateIssuerSigningKey = true,
+                    };
+                });
+        }
+
         public static void AddMassTransit(this IServiceCollection services)
         {
             services.AddMassTransit(x =>
             {
-                x.UsingRabbitMq((context, cfg) =>{});
+                x.UsingRabbitMq((context, cfg) => { });
             });
         }
 
@@ -54,8 +76,12 @@ namespace MarvelousConfigs.API.Extensions
         {
             services.AddSwaggerGen(opt =>
             {
-                opt.SwaggerDoc("v1", new OpenApiInfo { Title = "MyAPI", Version = "v1" });
                 opt.EnableAnnotations();
+                opt.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "MyAPI",
+                    Version = "v1"
+                });
                 opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     In = ParameterLocation.Header,
@@ -65,19 +91,20 @@ namespace MarvelousConfigs.API.Extensions
                     BearerFormat = "JWT",
                     Scheme = "bearer"
                 });
+
                 opt.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
                         new OpenApiSecurityScheme
                         {
-                            Reference = new OpenApiReference
-                            {
-                                Type=ReferenceType.SecurityScheme,
-                                Id="Bearer"
-                            }
-                        },
-                             new string[]{}
-                    }
+                        Reference = new OpenApiReference
+                        {
+                            Type=ReferenceType.SecurityScheme,
+                            Id="Bearer"
+                        }
+                    },
+                    new string[]{}
+                }
                 });
             });
         }

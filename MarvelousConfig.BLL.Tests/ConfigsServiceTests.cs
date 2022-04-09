@@ -33,7 +33,7 @@ namespace MarvelousConfig.BLL.Tests
             _auth = new Mock<IAuthRequestClient>();
             _map = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<CustomMapperBLL>()));
             _service = new ConfigsService(_repositoryMock.Object, _map, _cache, _logger.Object, _auth.Object);
-            
+
         }
 
         [TestCaseSource(typeof(AddConfigTestCaseSource))]

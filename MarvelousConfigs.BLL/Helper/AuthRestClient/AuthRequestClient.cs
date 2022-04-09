@@ -1,11 +1,9 @@
 ﻿using Marvelous.Contracts.Enums;
 using Marvelous.Contracts.RequestModels;
 using Marvelous.Contracts.Urls;
-using MarvelousConfigs.BLL.Helper.AuthRestClient;
 using Microsoft.Extensions.Logging;
 using RestSharp;
 using RestSharp.Authenticators;
-using RestSharp.Authenticators.OAuth2;
 
 namespace MarvelousConfigs.BLL.AuthRequestClient
 {

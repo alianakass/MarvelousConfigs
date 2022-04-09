@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Marvelous.Contracts.ExchangeModels;
+using Marvelous.Contracts.ResponseModels;
 using MarvelousConfigs.API.Models;
 using MarvelousConfigs.BLL.Models;
 
@@ -11,7 +11,7 @@ namespace MarvelousConfigs.API.Configuration
         {
             CreateMap<ConfigInputModel, ConfigModel>();
             CreateMap<ConfigModel, ConfigOutputModel>();
-            CreateMap<ConfigModel, ConfigExchangeModel>();
+            CreateMap<ConfigModel, ConfigResponseModel>();
 
             CreateMap<MicroserviceInputModel, MicroserviceModel>();
             CreateMap<MicroserviceModel, MicroserviceOutputModel>();
