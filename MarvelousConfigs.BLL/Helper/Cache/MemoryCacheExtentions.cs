@@ -21,18 +21,18 @@ namespace MarvelousConfigs.BLL.Cache
             _logger = logger;
         }
 
-        public void SetMemoryCache()
+        public async Task SetMemoryCache()
         {
             try
             {
                 _logger.LogInformation("Start loading objects into the cache");
-                var services = _microservice.GetAllMicroservices().Result;
+                var services = await _microservice.GetAllMicroservices();
                 foreach (var c in services)
                 {
                     _cache.Set((Marvelous.Contracts.Enums.Microservice)c.Id, c);
                 }
 
-                var configs = _config.GetAllConfigs().Result;
+                var configs = await _config.GetAllConfigs();
                 foreach (var config in configs)
                 {
                     _cache.Set(config.Id, config);

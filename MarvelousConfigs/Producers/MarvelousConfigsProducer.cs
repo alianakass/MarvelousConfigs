@@ -46,9 +46,9 @@ namespace MarvelousConfigs.API.RMQ.Producers
 
         private async Task CheckMicroserviceAndPublish(ConfigModel config, CancellationTokenSource source)
         {
-            switch (config.ServiceId)
+            switch ((Microservice)config.ServiceId)
             {
-                case (int)Microservice.MarvelousAccountChecking:
+                case Microservice.MarvelousAccountChecking:
                     await _bus.Publish<AccountCheckingCfg>(new
                     {
                         config.Key,
@@ -57,7 +57,7 @@ namespace MarvelousConfigs.API.RMQ.Producers
                 source.Token);
                     break;
 
-                case (int)Microservice.MarvelousReporting:
+                case Microservice.MarvelousReporting:
                     await _bus.Publish<ReportingCfg>(new
                     {
                         config.Key,
@@ -66,7 +66,7 @@ namespace MarvelousConfigs.API.RMQ.Producers
                 source.Token);
                     break;
 
-                case (int)Microservice.MarvelousResource:
+                case Microservice.MarvelousResource:
                     await _bus.Publish<ResourceCfg>(new
                     {
                         config.Key,
@@ -75,7 +75,7 @@ namespace MarvelousConfigs.API.RMQ.Producers
                 source.Token);
                     break;
 
-                case (int)Microservice.MarvelousTransactionStore:
+                case Microservice.MarvelousTransactionStore:
                     await _bus.Publish<TransactionStoreCfg>(new
                     {
                         config.Key,
@@ -84,7 +84,7 @@ namespace MarvelousConfigs.API.RMQ.Producers
                 source.Token);
                     break;
 
-                case (int)Microservice.MarvelousCrm:
+                case Microservice.MarvelousCrm:
                     await _bus.Publish<CrmCfg>(new
                     {
                         config.Key,
@@ -102,7 +102,7 @@ namespace MarvelousConfigs.API.RMQ.Producers
                 source.Token);
                     break;
 
-                case (int)Microservice.MarvelousRatesApi:
+                case Microservice.MarvelousRatesApi:
                     await _bus.Publish<RatesApiCfg>(new
                     {
                         config.Key,
@@ -111,7 +111,7 @@ namespace MarvelousConfigs.API.RMQ.Producers
                 source.Token);
                     break;
 
-                case (int)Microservice.MarvelousAuth:
+                case Microservice.MarvelousAuth:
                     await _bus.Publish<AuthCfg>(new
                     {
                         config.Key,

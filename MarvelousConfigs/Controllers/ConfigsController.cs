@@ -112,10 +112,10 @@ namespace MarvelousConfigs.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         //[AuthorizeEnum(Role.Admin)]
         [SwaggerOperation("Get configs by service id")]
-        public async Task<ActionResult<List<ConfigResponseModel>>> GetConfigsByServiceId(int id)
+        public async Task<ActionResult<List<ConfigOutputModel>>> GetConfigsByServiceId(int id)
         {
             _logger.LogInformation($"Request to get configs by service id{id}");
-            var configs = _map.Map<List<ConfigResponseModel>>(await _service.GetConfigsByServiceId(id));
+            var configs = _map.Map<List<ConfigOutputModel>>(await _service.GetConfigsByServiceId(id));
             _logger.LogInformation($"Response to a request for get configs by service id{id}");
             return Ok(configs);
         }
