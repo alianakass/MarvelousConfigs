@@ -16,15 +16,12 @@ namespace MarvelousConfigs.API.Controllers
         private readonly IMicroservicesService _service;
         private readonly IMapper _map;
         private readonly ILogger<MicroservicesController> _logger;
-        private readonly IMarvelousConfigsProducer _prod;
 
-        public MicroservicesController(IMapper mapper, IMicroservicesService service, ILogger<MicroservicesController> logger,
-            IMarvelousConfigsProducer producer)
+        public MicroservicesController(IMapper mapper, IMicroservicesService service, ILogger<MicroservicesController> logger)
         {
             _map = mapper;
             _service = service;
             _logger = logger;
-            _prod = producer;
         }
 
         //api/microservices
@@ -34,7 +31,6 @@ namespace MarvelousConfigs.API.Controllers
         [SwaggerOperation("Add microservice")]
         public async Task<ActionResult<int>> AddMicroservice([FromBody] MicroserviceInputModel model)
         {
-            //_auth.CheckTokenForFront(this.HttpContext.Request.Headers.Authorization[0]);
             _logger.LogInformation($"Request to add new microservice");
             int id = await _service.AddMicroservice(_map.Map<MicroserviceModel>(model));
             _logger.LogInformation($"Response to a request for add new microservice id {id}");
@@ -49,7 +45,6 @@ namespace MarvelousConfigs.API.Controllers
         [SwaggerOperation("Delete microservice by id")]
         public async Task<ActionResult> DeleteMicroserviceById(int id)
         {
-            //_auth.CheckTokenForFront(this.HttpContext.Request.Headers.Authorization[0]);
             _logger.LogInformation($"Request to delete microservice by id{id}");
             await _service.DeleteMicroservice(id);
             _logger.LogInformation($"Response to a request for delete microservice by id{id}");
@@ -64,7 +59,6 @@ namespace MarvelousConfigs.API.Controllers
         [SwaggerOperation("Restore microservice by id")]
         public async Task<ActionResult> RestoreMicroserviceById(int id)
         {
-            //_auth.CheckTokenForFront(this.HttpContext.Request.Headers.Authorization[0]);
             _logger.LogInformation($"Request to restore microservice by id{id}");
             await _service.RestoreMicroservice(id);
             _logger.LogInformation($"Response to a request for restore microservice by id{id}");
@@ -78,7 +72,6 @@ namespace MarvelousConfigs.API.Controllers
         [SwaggerOperation("Get all microservices")]
         public async Task<ActionResult<List<MicroserviceOutputModel>>> GetAllMicroservices()
         {
-            //_auth.CheckTokenForFront(this.HttpContext.Request.Headers.Authorization[0]);
             _logger.LogInformation($"Request to get all microservices");
             var services = _map.Map<List<MicroserviceOutputModel>>(await _service.GetAllMicroservices());
             _logger.LogInformation($"Response to a request for get all microservices");
@@ -94,7 +87,6 @@ namespace MarvelousConfigs.API.Controllers
         [SwaggerOperation("Update microservice by id")]
         public async Task<ActionResult> UpdateMicroserviceById(int id, [FromBody] MicroserviceInputModel model)
         {
-            //_auth.CheckTokenForFront(this.HttpContext.Request.Headers.Authorization[0]);
             _logger.LogInformation($"Request to update microservice by id{id}");
             await _service.UpdateMicroservice(id, _map.Map<MicroserviceModel>(model));
             _logger.LogInformation($"Response to a request for update microservice by id{id}");
@@ -109,7 +101,6 @@ namespace MarvelousConfigs.API.Controllers
         [SwaggerOperation("Get microservices with configs by id")]
         public async Task<ActionResult<MicroserviceWithConfigsOutputModel>> GetMicroserviceWithConfigsById(int id)
         {
-            //_auth.CheckTokenForFront(this.HttpContext.Request.Headers.Authorization[0]);
             _logger.LogInformation($"Request to get microservice with configs by id{id}");
             var services = _map.Map<MicroserviceWithConfigsOutputModel>(await _service.GetMicroserviceWithConfigsById(id));
             _logger.LogInformation($"Response to a request for get microservice with configs by id{id}");

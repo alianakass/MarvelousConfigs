@@ -30,7 +30,7 @@ namespace MarvelousConfigs.BLL.Services
         {
             _logger.LogInformation("Adding a new configuration");
             int id = await _rep.AddConfig(_map.Map<Config>(config));
-            _logger.LogInformation($"Сonfiguration { id } has been added");
+            _logger.LogInformation($"Configuration { id } has been added");
 
             if (id > 0)
             {
@@ -51,7 +51,7 @@ namespace MarvelousConfigs.BLL.Services
             }
             _logger.LogInformation($"Changing configuration { id }");
             await _rep.UpdateConfigById(id, _map.Map<Config>(config));
-            _logger.LogInformation($"Сonfiguration { id } has been updated");
+            _logger.LogInformation($"Configuration { id } has been updated");
             _cache.Set(id, _map.Map<ConfigModel>(((_rep.GetConfigById(id).Result))));
             _logger.LogInformation($"Configuration { id } caching");
         }
@@ -68,7 +68,7 @@ namespace MarvelousConfigs.BLL.Services
             }
             _logger.LogInformation($"Delete configuration { id }");
             await _rep.DeleteOrRestoreConfigById(id, true);
-            _logger.LogInformation($"Сonfiguration { id } has been deleted");
+            _logger.LogInformation($"Configuration { id } has been deleted");
             _cache.Remove(id);
             _logger.LogInformation($"Configuration { id } delete from cach");
         }
@@ -84,7 +84,7 @@ namespace MarvelousConfigs.BLL.Services
             }
             _logger.LogInformation($"Restore configuration { id }");
             await _rep.DeleteOrRestoreConfigById(id, false);
-            _logger.LogInformation($"Сonfiguration { id } has been restored");
+            _logger.LogInformation($"Configuration { id } has been restored");
             _cache.Set(id, conf);
             _logger.LogInformation($"Configuration { id } caching");
         }
@@ -107,7 +107,7 @@ namespace MarvelousConfigs.BLL.Services
         {
             _logger.LogInformation($"Getting all configurations");
             var cfg = _map.Map<List<ConfigModel>>(await _rep.GetAllConfigs());
-            _logger.LogInformation($"Сonfigurations has been received");
+            _logger.LogInformation($"Configurations has been received");
             return cfg;
         }
 
@@ -115,7 +115,7 @@ namespace MarvelousConfigs.BLL.Services
         {
             _logger.LogInformation($"Getting configurations by service id{ id }");
             var configs = _map.Map<List<ConfigModel>>(await _rep.GetConfigsByServiceId(id));
-            _logger.LogInformation($"Сonfigurations has been received");
+            _logger.LogInformation($"Configurations has been received");
             return configs;
         }
 

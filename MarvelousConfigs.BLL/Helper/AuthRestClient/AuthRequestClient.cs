@@ -1,9 +1,8 @@
-﻿using Marvelous.Contracts.Enums;
-using Marvelous.Contracts.RequestModels;
-using Marvelous.Contracts.Urls;
+﻿using Marvelous.Contracts.Autentificator;
+using Marvelous.Contracts.Endpoints;
+using Marvelous.Contracts.Enums;
 using Microsoft.Extensions.Logging;
 using RestSharp;
-using RestSharp.Authenticators;
 
 namespace MarvelousConfigs.BLL.AuthRequestClient
 {
@@ -15,42 +14,6 @@ namespace MarvelousConfigs.BLL.AuthRequestClient
         public AuthRequestClient(ILogger<AuthRequestClient> logger)
         {
             _logger = logger;
-        }
-
-        public async Task<bool> CheckTokenForFront(string token)
-        {
-            _logger.LogInformation($"Start sending a request to validate a token for front");
-            var client = new RestClient(new RestClientOptions(_url)
-            {
-                Timeout = 300000
-            });
-            client.Authenticator = new JwtAuthenticator(token.Split(" ")[1]); // new MarvelousAuthenticator(token);
-            client.AddDefaultHeader(nameof(Microservice), Microservice.MarvelousConfigs.ToString());
-            var request = new RestRequest($"{AuthUrls.ApiAuth}/{AuthUrls.ValidationFront}");
-            _logger.LogInformation($"Getting a response from {Microservice.MarvelousAuth}");
-            var response = await client.ExecuteAsync(request);
-            return CheckTransactionError(response);
-        }
-
-        public async Task<string> GetToken(AuthRequestModel auth)
-        {
-            _logger.LogInformation($"Start sending a request to get token for admin auth");
-            var client = new RestClient(new RestClientOptions(_url)
-            {
-                Timeout = 300000
-            });
-            client.AddDefaultHeader(nameof(Microservice), Microservice.MarvelousConfigs.ToString());
-            var request = new RestRequest($"{AuthUrls.ApiAuth}/{AuthUrls.Login}", Method.Post);
-            request.AddBody(auth);
-            _logger.LogInformation($"Getting a response from {Microservice.MarvelousAuth}");
-            var response = await client.ExecuteAsync(request);
-            if (CheckTransactionError(response))
-            {
-                _logger.LogInformation($"Token has been received");
-                return response.Content;
-            }
-            else
-                throw new Exception($"Error occurred while getting the token for the admin with email {auth.Email} | {response.ErrorMessage}");
         }
 
         public async Task<bool> GetRestResponse(string token)
@@ -75,9 +38,9 @@ namespace MarvelousConfigs.BLL.AuthRequestClient
             {
                 Timeout = 300000
             });
-            client.Authenticator = new JwtAuthenticator(token.Split(" ")[1]); // new MarvelousAuthenticator(token); 
+            client.Authenticator = new MarvelousAuthenticator(token);
             client.AddDefaultHeader(nameof(Microservice), value: Microservice.MarvelousConfigs.ToString());
-            var request = new RestRequest($"{AuthUrls.ApiAuth}/{AuthUrls.ValidationMicroservice}", Method.Get);
+            var request = new RestRequest($"{AuthEndpoints.ApiAuth}{AuthEndpoints.ValidationMicroservice}", Method.Get);
             _logger.LogInformation($"Getting a response from {Microservice.MarvelousAuth}");
             var response = await client.ExecuteAsync(request);
             return CheckTransactionError(response);
@@ -89,7 +52,7 @@ namespace MarvelousConfigs.BLL.AuthRequestClient
             bool result = false;
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
             {
-                _logger.LogWarning(response.ErrorException.Message);
+                _logger.LogWarning(response.ErrorException!.Message);
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
@@ -97,7 +60,7 @@ namespace MarvelousConfigs.BLL.AuthRequestClient
             }
             if (response.Content == null)
             {
-                _logger.LogWarning(response.ErrorException.Message);
+                _logger.LogWarning(response.ErrorException!.Message);
             }
             return result;
         }

@@ -9,10 +9,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NLog.Extensions.Logging;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using MarvelousConfigs.API.Configuration;
-using MarvelousConfigs.BLL.Configuration;
 
 namespace MarvelousConfigs.API.Extensions
 {
@@ -57,19 +53,19 @@ namespace MarvelousConfigs.API.Extensions
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        // указывает, будет ли валидироваться издатель при валидации токена
+                        // указывает, будет ли валидироватьCя издатель при валидации токена
                         ValidateIssuer = true,
-                        // строка, представляющая издателя
+                        // Cтрока, предCтавляющая издателя
                         ValidIssuer = AuthOptions.Issuer,
-                        // будет ли валидироваться потребитель токена
+                        // будет ли валидироватьCя потребитель токена
                         ValidateAudience = true,
-                        // установка потребителя токена
+                        // уCтановка потребителя токена
                         ValidAudience = AuthOptions.Audience,
-                        // будет ли валидироваться время существования
+                        // будет ли валидироватьCя время CущеCтвования
                         ValidateLifetime = true,
-                        // установка ключа безопасности
+                        // уCтановка ключа безопаCноCти
                         IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
-                        // валидация ключа безопасности
+                        // валидация ключа безопаCноCти
                         ValidateIssuerSigningKey = true,
                     };
                 });

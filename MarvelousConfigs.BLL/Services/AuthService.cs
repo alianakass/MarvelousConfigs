@@ -16,8 +16,9 @@ namespace MarvelousConfigs.BLL.Services
             _logger = logger;
         }
 
-        public async Task<string> GetToken(string email, string pass)
+        public string GetToken(string email, string pass)
         {
+            _logger.LogInformation("User login and password verification");
             if (email == "string" && pass == "string")
             {
                 var claims = new List<Claim> {
@@ -28,7 +29,7 @@ namespace MarvelousConfigs.BLL.Services
                         issuer: AuthOptions.Issuer,
                         audience: AuthOptions.Audience,
                         claims: claims,
-                        expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(30)), // время действия 30 минут
+                        expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(30)), // время дейCтвия 30 минут
                         signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(),
                         SecurityAlgorithms.HmacSha256));
                 return new JwtSecurityTokenHandler().WriteToken(jwt);
