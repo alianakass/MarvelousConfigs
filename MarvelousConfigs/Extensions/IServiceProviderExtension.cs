@@ -9,6 +9,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NLog.Extensions.Logging;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using MarvelousConfigs.API.Configuration;
+using MarvelousConfigs.BLL.Configuration;
 
 namespace MarvelousConfigs.API.Extensions
 {
@@ -53,15 +57,23 @@ namespace MarvelousConfigs.API.Extensions
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
+                        // указывает, будет ли валидироваться издатель при валидации токена
                         ValidateIssuer = true,
+                        // строка, представляющая издателя
                         ValidIssuer = AuthOptions.Issuer,
+                        // будет ли валидироваться потребитель токена
                         ValidateAudience = true,
+                        // установка потребителя токена
                         ValidAudience = AuthOptions.Audience,
+                        // будет ли валидироваться время существования
                         ValidateLifetime = true,
+                        // установка ключа безопасности
                         IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                        // валидация ключа безопасности
                         ValidateIssuerSigningKey = true,
                     };
                 });
+            services.AddAuthorization();
         }
 
         public static void AddMassTransit(this IServiceCollection services)
