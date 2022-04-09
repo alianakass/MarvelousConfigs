@@ -29,7 +29,7 @@ namespace MarvelousConfigs.API.RMQ.Producers
                 ServiceName = Microservice.MarvelousConfigs.ToString(),
                 TextMessage = mess
             },
-               source.Token) ;
+               source.Token);
 
         }
 
@@ -93,7 +93,7 @@ namespace MarvelousConfigs.API.RMQ.Producers
                 source.Token);
                     break;
 
-                case (int)Microservice.MarvelousEmailSendler:
+                case Microservice.MarvelousEmailSender:
                     await _bus.Publish<EmailSendlerCfg>(new
                     {
                         config.Key,
@@ -120,7 +120,7 @@ namespace MarvelousConfigs.API.RMQ.Producers
                 source.Token);
                     break;
 
-                case (int)Microservice.MarvelousSmsSendler:
+                case Microservice.MarvelousSmsSender:
                     await _bus.Publish<SmsSendlerCfg>(new
                     {
                         config.Key,

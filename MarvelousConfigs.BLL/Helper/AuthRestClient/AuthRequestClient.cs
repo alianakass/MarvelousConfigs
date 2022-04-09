@@ -1,9 +1,9 @@
 ﻿using Marvelous.Contracts.Enums;
-using Marvelous.Contracts.Urls;
+﻿using Marvelous.Contracts.Endpoints;
+using Marvelous.Contracts.RequestModels;
 using Microsoft.Extensions.Logging;
 using RestSharp;
 using RestSharp.Authenticators;
-using RestSharp.Authenticators.OAuth2;
 
 namespace MarvelousConfigs.BLL.AuthRequestClient
 {
@@ -42,7 +42,7 @@ namespace MarvelousConfigs.BLL.AuthRequestClient
             });
             client.Authenticator = new JwtAuthenticator(token.Split(" ")[1]);
             client.AddDefaultHeader(nameof(Microservice), value: Microservice.MarvelousConfigs.ToString());
-            var request = new RestRequest(_path, Method.Get);
+            var request = new RestRequest($"{AuthEndpoints.ApiAuth}/{AuthEndpoints.ValidationMicroservice}", Method.Get);
             _logger.LogInformation($"Getting a response from {Microservice.MarvelousAuth}");
             var response = await client.ExecuteAsync(request);
             return CheckTransactionError(response);
