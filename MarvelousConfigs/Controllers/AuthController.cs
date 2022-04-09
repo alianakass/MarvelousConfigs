@@ -1,5 +1,4 @@
 ﻿using MarvelousConfigs.API.Models;
-using MarvelousConfigs.BLL.AuthRequestClient;
 using MarvelousConfigs.BLL.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
