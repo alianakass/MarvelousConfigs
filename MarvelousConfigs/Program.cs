@@ -36,6 +36,7 @@ builder.Services.RegisterRepositories();
 builder.Services.RegisterServices();
 builder.Services.RegisterLogger(config);
 builder.Services.AddMassTransit();
+builder.Services.AddCustomAuth();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

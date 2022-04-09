@@ -38,10 +38,10 @@ namespace MarvelousConfigs.API.RMQ.Producers
             var source = new CancellationTokenSource(TimeSpan.FromSeconds(10));
 
             var config = await _config.GetConfigById(id);
-            _logger.LogInformation($"Try publish config id{id} for {(((Microservice)config.ServiceId).ToString())}");
+            _logger.LogInformation($"Try publish config id{id} for {((Microservice)config.ServiceId)}");
 
             await CheckMicroserviceAndPublish(config, source);
-            _logger.LogInformation($"Config id{config.Id} for {(((Microservice)config.ServiceId).ToString())} published");
+            _logger.LogInformation($"Config id{config.Id} for {((Microservice)config.ServiceId)} published");
         }
 
         private async Task CheckMicroserviceAndPublish(ConfigModel config, CancellationTokenSource source)

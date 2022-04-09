@@ -52,7 +52,7 @@ namespace MarvelousConfigs.BLL.Services
             _logger.LogInformation($"Changing configuration { id }");
             await _rep.UpdateConfigById(id, _map.Map<Config>(config));
             _logger.LogInformation($"Configuration { id } has been updated");
-            _cache.Set(id, (_rep.GetConfigById(id).Result));
+            _cache.Set(id, _map.Map<ConfigModel>(((_rep.GetConfigById(id).Result))));
             _logger.LogInformation($"Configuration { id } caching");
         }
 
@@ -123,7 +123,7 @@ namespace MarvelousConfigs.BLL.Services
         {
             if (!await _auth.GetRestResponse(token))
             {
-                throw new Exception();
+                throw new Exception($"Token for {ip} validation failed");
             }
             _logger.LogInformation($"Getting configurations by service address { ip }");
             List<Config> configs = await _cache.GetOrCreateAsync(ip, (ICacheEntry _)

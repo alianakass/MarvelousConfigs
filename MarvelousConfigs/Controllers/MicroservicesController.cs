@@ -16,15 +16,12 @@ namespace MarvelousConfigs.API.Controllers
         private readonly IMicroservicesService _service;
         private readonly IMapper _map;
         private readonly ILogger<MicroservicesController> _logger;
-        private readonly IMarvelousConfigsProducer _prod;
 
-        public MicroservicesController(IMapper mapper, IMicroservicesService service, ILogger<MicroservicesController> logger,
-            IMarvelousConfigsProducer producer)
+        public MicroservicesController(IMapper mapper, IMicroservicesService service, ILogger<MicroservicesController> logger)
         {
             _map = mapper;
             _service = service;
             _logger = logger;
-            _prod = producer;
         }
 
         //api/microservices
