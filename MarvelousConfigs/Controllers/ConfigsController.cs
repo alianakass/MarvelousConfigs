@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Marvelous.Contracts.Enums;
-using MarvelousConfigs.API.Attribute;
-using Marvelous.Contracts.ExchangeModels;
+using Marvelous.Contracts.ResponseModels;
 using MarvelousConfigs.API.Models;
 using MarvelousConfigs.API.RMQ.Producers;
 using MarvelousConfigs.BLL.Models;
@@ -113,10 +112,10 @@ namespace MarvelousConfigs.API.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         //[AuthorizeEnum(Role.Admin)]
         [SwaggerOperation("Get configs by service id")]
-        public async Task<ActionResult<List<ConfigExchangeModel>>> GetConfigsByServiceId(int id)
+        public async Task<ActionResult<List<ConfigResponseModel>>> GetConfigsByServiceId(int id)
         {
             _logger.LogInformation($"Request to get configs by service id{id}");
-            var configs = _map.Map<List<ConfigExchangeModel>>(await _service.GetConfigsByServiceId(id));
+            var configs = _map.Map<List<ConfigResponseModel>>(await _service.GetConfigsByServiceId(id));
             _logger.LogInformation($"Response to a request for get configs by service id{id}");
             return Ok(configs);
         }
@@ -127,13 +126,13 @@ namespace MarvelousConfigs.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [SwaggerOperation("Get configs by service address")]
-        public async Task<ActionResult<List<ConfigExchangeModel>>> GetConfigsByService()
+        public async Task<ActionResult<List<ConfigResponseModel>>> GetConfigsByService()
         {
             _logger.LogInformation($"Request to get configs by service");
             var a = HttpContext.Request.Headers.Authorization;
             var name = HttpContext.Request.Headers[nameof(Microservice)][0];
-            _logger.LogInformation($"Сall belongs to the service {$"{name}"}");
-            var configs = _map.Map<List<ConfigExchangeModel>>(await _service.GetConfigsByService(a, name));
+            _logger.LogInformation($"Call belongs to the service {$"{name}"}");
+            var configs = _map.Map<List<ConfigResponseModel>>(await _service.GetConfigsByService(a, name));
             _logger.LogInformation($"Response to a request for get configs by service {name}");
             return Ok(configs);
         }

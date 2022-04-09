@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using Marvelous.Contracts.Enums;
-using MarvelousConfigs.API.Attribute;
 using MarvelousConfigs.API.Models;
 using MarvelousConfigs.API.RMQ.Producers;
 using MarvelousConfigs.BLL.Models;

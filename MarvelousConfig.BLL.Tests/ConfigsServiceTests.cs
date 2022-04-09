@@ -30,8 +30,8 @@ namespace MarvelousConfig.BLL.Tests
             _repositoryMock = new Mock<IConfigsRepository>();
             _logger = new Mock<ILogger<ConfigsService>>();
             _map = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<CustomMapperBLL>()));
-            _service = new ConfigsService(_repositoryMock.Object, _map, _cache, _logger.Object);
-            
+            _service = new ConfigsService(_repositoryMock.Object, _map, _cache, _logger.Object, _auth.Object);
+
         }
 
         [TestCaseSource(typeof(AddConfigTestCaseSource))]

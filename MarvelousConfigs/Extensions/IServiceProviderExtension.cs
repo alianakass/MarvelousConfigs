@@ -46,7 +46,7 @@ namespace MarvelousConfigs.API.Extensions
         {
             services.AddMassTransit(x =>
             {
-                x.UsingRabbitMq((context, cfg) =>{});
+                x.UsingRabbitMq((context, cfg) => { });
             });
         }
 
