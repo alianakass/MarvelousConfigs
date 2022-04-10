@@ -2,11 +2,13 @@
 using Marvelous.Contracts.Endpoints;
 using Marvelous.Contracts.Enums;
 using Marvelous.Contracts.ResponseModels;
+using MarvelousConfigs.API.Attribute;
 using MarvelousConfigs.API.Models;
 using MarvelousConfigs.API.RMQ.Producers;
 using MarvelousConfigs.BLL.AuthRequestClient;
 using MarvelousConfigs.BLL.Models;
 using MarvelousConfigs.BLL.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -83,10 +85,11 @@ namespace MarvelousConfigs.API.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[AuthorizeEnum(Role.Admin)]
+        [Authorize]
         [SwaggerOperation("Get all configs")]
         public async Task<ActionResult<List<ConfigOutputModel>>> GetAllConfigs()
         {
+            var a = User.Identities.First();
             _logger.LogInformation($"Request to get all configs");
             var configs = _map.Map<List<ConfigOutputModel>>(await _service.GetAllConfigs());
             _logger.LogInformation($"Response to a request for all configs");

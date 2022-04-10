@@ -53,19 +53,19 @@ namespace MarvelousConfigs.API.Extensions
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
-                        // указывает, будет ли валидироватьCя издатель при валидации токена
+                        // указывает, будет ли валидироваться издатель при валидации токена
                         ValidateIssuer = true,
-                        // Cтрока, предCтавляющая издателя
+                        // Cтрока, представляющая издателя
                         ValidIssuer = AuthOptions.Issuer,
-                        // будет ли валидироватьCя потребитель токена
+                        // будет ли валидироваться потребитель токена
                         ValidateAudience = true,
-                        // уCтановка потребителя токена
+                        // установка потребителя токена
                         ValidAudience = AuthOptions.Audience,
-                        // будет ли валидироватьCя время CущеCтвования
+                        // будет ли валидироваться время существования
                         ValidateLifetime = true,
-                        // уCтановка ключа безопаCноCти
+                        // установка ключа безопасности
                         IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
-                        // валидация ключа безопаCноCти
+                        // валидация ключа безопасности
                         ValidateIssuerSigningKey = true,
                     };
                 });
