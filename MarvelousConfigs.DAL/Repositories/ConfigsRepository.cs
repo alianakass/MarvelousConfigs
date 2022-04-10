@@ -49,12 +49,12 @@ namespace MarvelousConfigs.DAL.Repositories
 
         public async Task<List<Config>> GetConfigsByService(string name)
         {
-            _logger.LogInformation($"Request to get configs by microservice address {name} to DB");
+            _logger.LogInformation($"Request to get configs by microservice {name} to DB");
 
             using IDbConnection connection = ProvideConnection();
 
             return (await connection.QueryAsync<Config>
-                (Queries.GetConfigsByServiceAddress, new { Address = name }, commandType: CommandType.StoredProcedure)).ToList();
+                (Queries.GetConfigsByServiceName, new { Name = name }, commandType: CommandType.StoredProcedure)).ToList();
         }
 
         public async Task<int> AddConfig(Config config)

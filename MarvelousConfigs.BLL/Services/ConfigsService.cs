@@ -119,15 +119,15 @@ namespace MarvelousConfigs.BLL.Services
             return configs;
         }
 
-        public async Task<List<ConfigModel>> GetConfigsByService(string token, string ip)
+        public async Task<List<ConfigModel>> GetConfigsByService(string token, string name)
         {
             if (!await _auth.GetRestResponse(token))
             {
-                throw new Exception($"Token for {ip} validation failed");
+                throw new Exception($"Token for {name} validation failed");
             }
-            _logger.LogInformation($"Getting configurations by service address { ip }");
-            List<Config> configs = await _cache.GetOrCreateAsync(ip, (ICacheEntry _)
-               => _rep.GetConfigsByService(ip));
+            _logger.LogInformation($"Getting configurations by service { name }");
+            List<Config> configs = await _cache.GetOrCreateAsync(name, (ICacheEntry _)
+               => _rep.GetConfigsByService(name));
             _logger.LogInformation($"Configurations has been received");
             return _map.Map<List<ConfigModel>>(configs);
 
