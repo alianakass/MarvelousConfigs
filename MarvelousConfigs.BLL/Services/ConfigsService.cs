@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MarvelousConfigs.BLL.AuthRequestClient;
+using MarvelousConfigs.BLL.Cache;
 using MarvelousConfigs.BLL.Exeptions;
 using MarvelousConfigs.BLL.Models;
 using MarvelousConfigs.DAL.Entities;
@@ -16,14 +17,18 @@ namespace MarvelousConfigs.BLL.Services
         private readonly IMemoryCache _cache;
         private readonly ILogger<ConfigsService> _logger;
         private readonly IAuthRequestClient _auth;
+        private readonly IMemoryCacheExtentions _memory;
 
-        public ConfigsService(IConfigsRepository repository, IMapper mapper, IMemoryCache cache, ILogger<ConfigsService> logger, IAuthRequestClient auth)
+        public ConfigsService(IConfigsRepository repository,
+            IMapper mapper, IMemoryCache cache, IMemoryCacheExtentions memory,
+            ILogger<ConfigsService> logger, IAuthRequestClient auth)
         {
             _rep = repository;
             _map = mapper;
             _cache = cache;
             _logger = logger;
             _auth = auth;
+            _memory = memory;
         }
 
         public async Task<int> AddConfig(ConfigModel config)
@@ -35,6 +40,7 @@ namespace MarvelousConfigs.BLL.Services
             if (id > 0)
             {
                 _cache.Set(id, config);
+                await _memory.RefreshConfigByServiceId(config.ServiceId);
                 _logger.LogInformation($"Configuration { id } caching");
             }
             return id;
@@ -53,6 +59,7 @@ namespace MarvelousConfigs.BLL.Services
             await _rep.UpdateConfigById(id, _map.Map<Config>(config));
             _logger.LogInformation($"Configuration { id } has been updated");
             _cache.Set(id, _map.Map<ConfigModel>(((_rep.GetConfigById(id).Result))));
+            await _memory.RefreshConfigByServiceId(config.ServiceId);
             _logger.LogInformation($"Configuration { id } caching");
         }
 
@@ -70,6 +77,7 @@ namespace MarvelousConfigs.BLL.Services
             await _rep.DeleteOrRestoreConfigById(id, true);
             _logger.LogInformation($"Configuration { id } has been deleted");
             _cache.Remove(id);
+            await _memory.RefreshConfigByServiceId(conf.ServiceId);
             _logger.LogInformation($"Configuration { id } delete from cach");
         }
 
@@ -86,6 +94,7 @@ namespace MarvelousConfigs.BLL.Services
             await _rep.DeleteOrRestoreConfigById(id, false);
             _logger.LogInformation($"Configuration { id } has been restored");
             _cache.Set(id, conf);
+            await _memory.RefreshConfigByServiceId(conf.ServiceId);
             _logger.LogInformation($"Configuration { id } caching");
         }
 

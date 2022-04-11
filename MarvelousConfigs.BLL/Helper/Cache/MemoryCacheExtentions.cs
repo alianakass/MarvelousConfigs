@@ -57,5 +57,22 @@ namespace MarvelousConfigs.BLL.Cache
                 _logger.LogCritical($"Error loading objects into the cache. {ex}");
             }
         }
+
+        public async Task RefreshConfigByServiceId(int id)
+        {
+            var service = await _cache.GetOrCreateAsync(id, (ICacheEntry _)
+                => _microservice.GetMicroserviceById(id));
+
+            if (service == null)
+                throw new Exception();
+
+            var configs = await _config.GetConfigsByService(service.ServiceName);
+            List<Config> cfgs = new List<Config>();
+            foreach (var c in configs)
+            {
+                cfgs.Add(c);
+            }
+            _cache.Set(service.ServiceName, cfgs);
+        }
     }
 }
