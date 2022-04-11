@@ -28,6 +28,7 @@ namespace MarvelousConfigs.API.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [SwaggerOperation("Add microservice")]
         public async Task<ActionResult<int>> AddMicroservice([FromBody] MicroserviceInputModel model)
         {
@@ -42,6 +43,7 @@ namespace MarvelousConfigs.API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [SwaggerOperation("Delete microservice by id")]
         public async Task<ActionResult> DeleteMicroserviceById(int id)
         {
@@ -56,6 +58,7 @@ namespace MarvelousConfigs.API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [SwaggerOperation("Restore microservice by id")]
         public async Task<ActionResult> RestoreMicroserviceById(int id)
         {
@@ -69,6 +72,7 @@ namespace MarvelousConfigs.API.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [SwaggerOperation("Get all microservices")]
         public async Task<ActionResult<List<MicroserviceOutputModel>>> GetAllMicroservices()
         {
@@ -84,6 +88,7 @@ namespace MarvelousConfigs.API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [SwaggerOperation("Update microservice by id")]
         public async Task<ActionResult> UpdateMicroserviceById(int id, [FromBody] MicroserviceInputModel model)
         {
@@ -98,6 +103,7 @@ namespace MarvelousConfigs.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [SwaggerOperation("Get microservices with configs by id")]
         public async Task<ActionResult<MicroserviceWithConfigsOutputModel>> GetMicroserviceWithConfigsById(int id)
         {

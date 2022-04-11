@@ -1,5 +1,6 @@
 using AutoMapper;
 using MarvelousConfigs.BLL.AuthRequestClient;
+using MarvelousConfigs.BLL.Cache;
 using MarvelousConfigs.BLL.Configuration;
 using MarvelousConfigs.BLL.Exeptions;
 using MarvelousConfigs.BLL.Models;
@@ -23,6 +24,7 @@ namespace MarvelousConfig.BLL.Tests
         private IMemoryCache _cache;
         private Mock<ILogger<ConfigsService>> _logger;
         private Mock<IAuthRequestClient> _auth;
+        private Mock<IMemoryCacheExtentions> _memory;
 
         [SetUp]
         public void Setup()
@@ -31,8 +33,10 @@ namespace MarvelousConfig.BLL.Tests
             _repositoryMock = new Mock<IConfigsRepository>();
             _logger = new Mock<ILogger<ConfigsService>>();
             _auth = new Mock<IAuthRequestClient>();
+            _memory = new Mock<IMemoryCacheExtentions>();
             _map = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<CustomMapperBLL>()));
-            _service = new ConfigsService(_repositoryMock.Object, _map, _cache, _logger.Object, _auth.Object);
+            _service = new ConfigsService(_repositoryMock.Object, _map, _cache, _memory.Object,
+                _logger.Object, _auth.Object);
 
         }
 
