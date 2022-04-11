@@ -8,6 +8,7 @@ using MarvelousConfigs.API.RMQ.Producers;
 using MarvelousConfigs.BLL.AuthRequestClient;
 using MarvelousConfigs.BLL.Models;
 using MarvelousConfigs.BLL.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
