@@ -30,7 +30,6 @@ namespace MarvelousConfigs.API.RMQ.Producers
                 TextMessage = mess
             },
                source.Token);
-
         }
 
         public async Task NotifyConfigurationAddedOrUpdated(int id)

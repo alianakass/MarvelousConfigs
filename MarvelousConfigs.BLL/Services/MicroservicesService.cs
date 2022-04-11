@@ -43,7 +43,7 @@ namespace MarvelousConfigs.BLL.Services
 
             if (service == null)
             {
-                throw new EntityNotFoundException("");
+                throw new EntityNotFoundException($"Service with id{ id } was not found");
             }
             _logger.LogInformation($"Changing microservice { id }");
             await _rep.UpdateMicroserviceById(id, _map.Map<Microservice>(microservice));
@@ -59,7 +59,7 @@ namespace MarvelousConfigs.BLL.Services
 
             if (service == null)
             {
-                throw new EntityNotFoundException("");
+                throw new EntityNotFoundException($"Service with id{ id } was not found");
             }
             _logger.LogInformation($"Delete microservice { id }");
             await _rep.DeleteOrRestoreMicroserviceById(id, true);
@@ -75,7 +75,7 @@ namespace MarvelousConfigs.BLL.Services
 
             if (service == null)
             {
-                throw new EntityNotFoundException("");
+                throw new EntityNotFoundException($"Service with id{ id } was not found");
             }
             _logger.LogInformation($"Restore microservice { id }");
             await _rep.DeleteOrRestoreMicroserviceById(id, false);
@@ -100,7 +100,7 @@ namespace MarvelousConfigs.BLL.Services
 
             if (service == null)
             {
-                throw new EntityNotFoundException("");
+                throw new EntityNotFoundException($"Service with id{ id } was not found");
             }
             _logger.LogInformation($"Microservice { id } has been received");
             return _map.Map<MicroserviceModel>(service);
@@ -114,7 +114,7 @@ namespace MarvelousConfigs.BLL.Services
 
             if (service == null)
             {
-                throw new EntityNotFoundException("");
+                throw new EntityNotFoundException($"Service with id{ id } was not found");
             }
 
             var serviceWithConfigs = await _rep.GetMicroserviceWithConfigsById(id);

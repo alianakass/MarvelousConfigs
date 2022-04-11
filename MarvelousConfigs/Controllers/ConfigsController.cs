@@ -2,7 +2,7 @@
 using Marvelous.Contracts.Endpoints;
 using Marvelous.Contracts.Enums;
 using Marvelous.Contracts.ResponseModels;
-using MarvelousConfigs.API.Attribute;
+using MarvelousConfigs.API.Extensions;
 using MarvelousConfigs.API.Models;
 using MarvelousConfigs.API.RMQ.Producers;
 using MarvelousConfigs.BLL.AuthRequestClient;
@@ -16,7 +16,7 @@ namespace MarvelousConfigs.API.Controllers
 {
     [ApiController]
     [Route("api/configs")]
-    public class ConfigsController : ControllerBase
+    public class ConfigsController : AdvanceController
     {
         private readonly IConfigsService _service;
         private readonly IMapper _map;
@@ -25,7 +25,7 @@ namespace MarvelousConfigs.API.Controllers
         private readonly IAuthRequestClient _auth;
 
         public ConfigsController(IMapper mapper, IConfigsService service,
-            ILogger<ConfigsController> logger, IMarvelousConfigsProducer producer, IAuthRequestClient auth)
+            ILogger<ConfigsController> logger, IMarvelousConfigsProducer producer, IAuthRequestClient auth) : base(auth, logger)
         {
             _map = mapper;
             _service = service;
@@ -39,10 +39,11 @@ namespace MarvelousConfigs.API.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        //[AuthorizeEnum(Role.Admin)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [SwaggerOperation("Add config")]
         public async Task<ActionResult<int>> AddConfig([FromBody] ConfigInputModel model)
         {
+            await this.CheckRole(Role.Admin);
             _logger.LogInformation($"Request to add new config");
             int id = await _service.AddConfig(_map.Map<ConfigModel>(model));
             _logger.LogInformation($"Response to a request for add new config id {id}");
@@ -55,10 +56,11 @@ namespace MarvelousConfigs.API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        //[AuthorizeEnum(Role.Admin)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [SwaggerOperation("Delete config by id")]
         public async Task<ActionResult> DeleteConfigById(int id)
         {
+            await this.CheckRole(Role.Admin);
             _logger.LogInformation($"Request to delete config by id{id}");
             await _service.DeleteConfigById(id);
             _logger.LogInformation($"Response to a request for delete config by id{id}");
@@ -70,10 +72,11 @@ namespace MarvelousConfigs.API.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        //[AuthorizeEnum(Role.Admin)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [SwaggerOperation("Restore config by id")]
         public async Task<ActionResult> RestoreConfigById(int id)
         {
+            await this.CheckRole(Role.Admin);
             _logger.LogInformation($"Request to restore config by id{id}");
             await _service.RestoreConfigById(id);
             await _prod.NotifyConfigurationAddedOrUpdated(id);
@@ -85,11 +88,11 @@ namespace MarvelousConfigs.API.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [Authorize]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [SwaggerOperation("Get all configs")]
         public async Task<ActionResult<List<ConfigOutputModel>>> GetAllConfigs()
         {
-            var a = User.Identities.First();
+            await this.CheckRole(Role.Admin);
             _logger.LogInformation($"Request to get all configs");
             var configs = _map.Map<List<ConfigOutputModel>>(await _service.GetAllConfigs());
             _logger.LogInformation($"Response to a request for all configs");
@@ -100,11 +103,11 @@ namespace MarvelousConfigs.API.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        //[AuthorizeEnum(Role.Admin)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [SwaggerOperation("Update config by id")]
         public async Task<ActionResult> UpdateConfigById(int id, [FromBody] ConfigInputModel model)
         {
+            await this.CheckRole(Role.Admin);
             _logger.LogInformation($"Request to update config by id{id}");
             await _service.UpdateConfigById(id, _map.Map<ConfigModel>(model));
             await _prod.NotifyConfigurationAddedOrUpdated(id);
@@ -117,10 +120,11 @@ namespace MarvelousConfigs.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        //[AuthorizeEnum(Role.Admin)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [SwaggerOperation("Get configs by service id")]
         public async Task<ActionResult<List<ConfigOutputModel>>> GetConfigsByServiceId(int id)
         {
+            await this.CheckRole(Role.Admin);
             _logger.LogInformation($"Request to get configs by service id{id}");
             var configs = _map.Map<List<ConfigOutputModel>>(await _service.GetConfigsByServiceId(id));
             _logger.LogInformation($"Response to a request for get configs by service id{id}");
@@ -132,9 +136,11 @@ namespace MarvelousConfigs.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [SwaggerOperation("Get configs by service address")]
         public async Task<ActionResult<List<ConfigResponseModel>>> GetConfigsByService()
         {
+
             _logger.LogInformation($"Request to get configs by service");
             var a = HttpContext.Request.Headers.Authorization;
             var name = HttpContext.Request.Headers[nameof(Microservice)][0];
