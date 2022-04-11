@@ -1,5 +1,6 @@
 ﻿using Marvelous.Contracts.Enums;
 using MarvelousConfigs.BLL.AuthRequestClient;
+using MarvelousConfigs.BLL.Helper.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MarvelousConfigs.API.Extensions
@@ -20,11 +21,11 @@ namespace MarvelousConfigs.API.Extensions
             _logger.LogInformation($"Query for validation of token to {Microservice.MarvelousAuth}");
             var token = HttpContext.Request.Headers.Authorization.FirstOrDefault();
             if (token is null)
-                throw new Exception($"User not authenticated");
+                throw new ForbiddenException($"User not authenticated");
             var lead = await _auth.SendRequestToValidateToken(token);
             if (!roles.Select(r => r.ToString()).Contains(lead.Data!.Role))
             {
-                throw new Exception($"User with role:{lead.Data!.Role} don't have acces to this method");
+                throw new ForbiddenException($"User with role:{lead.Data!.Role} don't have acces to this method");
             }
         }
     }

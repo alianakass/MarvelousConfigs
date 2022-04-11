@@ -1,4 +1,5 @@
-﻿using MarvelousConfigs.DAL.Entities;
+﻿using MarvelousConfigs.BLL.Exeptions;
+using MarvelousConfigs.DAL.Entities;
 using MarvelousConfigs.DAL.Repositories;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
@@ -64,7 +65,7 @@ namespace MarvelousConfigs.BLL.Cache
                 => _microservice.GetMicroserviceById(id));
 
             if (service == null)
-                throw new Exception();
+                throw new EntityNotFoundException($"Service with id{ id } was not found");
 
             var configs = await _config.GetConfigsByService(service.ServiceName);
             List<Config> cfgs = new List<Config>();
