@@ -54,7 +54,7 @@ namespace MarvelousConfigs.DAL.Repositories
 
             using IDbConnection connection = ProvideConnection();
 
-            var microservices = await connection.QueryAsync
+            await connection.QueryAsync
                 (Queries.UpdateMicroserviceById, new { Id = id, ServiceName = microservice.ServiceName, Url = microservice.Url, Address = microservice.Address },
                 commandType: CommandType.StoredProcedure);
         }
