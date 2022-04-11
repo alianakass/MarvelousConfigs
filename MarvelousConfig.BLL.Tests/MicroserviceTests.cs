@@ -40,7 +40,7 @@ namespace MarvelousConfigs.BLL.Tests
             _repositoryMock.Setup(x => x.AddMicroservice(It.IsAny<Microservice>())).ReturnsAsync(It.IsAny<int>());
 
             //then
-            var actual = await _service.AddMicroservice(It.IsAny<MicroserviceModel>());
+            int actual = await _service.AddMicroservice(It.IsAny<MicroserviceModel>());
 
             //when
             _repositoryMock.Verify(x => x.AddMicroservice(It.IsAny<Microservice>()), Times.Once);
@@ -53,7 +53,7 @@ namespace MarvelousConfigs.BLL.Tests
             _repositoryMock.Setup(x => x.GetAllMicroservices()).ReturnsAsync(It.IsAny<List<Microservice>>);
 
             //then
-            var actual = await _service.GetAllMicroservices();
+            List<MicroserviceModel>? actual = await _service.GetAllMicroservices();
 
             //when
             _repositoryMock.Verify(x => x.GetAllMicroservices(), Times.Once);
@@ -157,7 +157,7 @@ namespace MarvelousConfigs.BLL.Tests
             _repositoryMock.Setup(x => x.GetMicroserviceWithConfigsById(id)).ReturnsAsync(It.IsAny<MicroserviceWithConfigs>());
 
             //then
-            var actual = await _service.GetMicroserviceWithConfigsById(id);
+            MicroserviceWithConfigsModel? actual = await _service.GetMicroserviceWithConfigsById(id);
 
             //when
             _repositoryMock.Verify(x => x.GetMicroserviceWithConfigsById(id), Times.Once);

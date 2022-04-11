@@ -60,7 +60,7 @@ namespace MarvelousConfig.BLL.Tests
             _repositoryMock.Setup(x => x.GetAllConfigs()).ReturnsAsync(It.IsAny<List<Config>>());
 
             //then
-            var actual = await _service.GetAllConfigs();
+            List<ConfigModel>? actual = await _service.GetAllConfigs();
 
             //when
             _repositoryMock.Verify(x => x.GetAllConfigs(), Times.Once);
