@@ -20,7 +20,7 @@ namespace MarvelousConfigs.API.RMQ.Producers
             _bus = bus;
         }
 
-        public async Task NotifyError(string mess)
+        public async Task NotifyAdminAboutErrorToEmail(string mess)
         {
             var source = new CancellationTokenSource(TimeSpan.FromSeconds(10));
 
