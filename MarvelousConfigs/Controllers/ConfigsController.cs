@@ -34,56 +34,6 @@ namespace MarvelousConfigs.API.Controllers
         }
 
         //api/configs
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [SwaggerOperation("Add config")]
-        public async Task<ActionResult<int>> AddConfig([FromBody] ConfigInputModel model)
-        {
-            await CheckRole(Role.Admin);
-            _logger.LogInformation($"Request to add new config");
-            int id = await _service.AddConfig(_map.Map<ConfigModel>(model));
-            _logger.LogInformation($"Response to a request for add new config id {id}");
-            await _prod.NotifyConfigurationAddedOrUpdated(id);
-            return StatusCode(StatusCodes.Status201Created, id);
-        }
-
-        //api/configs/42
-        [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [SwaggerOperation("Delete config by id")]
-        public async Task<ActionResult> DeleteConfigById(int id)
-        {
-            await CheckRole(Role.Admin);
-            _logger.LogInformation($"Request to delete config by id{id}");
-            await _service.DeleteConfigById(id);
-            _logger.LogInformation($"Response to a request for delete config by id{id}");
-            return NoContent();
-        }
-
-        //api/configs/42
-        [HttpPatch("{id}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [SwaggerOperation("Restore config by id")]
-        public async Task<ActionResult> RestoreConfigById(int id)
-        {
-            await CheckRole(Role.Admin);
-            _logger.LogInformation($"Request to restore config by id{id}");
-            await _service.RestoreConfigById(id);
-            await _prod.NotifyConfigurationAddedOrUpdated(id);
-            _logger.LogInformation($"Response to a request for restore config by id{id}");
-            return NoContent();
-        }
-
-        //api/configs
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -109,7 +59,7 @@ namespace MarvelousConfigs.API.Controllers
             await CheckRole(Role.Admin);
             _logger.LogInformation($"Request to update config by id{id}");
             await _service.UpdateConfigById(id, _map.Map<ConfigModel>(model));
-            await _prod.NotifyConfigurationAddedOrUpdated(id);
+            await _prod.NotifyConfigurationUpdated(id);
             _logger.LogInformation($"Response to a request for update config by id{id}");
             return NoContent();
         }

@@ -34,19 +34,6 @@ namespace MarvelousConfigs.BLL.Tests
         }
 
         [Test]
-        public async Task AddMicroserviceTest()
-        {
-            //given
-            _repositoryMock.Setup(x => x.AddMicroservice(It.IsAny<Microservice>())).ReturnsAsync(It.IsAny<int>());
-
-            //then
-            int actual = await _service.AddMicroservice(It.IsAny<MicroserviceModel>());
-
-            //when
-            _repositoryMock.Verify(x => x.AddMicroservice(It.IsAny<Microservice>()), Times.Once);
-        }
-
-        [Test]
         public async Task GetAllMicroservicesTest()
         {
             //given
@@ -86,66 +73,6 @@ namespace MarvelousConfigs.BLL.Tests
             //when
             Assert.ThrowsAsync<EntityNotFoundException>(async () => await _service.UpdateMicroservice(It.IsAny<int>(), It.IsAny<MicroserviceModel>()));
             _repositoryMock.Verify(x => x.UpdateMicroserviceById(It.IsAny<int>(), It.IsAny<Microservice>()), Times.Never);
-            _repositoryMock.Verify(x => x.GetMicroserviceById(It.IsAny<int>()), Times.Once);
-        }
-
-        [TestCaseSource(typeof(DeleteOrRestoreMicroserviceByIdTestCaseSource))]
-        public async Task DeleteMicroserviceByIdTest(int id, Microservice microservice)
-        {
-            //given
-            _repositoryMock.Setup(x => x.GetMicroserviceById(id)).ReturnsAsync(microservice);
-            _repositoryMock.Setup(x => x.DeleteOrRestoreMicroserviceById(id, true));
-
-            //then
-            await _service.DeleteMicroservice(id);
-
-            //when
-            _repositoryMock.Verify(x => x.DeleteOrRestoreMicroserviceById(id, true), Times.Once);
-            _repositoryMock.Verify(x => x.GetMicroserviceById(id), Times.Once);
-        }
-
-        [Test]
-        public void DeleteMicroserviceByIdTest_WhenMicroserviceNotFound_ShouldThrowEntityNotFoundException()
-        {
-            //given
-            _repositoryMock.Setup(x => x.GetMicroserviceById(It.IsAny<int>()));
-            _repositoryMock.Setup(x => x.DeleteOrRestoreMicroserviceById(It.IsAny<int>(), true));
-
-            //then
-
-            //when
-            Assert.ThrowsAsync<EntityNotFoundException>(async () => await _service.DeleteMicroservice(It.IsAny<int>()));
-            _repositoryMock.Verify(x => x.DeleteOrRestoreMicroserviceById(It.IsAny<int>(), true), Times.Never);
-            _repositoryMock.Verify(x => x.GetMicroserviceById(It.IsAny<int>()), Times.Once);
-        }
-
-        [TestCaseSource(typeof(DeleteOrRestoreMicroserviceByIdTestCaseSource))]
-        public async Task RestoreMicroserviceByIdTest(int id, Microservice microservice)
-        {
-            //given
-            _repositoryMock.Setup(x => x.GetMicroserviceById(id)).ReturnsAsync(microservice);
-            _repositoryMock.Setup(x => x.DeleteOrRestoreMicroserviceById(id, false));
-
-            //then
-            await _service.RestoreMicroservice(id);
-
-            //when
-            _repositoryMock.Verify(x => x.DeleteOrRestoreMicroserviceById(id, false), Times.Once);
-            _repositoryMock.Verify(x => x.GetMicroserviceById(id), Times.Once);
-        }
-
-        [Test]
-        public void RestoreMicroserviceByIdTest_WhenMicroserviceNotFound_ShouldThrowEntityNotFoundException()
-        {
-            //given
-            _repositoryMock.Setup(x => x.GetMicroserviceById(It.IsAny<int>()));
-            _repositoryMock.Setup(x => x.DeleteOrRestoreMicroserviceById(It.IsAny<int>(), false));
-
-            //then         
-
-            //when
-            Assert.ThrowsAsync<EntityNotFoundException>(async () => await _service.RestoreMicroservice(It.IsAny<int>()));
-            _repositoryMock.Verify(x => x.DeleteOrRestoreMicroserviceById(It.IsAny<int>(), false), Times.Never);
             _repositoryMock.Verify(x => x.GetMicroserviceById(It.IsAny<int>()), Times.Once);
         }
 

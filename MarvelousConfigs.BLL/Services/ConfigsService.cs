@@ -32,21 +32,6 @@ namespace MarvelousConfigs.BLL.Services
             _memory = memory;
         }
 
-        public async Task<int> AddConfig(ConfigModel config)
-        {
-            _logger.LogInformation("Adding a new configuration");
-            int id = await _rep.AddConfig(_map.Map<Config>(config));
-            _logger.LogInformation($"Configuration { id } has been added");
-
-            if (id > 0)
-            {
-                _cache.Set(id, config);
-                await _memory.RefreshConfigByServiceId(config.ServiceId);
-                _logger.LogInformation($"Configuration { id } caching");
-            }
-            return id;
-        }
-
         public async Task UpdateConfigById(int id, ConfigModel config)
         {
             Config conf = await _cache.GetOrCreateAsync(id, (ICacheEntry _)
@@ -61,41 +46,6 @@ namespace MarvelousConfigs.BLL.Services
             _logger.LogInformation($"Configuration { id } has been updated");
             _cache.Set(id, _map.Map<ConfigModel>(((_rep.GetConfigById(id).Result))));
             await _memory.RefreshConfigByServiceId(config.ServiceId);
-            _logger.LogInformation($"Configuration { id } caching");
-        }
-
-        public async Task DeleteConfigById(int id)
-        {
-
-            Config conf = await _cache.GetOrCreateAsync(id, (ICacheEntry _)
-                => _rep.GetConfigById(id));
-
-            if (conf == null)
-            {
-                throw new EntityNotFoundException($"Configuration { id } not found");
-            }
-            _logger.LogInformation($"Delete configuration { id }");
-            await _rep.DeleteOrRestoreConfigById(id, true);
-            _logger.LogInformation($"Configuration { id } has been deleted");
-            _cache.Remove(id);
-            await _memory.RefreshConfigByServiceId(conf.ServiceId);
-            _logger.LogInformation($"Configuration { id } delete from cach");
-        }
-
-        public async Task RestoreConfigById(int id)
-        {
-            Config conf = await _cache.GetOrCreateAsync(id, (ICacheEntry _)
-                => _rep.GetConfigById(id));
-
-            if (conf == null)
-            {
-                throw new EntityNotFoundException($"Configuration { id } not found");
-            }
-            _logger.LogInformation($"Restore configuration { id }");
-            await _rep.DeleteOrRestoreConfigById(id, false);
-            _logger.LogInformation($"Configuration { id } has been restored");
-            _cache.Set(id, conf);
-            await _memory.RefreshConfigByServiceId(conf.ServiceId);
             _logger.LogInformation($"Configuration { id } caching");
         }
 
