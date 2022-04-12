@@ -23,13 +23,14 @@ namespace MarvelousConfigs.API.RMQ.Producers
         public async Task NotifyAdminAboutErrorToEmail(string mess)
         {
             var source = new CancellationTokenSource(TimeSpan.FromSeconds(10));
-
+            _logger.LogInformation($"Try publish message about error for service {Microservice.MarvelousEmailSender}");
             await _bus.Publish<EmailErrorMessage>(new
             {
                 ServiceName = Microservice.MarvelousConfigs.ToString(),
                 TextMessage = mess
             },
                source.Token);
+            _logger.LogInformation($"Message about error for service {Microservice.MarvelousEmailSender} published");
         }
 
         public async Task NotifyConfigurationUpdated(int id)
