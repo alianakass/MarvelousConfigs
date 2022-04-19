@@ -7,8 +7,8 @@ namespace MarvelousConfigs.API.Models.Validation
     {
         public AuthRequestModelValidator()
         {
-            RuleFor(t => t.Email).NotEmpty();
-            RuleFor(t => t.Password).NotEmpty();
+            RuleFor(x => x.Email).NotEmpty();
+            RuleFor(x => x.Password).NotEmpty();
         }
 
     }

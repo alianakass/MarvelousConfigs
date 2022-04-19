@@ -1,22 +1,18 @@
 ﻿using Marvelous.Contracts.Configurations;
 using Marvelous.Contracts.EmailMessageModels;
-using Marvelous.Contracts.Enums;
-using MarvelousConfigs.BLL.Models;
-using MarvelousConfigs.BLL.Services;
+using MarvelousConfigs.DAL.Entities;
 using MassTransit;
 using Microsoft.Extensions.Logging;
 
-namespace MarvelousConfigs.BLL.Helper.Producer
+namespace MarvelousConfigs.BLL.Infrastructure
 {
     public class MarvelousConfigsProducer : IMarvelousConfigsProducer
     {
-        private readonly IConfigsService _config;
         private readonly ILogger<MarvelousConfigsProducer> _logger;
         private readonly IBus _bus;
 
-        public MarvelousConfigsProducer(IConfigsService configsService, ILogger<MarvelousConfigsProducer> logger, IBus bus)
+        public MarvelousConfigsProducer(ILogger<MarvelousConfigsProducer> logger, IBus bus)
         {
-            _config = configsService;
             _logger = logger;
             _bus = bus;
         }
@@ -24,32 +20,31 @@ namespace MarvelousConfigs.BLL.Helper.Producer
         public async Task NotifyAdminAboutErrorToEmail(string mess)
         {
             var source = new CancellationTokenSource(TimeSpan.FromSeconds(10));
-            _logger.LogInformation($"Try publish message about error for service {Microservice.MarvelousEmailSender}");
+            _logger.LogInformation($"Try publish message about error for service {Marvelous.Contracts.Enums.Microservice.MarvelousEmailSender}");
             await _bus.Publish<EmailErrorMessage>(new
             {
-                ServiceName = Microservice.MarvelousConfigs.ToString(),
+                ServiceName = Marvelous.Contracts.Enums.Microservice.MarvelousConfigs.ToString(),
                 TextMessage = mess
             },
                source.Token);
-            _logger.LogInformation($"Message about error for service {Microservice.MarvelousEmailSender} published");
+            _logger.LogInformation($"Message about error for service {Marvelous.Contracts.Enums.Microservice.MarvelousEmailSender} published");
         }
 
-        public async Task NotifyConfigurationUpdated(int id)
+        public async Task NotifyConfigurationUpdated(Config config)
         {
             var source = new CancellationTokenSource(TimeSpan.FromSeconds(10));
 
-            var config = await _config.GetConfigById(id);
-            _logger.LogInformation($"Try publish config id{id} for {((Microservice)config.ServiceId)}");
+            _logger.LogInformation($"Try publish config id{config.Id} for {((Marvelous.Contracts.Enums.Microservice)config.ServiceId)}");
 
             await CheckMicroserviceAndPublish(config, source);
-            _logger.LogInformation($"Config id{config.Id} for {((Microservice)config.ServiceId)} published");
+            _logger.LogInformation($"Config id{config.Id} for {((Marvelous.Contracts.Enums.Microservice)config.ServiceId)} published");
         }
 
-        private async Task CheckMicroserviceAndPublish(ConfigModel config, CancellationTokenSource source)
+        private async Task CheckMicroserviceAndPublish(Config config, CancellationTokenSource source)
         {
-            switch ((Microservice)config.ServiceId)
+            switch ((Marvelous.Contracts.Enums.Microservice)config.ServiceId)
             {
-                case Microservice.MarvelousAccountChecking:
+                case Marvelous.Contracts.Enums.Microservice.MarvelousAccountChecking:
                     await _bus.Publish<AccountCheckingCfg>(new
                     {
                         config.Key,
@@ -58,7 +53,7 @@ namespace MarvelousConfigs.BLL.Helper.Producer
                 source.Token);
                     break;
 
-                case Microservice.MarvelousResource:
+                case Marvelous.Contracts.Enums.Microservice.MarvelousResource:
                     await _bus.Publish<ResourceCfg>(new
                     {
                         config.Key,
@@ -67,7 +62,7 @@ namespace MarvelousConfigs.BLL.Helper.Producer
                 source.Token);
                     break;
 
-                case Microservice.MarvelousCrm:
+                case Marvelous.Contracts.Enums.Microservice.MarvelousCrm:
                     await _bus.Publish<CrmCfg>(new
                     {
                         config.Key,
@@ -76,7 +71,7 @@ namespace MarvelousConfigs.BLL.Helper.Producer
                 source.Token);
                     break;
 
-                case Microservice.MarvelousEmailSender:
+                case Marvelous.Contracts.Enums.Microservice.MarvelousEmailSender:
                     await _bus.Publish<EmailSendlerCfg>(new
                     {
                         config.Key,
@@ -85,7 +80,7 @@ namespace MarvelousConfigs.BLL.Helper.Producer
                 source.Token);
                     break;
 
-                case Microservice.MarvelousRatesApi:
+                case Marvelous.Contracts.Enums.Microservice.MarvelousRatesApi:
                     await _bus.Publish<RatesApiCfg>(new
                     {
                         config.Key,
@@ -94,7 +89,7 @@ namespace MarvelousConfigs.BLL.Helper.Producer
                 source.Token);
                     break;
 
-                case Microservice.MarvelousAuth:
+                case Marvelous.Contracts.Enums.Microservice.MarvelousAuth:
                     await _bus.Publish<AuthCfg>(new
                     {
                         config.Key,
@@ -103,7 +98,7 @@ namespace MarvelousConfigs.BLL.Helper.Producer
                 source.Token);
                     break;
 
-                case Microservice.MarvelousSmsSender:
+                case Marvelous.Contracts.Enums.Microservice.MarvelousSmsSender:
                     await _bus.Publish<SmsSendlerCfg>(new
                     {
                         config.Key,
@@ -113,7 +108,7 @@ namespace MarvelousConfigs.BLL.Helper.Producer
                     break;
 
                 default:
-                    throw new Exception($"Unable to send configurations {config.Id} for {(Microservice)config.ServiceId}");
+                    throw new Exception($"Unable to send configurations {config.Id} for {(Marvelous.Contracts.Enums.Microservice)config.ServiceId}");
 
             }
         }

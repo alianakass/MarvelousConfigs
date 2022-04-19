@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using Marvelous.Contracts.RequestModels;
-using MarvelousConfigs.BLL.AuthRequestClient;
+using MarvelousConfigs.BLL.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;

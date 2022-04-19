@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
-using MarvelousConfigs.BLL.AuthRequestClient;
-using MarvelousConfigs.BLL.Cache;
-using MarvelousConfigs.BLL.Exeptions;
-using MarvelousConfigs.BLL.Helper.Exceptions;
-using MarvelousConfigs.BLL.Helper.Producer;
+using MarvelousConfigs.BLL.Infrastructure;
+using MarvelousConfigs.BLL.Infrastructure.Exceptions;
 using MarvelousConfigs.BLL.Models;
 using MarvelousConfigs.DAL.Entities;
 using MarvelousConfigs.DAL.Repositories;
@@ -44,11 +41,12 @@ namespace MarvelousConfigs.BLL.Services
             {
                 throw new EntityNotFoundException($"Configuration { id } not found");
             }
-            _logger.LogInformation($"Changing configuration { id }");
+            _logger.LogInformation($"Start update configuration { id }");
             await _rep.UpdateConfigById(id, _map.Map<Config>(config));
             _logger.LogInformation($"Configuration { id } has been updated");
-            _cache.Set(id, _map.Map<ConfigModel>(((_rep.GetConfigById(id).Result))));
-            await _prod.NotifyConfigurationUpdated(id);
+            Config newCfg = await _rep.GetConfigById(id);
+            _cache.Set(id, newCfg);
+            await _prod.NotifyConfigurationUpdated(newCfg);
             await _memory.RefreshConfigByServiceId(config.ServiceId);
             _logger.LogInformation($"Configuration { id } caching");
         }
@@ -85,10 +83,7 @@ namespace MarvelousConfigs.BLL.Services
 
         public async Task<List<ConfigModel>> GetConfigsByService(string token, string name)
         {
-            if (!await _auth.SendRequestWithToken(token))
-            {
-                throw new ForbiddenException($"Token for { name } validation failed");
-            }
+            await _auth.SendRequestWithToken(token);
             _logger.LogInformation($"Getting configurations by service address { name }");
             List<Config> configs = await _cache.GetOrCreateAsync(name, (ICacheEntry _)
                => _rep.GetConfigsByService(name));

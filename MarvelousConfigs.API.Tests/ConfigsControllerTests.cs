@@ -4,8 +4,9 @@ using Marvelous.Contracts.ResponseModels;
 using MarvelousConfigs.API.Configuration;
 using MarvelousConfigs.API.Controllers;
 using MarvelousConfigs.API.Models;
-using MarvelousConfigs.BLL.AuthRequestClient;
-using MarvelousConfigs.BLL.Helper.Exceptions;
+using MarvelousConfigs.API.Models.Validation;
+using MarvelousConfigs.BLL.Infrastructure;
+using MarvelousConfigs.BLL.Infrastructure.Exceptions;
 using MarvelousConfigs.BLL.Models;
 using MarvelousConfigs.BLL.Services;
 using Microsoft.AspNetCore.Http;
@@ -18,7 +19,7 @@ using System.Threading.Tasks;
 
 namespace MarvelousConfigs.API.Tests
 {
-    public class ConfigsControllerTests : BaseTest<ConfigsController>
+    public class ConfigsControllerTests : BaseVerifyTest<ConfigsController>
     {
         private IMapper _map;
         private IValidator<ConfigInputModel> _validator;
@@ -32,6 +33,7 @@ namespace MarvelousConfigs.API.Tests
             _map = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<CustomMapperAPI>()));
             _service = new Mock<IConfigsService>();
             _logger = new Mock<ILogger<ConfigsController>>();
+            _validator = new ConfigInputModelValidator();
             _auth = new Mock<IAuthRequestClient>();
             _controller = new ConfigsController(_map, _service.Object, _logger.Object, _auth.Object, _validator);
         }

@@ -5,8 +5,8 @@ using Marvelous.Contracts.Enums;
 using Marvelous.Contracts.ResponseModels;
 using MarvelousConfigs.API.Extensions;
 using MarvelousConfigs.API.Models;
-using MarvelousConfigs.BLL.AuthRequestClient;
-using MarvelousConfigs.BLL.Helper.Exceptions;
+using MarvelousConfigs.BLL.Infrastructure;
+using MarvelousConfigs.BLL.Infrastructure.Exceptions;
 using MarvelousConfigs.BLL.Models;
 using MarvelousConfigs.BLL.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -62,7 +62,6 @@ namespace MarvelousConfigs.API.Controllers
             await CheckRole(Role.Admin);
             _logger.LogInformation($"Request to update config by id{id}");
             await _service.UpdateConfigById(id, _map.Map<ConfigModel>(model));
-            await _prod.NotifyConfigurationUpdated(id);
             _logger.LogInformation($"Response to a request for update config by id{id}");
             return NoContent();
         }
@@ -94,10 +93,14 @@ namespace MarvelousConfigs.API.Controllers
         public async Task<ActionResult<List<ConfigResponseModel>>> GetConfigsByService()
         {
             _logger.LogInformation($"Request to get configs by service");
-            Microsoft.Extensions.Primitives.StringValues a = HttpContext.Request.Headers.Authorization;
-            string? name = HttpContext.Request.Headers[nameof(Microservice)][0];
+            var token = HttpContext.Request.Headers.Authorization;
+            var name = HttpContext.Request.Headers[nameof(Microservice)].FirstOrDefault();
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new UnauthorizedException("");
+            }
             _logger.LogInformation($"Call belongs to the service {$"{name}"}");
-            List<ConfigResponseModel>? configs = _map.Map<List<ConfigResponseModel>>(await _service.GetConfigsByService(a, name));
+            List<ConfigResponseModel>? configs = _map.Map<List<ConfigResponseModel>>(await _service.GetConfigsByService(token, name));
             _logger.LogInformation($"Response to a request for get configs by service {name}");
             return Ok(configs);
         }

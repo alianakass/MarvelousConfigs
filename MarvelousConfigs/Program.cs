@@ -43,6 +43,7 @@ builder.Services.AddMassTransit();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwagger();
+builder.Services.AddFluentValidation();
 
 var app = builder.Build();
 

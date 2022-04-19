@@ -1,12 +1,10 @@
-﻿using MarvelousConfigs.BLL.Exeptions;
-using MarvelousConfigs.BLL.Helper.Exceptions;
-using MarvelousConfigs.BLL.Helper.Producer;
+﻿using MarvelousConfigs.BLL.Infrastructure.Exceptions;
 using MarvelousConfigs.DAL.Entities;
 using MarvelousConfigs.DAL.Repositories;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 
-namespace MarvelousConfigs.BLL.Cache
+namespace MarvelousConfigs.BLL.Infrastructure
 {
     public class MemoryCacheExtentions : IMemoryCacheExtentions
     {

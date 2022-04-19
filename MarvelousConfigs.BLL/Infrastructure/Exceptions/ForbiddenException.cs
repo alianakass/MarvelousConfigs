@@ -1,4 +1,4 @@
-﻿namespace MarvelousConfigs.BLL.Helper.Exceptions
+﻿namespace MarvelousConfigs.BLL.Infrastructure.Exceptions
 {
     public class ForbiddenException : Exception
     {

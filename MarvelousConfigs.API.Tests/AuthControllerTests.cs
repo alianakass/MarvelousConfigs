@@ -1,7 +1,8 @@
 ﻿using FluentValidation;
 using Marvelous.Contracts.RequestModels;
 using MarvelousConfigs.API.Controllers;
-using MarvelousConfigs.BLL.AuthRequestClient;
+using MarvelousConfigs.API.Models.Validation;
+using MarvelousConfigs.BLL.Infrastructure;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MarvelousConfigs.API.Tests
 {
-    public class AuthControllerTests : BaseTest<AuthController>
+    public class AuthControllerTests : BaseVerifyTest<AuthController>
     {
         private Mock<IAuthRequestClient> _auth;
         private AuthController _controller;
@@ -20,6 +21,7 @@ namespace MarvelousConfigs.API.Tests
         {
             _logger = new Mock<ILogger<AuthController>>();
             _auth = new Mock<IAuthRequestClient>();
+            _validator = new AuthRequestModelValidator();
             _controller = new AuthController(_logger.Object, _auth.Object, _validator);
         }
 

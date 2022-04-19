@@ -1,6 +1,6 @@
 ﻿using Marvelous.Contracts.Enums;
-using MarvelousConfigs.BLL.AuthRequestClient;
-using MarvelousConfigs.BLL.Helper.Exceptions;
+using MarvelousConfigs.BLL.Infrastructure;
+using MarvelousConfigs.BLL.Infrastructure.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MarvelousConfigs.API.Extensions

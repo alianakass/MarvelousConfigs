@@ -1,8 +1,6 @@
 ﻿using FluentValidation.AspNetCore;
 using MarvelousConfigs.API.Models.Validation;
-using MarvelousConfigs.BLL.AuthRequestClient;
-using MarvelousConfigs.BLL.Cache;
-using MarvelousConfigs.BLL.Helper.Producer;
+using MarvelousConfigs.BLL.Infrastructure;
 using MarvelousConfigs.BLL.Services;
 using MarvelousConfigs.DAL.Repositories;
 using MassTransit;

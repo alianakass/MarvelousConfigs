@@ -3,8 +3,8 @@ using Marvelous.Contracts.ResponseModels;
 using MarvelousConfigs.API.Configuration;
 using MarvelousConfigs.API.Controllers;
 using MarvelousConfigs.API.Models;
-using MarvelousConfigs.BLL.AuthRequestClient;
-using MarvelousConfigs.BLL.Helper.Exceptions;
+using MarvelousConfigs.BLL.Infrastructure;
+using MarvelousConfigs.BLL.Infrastructure.Exceptions;
 using MarvelousConfigs.BLL.Models;
 using MarvelousConfigs.BLL.Services;
 using Microsoft.AspNetCore.Http;
@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace MarvelousConfigs.API.Tests
 {
-    public class MicroservicesControllerTests : BaseTest<MicroservicesController>
+    public class MicroservicesControllerTests : BaseVerifyTest<MicroservicesController>
     {
         private IMapper _map;
         private Mock<IMicroservicesService> _service;

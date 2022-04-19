@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using MarvelousConfigs.BLL.Exeptions;
+using MarvelousConfigs.BLL.Infrastructure.Exceptions;
 using MarvelousConfigs.BLL.Models;
 using MarvelousConfigs.DAL.Repositories;
 using Microsoft.Extensions.Caching.Memory;

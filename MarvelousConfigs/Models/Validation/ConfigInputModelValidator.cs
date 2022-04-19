@@ -6,7 +6,7 @@ namespace MarvelousConfigs.API.Models.Validation
     {
         public ConfigInputModelValidator()
         {
-            RuleFor(t => t.Value).NotEmpty();
+            RuleFor(x => x.Value).NotEmpty();
         }
     }
 }

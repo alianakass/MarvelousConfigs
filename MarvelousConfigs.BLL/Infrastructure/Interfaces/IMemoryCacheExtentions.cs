@@ -1,4 +1,4 @@
-﻿namespace MarvelousConfigs.BLL.Cache
+﻿namespace MarvelousConfigs.BLL.Infrastructure
 {
     public interface IMemoryCacheExtentions
     {

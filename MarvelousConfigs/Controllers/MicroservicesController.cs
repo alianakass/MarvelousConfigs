@@ -2,7 +2,7 @@
 using Marvelous.Contracts.Enums;
 using MarvelousConfigs.API.Extensions;
 using MarvelousConfigs.API.Models;
-using MarvelousConfigs.BLL.AuthRequestClient;
+using MarvelousConfigs.BLL.Infrastructure;
 using MarvelousConfigs.BLL.Models;
 using MarvelousConfigs.BLL.Services;
 using Microsoft.AspNetCore.Mvc;
