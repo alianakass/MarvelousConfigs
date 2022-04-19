@@ -44,19 +44,6 @@ namespace MarvelousConfig.BLL.Tests
 
         }
 
-        [TestCaseSource(typeof(AddConfigTestCaseSource))]
-        public async Task AddConfigTest(ConfigModel model)
-        {
-            //given
-            _repositoryMock.Setup(x => x.AddConfig(It.IsAny<Config>())).ReturnsAsync(It.IsAny<int>);
-
-            //then
-            int actual = await _service.AddConfig(model);
-
-            //when
-            _repositoryMock.Verify(x => x.AddConfig(It.IsAny<Config>()), Times.Once);
-        }
-
         [Test]
         public async Task GetAllConfigsTest()
         {
@@ -67,6 +54,9 @@ namespace MarvelousConfig.BLL.Tests
             List<ConfigModel>? actual = await _service.GetAllConfigs();
 
             //then
+            List<ConfigModel>? actual = await _service.GetAllConfigs();
+
+            //when
             _repositoryMock.Verify(x => x.GetAllConfigs(), Times.Once);
         }
 
@@ -97,68 +87,6 @@ namespace MarvelousConfig.BLL.Tests
             Assert.ThrowsAsync<EntityNotFoundException>(async () => await _service.UpdateConfigById(id, It.IsAny<ConfigModel>()));
             _repositoryMock.Verify(x => x.GetConfigById(It.IsAny<int>()), Times.Once);
             _repositoryMock.Verify(x => x.UpdateConfigById(It.IsAny<int>(), It.IsAny<Config>()), Times.Never);
-        }
-
-        [TestCaseSource(typeof(DeleteOrRestoreConfigTestCaseSource))]
-        public async Task DeleteConfigByIdTest(Config config)
-        {
-            //given
-            _repositoryMock.Setup(x => x.GetConfigById(It.IsAny<int>())).ReturnsAsync(config);
-            _repositoryMock.Setup(x => x.DeleteOrRestoreConfigById(It.IsAny<int>(), true));
-
-            //then
-            await _service.DeleteConfigById(It.IsAny<int>());
-
-            //when
-            _repositoryMock.Verify(x => x.GetConfigById(It.IsAny<int>()), Times.Once);
-            _repositoryMock.Verify(x => x.DeleteOrRestoreConfigById(It.IsAny<int>(), true), Times.Once);
-        }
-
-        [Test]
-        public void DeleteConfigByIdTest_WhenConfigNotFound_ShouldThrowEntityNotFoundException()
-        {
-            //given
-            _repositoryMock.Setup(x => x.GetConfigById(It.IsAny<int>()));
-            _repositoryMock.Setup(x => x.DeleteOrRestoreConfigById(It.IsAny<int>(), true));
-
-            //then
-
-
-            //when
-            Assert.ThrowsAsync<EntityNotFoundException>(async () => await _service.DeleteConfigById(It.IsAny<int>()));
-            _repositoryMock.Verify(x => x.GetConfigById(It.IsAny<int>()), Times.Once);
-            _repositoryMock.Verify(x => x.DeleteOrRestoreConfigById(It.IsAny<int>(), true), Times.Never);
-        }
-
-        [TestCaseSource(typeof(DeleteOrRestoreConfigTestCaseSource))]
-        public async Task RestoreConfigByIdTest(Config config)
-        {
-            //given
-            _repositoryMock.Setup(x => x.GetConfigById(It.IsAny<int>())).ReturnsAsync(config);
-            _repositoryMock.Setup(x => x.DeleteOrRestoreConfigById(It.IsAny<int>(), false));
-
-            //then
-            await _service.RestoreConfigById(It.IsAny<int>());
-
-            //when
-            _repositoryMock.Verify(x => x.GetConfigById(It.IsAny<int>()), Times.Once);
-            _repositoryMock.Verify(x => x.DeleteOrRestoreConfigById(It.IsAny<int>(), false), Times.Once);
-        }
-
-        [Test]
-        public void RestoreConfigByIdTest_WhenConfigNotFound_ShouldThrowEntityNotFoundException()
-        {
-            //given
-            _repositoryMock.Setup(x => x.GetConfigById(It.IsAny<int>()));
-            _repositoryMock.Setup(x => x.DeleteOrRestoreConfigById(It.IsAny<int>(), false));
-
-            //then
-
-
-            //when
-            Assert.ThrowsAsync<EntityNotFoundException>(async () => await _service.RestoreConfigById(It.IsAny<int>()));
-            _repositoryMock.Verify(x => x.GetConfigById(It.IsAny<int>()), Times.Once);
-            _repositoryMock.Verify(x => x.DeleteOrRestoreConfigById(It.IsAny<int>(), false), Times.Never);
         }
     }
 }

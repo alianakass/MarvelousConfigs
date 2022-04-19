@@ -32,63 +32,17 @@ namespace MarvelousConfigs.API.Controllers
         }
 
         //api/microservices
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [SwaggerOperation("Add microservice")]
-        public async Task<ActionResult<int>> AddMicroservice([FromBody] MicroserviceInputModel model)
-        {
-            await this.CheckRole(Role.Admin);
-            _logger.LogInformation($"Request to add new microservice");
-            int id = await _service.AddMicroservice(_map.Map<MicroserviceModel>(model));
-            _logger.LogInformation($"Response to a request for add new microservice id {id}");
-            return StatusCode(StatusCodes.Status201Created, id);
-        }
-
-        //api/microservices/42
-        [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [SwaggerOperation("Delete microservice by id")]
-        public async Task<ActionResult> DeleteMicroserviceById(int id)
-        {
-            await this.CheckRole(Role.Admin);
-            _logger.LogInformation($"Request to delete microservice by id{id}");
-            await _service.DeleteMicroservice(id);
-            _logger.LogInformation($"Response to a request for delete microservice by id{id}");
-            return NoContent();
-        }
-
-        //api/microservices/42
-        [HttpPatch("{id}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [SwaggerOperation("Restore microservice by id")]
-        public async Task<ActionResult> RestoreMicroserviceById(int id)
-        {
-            await this.CheckRole(Role.Admin);
-            _logger.LogInformation($"Request to restore microservice by id{id}");
-            await _service.RestoreMicroservice(id);
-            _logger.LogInformation($"Response to a request for restore microservice by id{id}");
-            return NoContent();
-        }
-
-        //api/microservices
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [SwaggerOperation("Get all microservices")]
         public async Task<ActionResult<List<MicroserviceOutputModel>>> GetAllMicroservices()
         {
-            await this.CheckRole(Role.Admin);
+            await CheckRole(Role.Admin);
             _logger.LogInformation($"Request to get all microservices");
-            var services = _map.Map<List<MicroserviceOutputModel>>(await _service.GetAllMicroservices());
+            List<MicroserviceOutputModel>? services = _map.Map<List<MicroserviceOutputModel>>(await _service.GetAllMicroservices());
             _logger.LogInformation($"Response to a request for get all microservices");
             return Ok(services);
         }
@@ -99,10 +53,11 @@ namespace MarvelousConfigs.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [SwaggerOperation("Update microservice by id")]
         public async Task<ActionResult> UpdateMicroserviceById(int id, [FromBody] MicroserviceInputModel model)
         {
-            await this.CheckRole(Role.Admin);
+            await CheckRole(Role.Admin);
             _logger.LogInformation($"Request to update microservice by id{id}");
             await _service.UpdateMicroservice(id, _map.Map<MicroserviceModel>(model));
             _logger.LogInformation($"Response to a request for update microservice by id{id}");
@@ -115,12 +70,13 @@ namespace MarvelousConfigs.API.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [SwaggerOperation("Get microservices with configs by id")]
         public async Task<ActionResult<MicroserviceWithConfigsOutputModel>> GetMicroserviceWithConfigsById(int id)
         {
-            await this.CheckRole(Role.Admin);
+            await CheckRole(Role.Admin);
             _logger.LogInformation($"Request to get microservice with configs by id{id}");
-            var services = _map.Map<MicroserviceWithConfigsOutputModel>(await _service.GetMicroserviceWithConfigsById(id));
+            MicroserviceWithConfigsOutputModel? services = _map.Map<MicroserviceWithConfigsOutputModel>(await _service.GetMicroserviceWithConfigsById(id));
             _logger.LogInformation($"Response to a request for get microservice with configs by id{id}");
             return Ok(services);
         }

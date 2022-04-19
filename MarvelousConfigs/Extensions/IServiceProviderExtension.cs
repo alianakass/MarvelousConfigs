@@ -32,7 +32,8 @@ namespace MarvelousConfigs.API.Extensions
 
         public static void SetMemoryCache(this WebApplication app)
         {
-            app.Services.CreateScope().ServiceProvider.GetRequiredService<IMemoryCacheExtentions>().SetMemoryCache();
+            app.Services.CreateScope().ServiceProvider
+                .GetRequiredService<IMemoryCacheExtentions>().SetMemoryCache();
         }
 
         public static void RegisterLogger(this IServiceCollection service, IConfiguration config)
