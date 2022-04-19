@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using Marvelous.Contracts.Endpoints;
 using Marvelous.Contracts.Enums;
 using Marvelous.Contracts.ResponseModels;
 using MarvelousConfigs.API.Extensions;
 using MarvelousConfigs.API.Models;
-using MarvelousConfigs.API.RMQ.Producers;
 using MarvelousConfigs.BLL.AuthRequestClient;
+using MarvelousConfigs.BLL.Helper.Exceptions;
 using MarvelousConfigs.BLL.Models;
 using MarvelousConfigs.BLL.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -21,17 +22,17 @@ namespace MarvelousConfigs.API.Controllers
         private readonly IConfigsService _service;
         private readonly IMapper _map;
         private readonly ILogger<ConfigsController> _logger;
-        private readonly IMarvelousConfigsProducer _prod;
         private readonly IAuthRequestClient _auth;
+        private readonly IValidator<ConfigInputModel> _validator;
 
         public ConfigsController(IMapper mapper, IConfigsService service,
-            ILogger<ConfigsController> logger, IMarvelousConfigsProducer producer, IAuthRequestClient auth) : base(auth, logger)
+            ILogger<ConfigsController> logger, IAuthRequestClient auth, IValidator<ConfigInputModel> validator) : base(auth, logger)
         {
             _map = mapper;
             _service = service;
             _logger = logger;
-            _prod = producer;
             _auth = auth;
+            _validator = validator;
         }
 
         //api/configs
@@ -47,7 +48,6 @@ namespace MarvelousConfigs.API.Controllers
             _logger.LogInformation($"Request to add new config");
             int id = await _service.AddConfig(_map.Map<ConfigModel>(model));
             _logger.LogInformation($"Response to a request for add new config id {id}");
-            await _prod.NotifyConfigurationAddedOrUpdated(id);
             return StatusCode(StatusCodes.Status201Created, id);
         }
 
@@ -79,7 +79,6 @@ namespace MarvelousConfigs.API.Controllers
             await this.CheckRole(Role.Admin);
             _logger.LogInformation($"Request to restore config by id{id}");
             await _service.RestoreConfigById(id);
-            await _prod.NotifyConfigurationAddedOrUpdated(id);
             _logger.LogInformation($"Response to a request for restore config by id{id}");
             return NoContent();
         }
@@ -107,10 +106,20 @@ namespace MarvelousConfigs.API.Controllers
         [SwaggerOperation("Update config by id")]
         public async Task<ActionResult> UpdateConfigById(int id, [FromBody] ConfigInputModel model)
         {
-            await this.CheckRole(Role.Admin);
+            await CheckRole(Role.Admin);
+
+            if (model == null)
+                throw new Exception("You must specify the table details in the request body");
+            var validationResult = _validator.Validate(model);
+            if (!validationResult.IsValid)
+            {
+                var ex = new ValidationException(validationResult.Errors);
+                _logger.LogError(ex, ex.Message);
+                throw ex;
+            }
+
             _logger.LogInformation($"Request to update config by id{id}");
             await _service.UpdateConfigById(id, _map.Map<ConfigModel>(model));
-            await _prod.NotifyConfigurationAddedOrUpdated(id);
             _logger.LogInformation($"Response to a request for update config by id{id}");
             return NoContent();
         }
@@ -140,12 +149,13 @@ namespace MarvelousConfigs.API.Controllers
         [SwaggerOperation("Get configs by service address")]
         public async Task<ActionResult<List<ConfigResponseModel>>> GetConfigsByService()
         {
-
             _logger.LogInformation($"Request to get configs by service");
-            var a = HttpContext.Request.Headers.Authorization;
-            var name = HttpContext.Request.Headers[nameof(Microservice)][0];
+            var token = HttpContext.Request.Headers.Authorization.FirstOrDefault();
+            if (token == null)
+                throw new UnauthorizedException($"Request attempt from unauthorized user");
+            string? name = HttpContext.Request.Headers[nameof(Microservice)][0];
             _logger.LogInformation($"Call belongs to the service {$"{name}"}");
-            var configs = _map.Map<List<ConfigResponseModel>>(await _service.GetConfigsByService(a, name));
+            List<ConfigResponseModel>? configs = _map.Map<List<ConfigResponseModel>>(await _service.GetConfigsByService(token, name));
             _logger.LogInformation($"Response to a request for get configs by service {name}");
             return Ok(configs);
         }

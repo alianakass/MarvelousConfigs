@@ -4,8 +4,9 @@ using Marvelous.Contracts.Enums;
 using MarvelousConfigs.BLL.Models;
 using MarvelousConfigs.BLL.Services;
 using MassTransit;
+using Microsoft.Extensions.Logging;
 
-namespace MarvelousConfigs.API.RMQ.Producers
+namespace MarvelousConfigs.BLL.Helper.Producer
 {
     public class MarvelousConfigsProducer : IMarvelousConfigsProducer
     {
@@ -32,7 +33,7 @@ namespace MarvelousConfigs.API.RMQ.Producers
                source.Token);
         }
 
-        public async Task NotifyConfigurationAddedOrUpdated(int id)
+        public async Task NotifyConfigurationUpdated(int id)
         {
             var source = new CancellationTokenSource(TimeSpan.FromSeconds(10));
 
@@ -56,26 +57,8 @@ namespace MarvelousConfigs.API.RMQ.Producers
                 source.Token);
                     break;
 
-                case Microservice.MarvelousReporting:
-                    await _bus.Publish<ReportingCfg>(new
-                    {
-                        config.Key,
-                        config.Value
-                    },
-                source.Token);
-                    break;
-
                 case Microservice.MarvelousResource:
                     await _bus.Publish<ResourceCfg>(new
-                    {
-                        config.Key,
-                        config.Value
-                    },
-                source.Token);
-                    break;
-
-                case Microservice.MarvelousTransactionStore:
-                    await _bus.Publish<TransactionStoreCfg>(new
                     {
                         config.Key,
                         config.Value

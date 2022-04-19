@@ -1,4 +1,5 @@
-﻿using MarvelousConfigs.BLL.Exeptions;
+﻿using FluentValidation;
+using MarvelousConfigs.BLL.Exeptions;
 using MarvelousConfigs.BLL.Helper.Exceptions;
 using System.Net;
 using System.Text.Json;
@@ -22,6 +23,18 @@ namespace MarvelousConfigs.API.Infrastructure
             {
                 await _next(context);
             }
+            catch (CacheLoadingException ex)
+            {
+                await HandleExceptionAsync(context, HttpStatusCode.BadGateway, ex.Message);
+            }
+            catch (Microsoft.Data.SqlClient.SqlException ex)
+            {
+                await HandleExceptionAsync(context, HttpStatusCode.ServiceUnavailable, ex.Message);
+            }
+            catch (UnauthorizedException ex)
+            {
+                await HandleExceptionAsync(context, HttpStatusCode.Unauthorized, ex.Message);
+            }
             catch (ForbiddenException ex)
             {
                 await HandleExceptionAsync(context, HttpStatusCode.Forbidden, ex.Message);
@@ -30,9 +43,9 @@ namespace MarvelousConfigs.API.Infrastructure
             {
                 await HandleExceptionAsync(context, HttpStatusCode.NotFound, ex.Message);
             }
-            catch (Microsoft.Data.SqlClient.SqlException ex)
+            catch (ValidationException ex)
             {
-                await HandleExceptionAsync(context, HttpStatusCode.ServiceUnavailable, ex.Message);
+                await HandleExceptionAsync(context, HttpStatusCode.UnprocessableEntity, ex.Message);
             }
             catch (Exception ex)
             {
