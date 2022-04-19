@@ -1,6 +1,6 @@
 ﻿using Marvelous.Contracts.Enums;
-using MarvelousConfigs.BLL.AuthRequestClient;
-using MarvelousConfigs.BLL.Helper.Exceptions;
+using MarvelousConfigs.BLL.Infrastructure;
+using MarvelousConfigs.BLL.Infrastructure.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MarvelousConfigs.API.Extensions
@@ -23,9 +23,9 @@ namespace MarvelousConfigs.API.Extensions
             if (token is null)
                 throw new UnauthorizedException($"Request attempt from unauthorized user");
             var lead = await _auth.SendRequestToValidateToken(token);
-            if (!roles.Select(r => r.ToString()).Contains(lead.Data!.Role))
+            if (!roles.Select(r => r.ToString()).Contains(lead.Role))
             {
-                throw new ForbiddenException($"Request attempt from user with role:{lead.Data!.Role}. User doesn't have access");
+                throw new ForbiddenException($"Request attempt from user with role:{lead.Role}. User doesn't have access");
             }
         }
     }

@@ -1,9 +1,11 @@
-﻿using MarvelousConfigs.API.RMQ.Producers;
-using MarvelousConfigs.BLL.AuthRequestClient;
-using MarvelousConfigs.BLL.Cache;
+﻿using FluentValidation.AspNetCore;
+using MarvelousConfigs.API.Models.Validation;
+using MarvelousConfigs.BLL.Infrastructure;
 using MarvelousConfigs.BLL.Services;
 using MarvelousConfigs.DAL.Repositories;
 using MassTransit;
+using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using NLog.Extensions.Logging;
 
@@ -86,7 +88,22 @@ namespace MarvelousConfigs.API.Extensions
                 }
                 });
             });
+            services.AddFluentValidationRulesToSwagger();
         }
 
+        public static void AddFluentValidation(this IServiceCollection services)
+        {
+            //Добавление FluentValidation
+            services.AddFluentValidation(fv =>
+            {
+                //Регистрация валидаторов по сборке с временем жизни = Singleton
+                fv.RegisterValidatorsFromAssemblyContaining<AuthRequestModelValidator>(lifetime: ServiceLifetime.Singleton);
+                fv.RegisterValidatorsFromAssemblyContaining<ConfigInputModelValidator>(lifetime: ServiceLifetime.Singleton);
+                //Отключение валидации с помощью DataAnnotations
+                fv.DisableDataAnnotationsValidation = true;
+            });
+            //Отключение стандартного валидатора
+            services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
+        }
     }
 }

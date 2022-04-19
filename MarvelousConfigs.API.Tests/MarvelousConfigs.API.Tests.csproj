@@ -8,7 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="11.0.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
     <PackageReference Include="Moq" Version="4.17.2" />
     <PackageReference Include="NUnit" Version="3.13.3" />
@@ -20,8 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MarvelousConfigs.BLL\MarvelousConfigs.BLL.csproj" />
-    <ProjectReference Include="..\MarvelousConfigs.DAL\MarvelousConfigs.DAL.csproj" />
+    <ProjectReference Include="..\MarvelousConfigs\MarvelousConfigs.API.csproj" />
   </ItemGroup>
 
 </Project>

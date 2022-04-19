@@ -1,26 +1,27 @@
-﻿using MarvelousConfigs.BLL.Exeptions;
-using MarvelousConfigs.BLL.Helper.Exceptions;
+﻿using MarvelousConfigs.BLL.Infrastructure.Exceptions;
 using MarvelousConfigs.DAL.Entities;
 using MarvelousConfigs.DAL.Repositories;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 
-namespace MarvelousConfigs.BLL.Cache
+namespace MarvelousConfigs.BLL.Infrastructure
 {
     public class MemoryCacheExtentions : IMemoryCacheExtentions
     {
         private readonly IMemoryCache _cache;
+        private readonly IMarvelousConfigsProducer _prod;
         private readonly IConfigsRepository _config;
         private readonly IMicroserviceRepository _microservice;
         private readonly ILogger<MemoryCacheExtentions> _logger;
 
         public MemoryCacheExtentions(IMemoryCache cache, IMicroserviceRepository microservice,
-            IConfigsRepository configs, ILogger<MemoryCacheExtentions> logger)
+            IConfigsRepository configs, ILogger<MemoryCacheExtentions> logger, IMarvelousConfigsProducer producer)
         {
             _cache = cache;
             _microservice = microservice;
             _config = configs;
             _logger = logger;
+            _prod = producer;
         }
 
         public async Task SetMemoryCache()
@@ -56,6 +57,7 @@ namespace MarvelousConfigs.BLL.Cache
             }
             catch (Exception ex)
             {
+                await _prod.NotifyAdminAboutErrorToEmail($"Cache loading error during service initialization. {ex}");
                 throw new CacheLoadingException($"Cache loading error during service initialization. {ex}");
             }
         }
@@ -82,6 +84,8 @@ namespace MarvelousConfigs.BLL.Cache
             }
             catch (Exception ex)
             {
+                await _prod.NotifyAdminAboutErrorToEmail($"Сache loading error when trying to update cached configurations for service " +
+                    $"{(Marvelous.Contracts.Enums.Microservice)id}. {ex}");
                 throw new CacheLoadingException($"Сache loading error when trying to update cached configurations for service " +
                     $"{(Marvelous.Contracts.Enums.Microservice)id}. {ex}");
             }

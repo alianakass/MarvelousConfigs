@@ -1,4 +1,4 @@
-﻿namespace MarvelousConfigs.BLL.Exeptions
+﻿namespace MarvelousConfigs.BLL.Infrastructure.Exceptions
 {
     public class EntityNotFoundException : Exception
     {

@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using Marvelous.Contracts.Endpoints;
 using Marvelous.Contracts.Enums;
 using Marvelous.Contracts.ResponseModels;
 using MarvelousConfigs.API.Extensions;
 using MarvelousConfigs.API.Models;
-using MarvelousConfigs.API.RMQ.Producers;
-using MarvelousConfigs.BLL.AuthRequestClient;
+using MarvelousConfigs.BLL.Infrastructure;
+using MarvelousConfigs.BLL.Infrastructure.Exceptions;
 using MarvelousConfigs.BLL.Models;
 using MarvelousConfigs.BLL.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -20,17 +21,17 @@ namespace MarvelousConfigs.API.Controllers
         private readonly IConfigsService _service;
         private readonly IMapper _map;
         private readonly ILogger<ConfigsController> _logger;
-        private readonly IMarvelousConfigsProducer _prod;
         private readonly IAuthRequestClient _auth;
+        private readonly IValidator<ConfigInputModel> _validator;
 
         public ConfigsController(IMapper mapper, IConfigsService service,
-            ILogger<ConfigsController> logger, IMarvelousConfigsProducer producer, IAuthRequestClient auth) : base(auth, logger)
+            ILogger<ConfigsController> logger, IAuthRequestClient auth, IValidator<ConfigInputModel> validator) : base(auth, logger)
         {
             _map = mapper;
             _service = service;
             _logger = logger;
-            _prod = producer;
             _auth = auth;
+            _validator = validator;
         }
 
         //api/configs
@@ -61,7 +62,6 @@ namespace MarvelousConfigs.API.Controllers
             await CheckRole(Role.Admin);
             _logger.LogInformation($"Request to update config by id{id}");
             await _service.UpdateConfigById(id, _map.Map<ConfigModel>(model));
-            await _prod.NotifyConfigurationUpdated(id);
             _logger.LogInformation($"Response to a request for update config by id{id}");
             return NoContent();
         }
@@ -92,12 +92,15 @@ namespace MarvelousConfigs.API.Controllers
         [SwaggerOperation("Get configs by service address")]
         public async Task<ActionResult<List<ConfigResponseModel>>> GetConfigsByService()
         {
-
             _logger.LogInformation($"Request to get configs by service");
-            Microsoft.Extensions.Primitives.StringValues a = HttpContext.Request.Headers.Authorization;
-            string? name = HttpContext.Request.Headers[nameof(Microservice)][0];
+            var token = HttpContext.Request.Headers.Authorization;
+            var name = HttpContext.Request.Headers[nameof(Microservice)].FirstOrDefault();
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new UnauthorizedException("");
+            }
             _logger.LogInformation($"Call belongs to the service {$"{name}"}");
-            List<ConfigResponseModel>? configs = _map.Map<List<ConfigResponseModel>>(await _service.GetConfigsByService(a, name));
+            List<ConfigResponseModel>? configs = _map.Map<List<ConfigResponseModel>>(await _service.GetConfigsByService(token, name));
             _logger.LogInformation($"Response to a request for get configs by service {name}");
             return Ok(configs);
         }

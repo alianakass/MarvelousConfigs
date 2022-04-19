@@ -2,7 +2,7 @@
 using Marvelous.Contracts.Enums;
 using MarvelousConfigs.API.Extensions;
 using MarvelousConfigs.API.Models;
-using MarvelousConfigs.BLL.AuthRequestClient;
+using MarvelousConfigs.BLL.Infrastructure;
 using MarvelousConfigs.BLL.Models;
 using MarvelousConfigs.BLL.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -44,7 +44,6 @@ namespace MarvelousConfigs.API.Controllers
             _logger.LogInformation($"Request to get all microservices");
             List<MicroserviceOutputModel>? services = _map.Map<List<MicroserviceOutputModel>>(await _service.GetAllMicroservices());
             _logger.LogInformation($"Response to a request for get all microservices");
-
             return Ok(services);
         }
 
