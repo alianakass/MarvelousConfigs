@@ -21,7 +21,7 @@ namespace MarvelousConfigs.BLL.Infrastructure
         {
             var source = new CancellationTokenSource(TimeSpan.FromSeconds(10));
             _logger.LogInformation($"Try publish message about error for service {Marvelous.Contracts.Enums.Microservice.MarvelousEmailSender}");
-            await _bus.Publish<EmailErrorMessage>(new
+            await _bus.Publish(new EmailErrorMessage
             {
                 ServiceName = Marvelous.Contracts.Enums.Microservice.MarvelousConfigs.ToString(),
                 TextMessage = mess
@@ -45,64 +45,64 @@ namespace MarvelousConfigs.BLL.Infrastructure
             switch ((Marvelous.Contracts.Enums.Microservice)config.ServiceId)
             {
                 case Marvelous.Contracts.Enums.Microservice.MarvelousAccountChecking:
-                    await _bus.Publish<AccountCheckingCfg>(new
+                    await _bus.Publish(new AccountCheckingCfg
                     {
-                        config.Key,
-                        config.Value
+                        Key = config.Key,
+                        Value = config.Value
                     },
                 source.Token);
                     break;
 
                 case Marvelous.Contracts.Enums.Microservice.MarvelousResource:
-                    await _bus.Publish<ResourceCfg>(new
+                    await _bus.Publish(new ResourceCfg
                     {
-                        config.Key,
-                        config.Value
+                        Key = config.Key,
+                        Value = config.Value
                     },
                 source.Token);
                     break;
 
                 case Marvelous.Contracts.Enums.Microservice.MarvelousCrm:
-                    await _bus.Publish<CrmCfg>(new
+                    await _bus.Publish(new CrmCfg
                     {
-                        config.Key,
-                        config.Value
+                        Key = config.Key,
+                        Value = config.Value
                     },
                 source.Token);
                     break;
 
                 case Marvelous.Contracts.Enums.Microservice.MarvelousEmailSender:
-                    await _bus.Publish<EmailSendlerCfg>(new
+                    await _bus.Publish(new EmailSendlerCfg
                     {
-                        config.Key,
-                        config.Value
+                        Key = config.Key,
+                        Value = config.Value
                     },
                 source.Token);
                     break;
 
                 case Marvelous.Contracts.Enums.Microservice.MarvelousRatesApi:
-                    await _bus.Publish<RatesApiCfg>(new
+                    await _bus.Publish(new RatesApiCfg
                     {
-                        config.Key,
-                        config.Value
+                        Key = config.Key,
+                        Value = config.Value
                     },
                 source.Token);
                     break;
 
                 case Marvelous.Contracts.Enums.Microservice.MarvelousAuth:
-                    await _bus.Publish<AuthCfg>(new
+                    await _bus.Publish(new AuthCfg
                     {
-                        config.Key,
-                        config.Value
+                        Key = config.Key,
+                        Value = config.Value
                     },
                 source.Token);
                     break;
 
                 case Marvelous.Contracts.Enums.Microservice.MarvelousSmsSender:
-                    await _bus.Publish<SmsSendlerCfg>(new
+                    await _bus.Publish(new SmsSendlerCfg
                     {
-                        config.Key,
-                        config.Value
+                        Key = config.Key,
+                        Value = config.Value
                     },
                  source.Token);
                     break;

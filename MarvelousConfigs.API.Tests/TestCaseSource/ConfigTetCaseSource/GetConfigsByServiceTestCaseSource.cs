@@ -1,4 +1,5 @@
-﻿using MarvelousConfigs.BLL.Models;
+﻿using Marvelous.Contracts.Enums;
+using MarvelousConfigs.BLL.Models;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -17,9 +18,9 @@ namespace MarvelousConfigs.API.Tests
                 Created = System.DateTime.Now
             } };
 
-            string name = "MarvelousAuth";
+            Microservice microservice = Microservice.MarvelousAuth;
 
-            yield return new object[] { services, name };
+            yield return new object[] { services, microservice };
         }
     }
 }

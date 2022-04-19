@@ -1,5 +1,6 @@
 using AutoMapper;
 using FluentValidation;
+using Marvelous.Contracts.Enums;
 using Marvelous.Contracts.ResponseModels;
 using MarvelousConfigs.API.Configuration;
 using MarvelousConfigs.API.Controllers;
@@ -222,15 +223,15 @@ namespace MarvelousConfigs.API.Tests
         }
 
         [TestCaseSource(typeof(GetConfigsByServiceTestCaseSource))]
-        public async Task GetConfigsByServiceTest_Should200Ok(List<ConfigModel> configs, string name)
+        public async Task GetConfigsByServiceTest_Should200Ok(List<ConfigModel> configs, Microservice microservice)
         {
             //given
             string token = "token";
             var context = new DefaultHttpContext();
             context.Request.Headers.Authorization = token;
-            //context.Request.Headers[nameof(Microservice)][0] = "";
+            context.Request.Headers.Add(nameof(Microservice), microservice.ToString());
             _controller.ControllerContext.HttpContext = context;
-            _service.Setup(x => x.GetConfigsByService(token, name)).ReturnsAsync(configs);
+            _service.Setup(x => x.GetConfigsByService(token, microservice.ToString())).ReturnsAsync(configs);
 
             //when
             var result = await _controller.GetConfigsByService();
@@ -238,7 +239,7 @@ namespace MarvelousConfigs.API.Tests
             //then
             Assert.IsNotNull(result);
             Assert.IsInstanceOf<OkObjectResult>(result.Result);
-            _service.Verify(x => x.GetConfigsByService(token, name), Times.Once);
+            _service.Verify(x => x.GetConfigsByService(token, microservice.ToString()), Times.Once);
 
         }
 

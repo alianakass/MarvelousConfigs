@@ -30,13 +30,13 @@ namespace MarvelousConfigs.BLL.Tests
         {
             //given
             string message = "test";
-            _bus.Setup(x => x.Publish(It.IsAny<EmailErrorMessage>(), new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token));
+            _bus.Setup(x => x.Publish(It.IsAny<EmailErrorMessage>(), It.IsAny<CancellationToken>()));
 
             //when
             await _producer.NotifyAdminAboutErrorToEmail(message);
 
             //then
-            _bus.Verify(v => v.Publish(It.IsAny<EmailErrorMessage>(), new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token), Times.Once);
+            _bus.Verify(v => v.Publish(It.IsAny<EmailErrorMessage>(), It.IsAny<CancellationToken>()), Times.Once);
             VerifyLogger(LogLevel.Information, 2);
         }
 
@@ -45,13 +45,13 @@ namespace MarvelousConfigs.BLL.Tests
         {
             //given
             Config cfg = new Config() { Id = 3, Created = DateTime.Now, Key = "Key", Value = "Value", ServiceId = 9 };
-            _bus.Setup(x => x.Publish(It.IsAny<AuthCfg>(), new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token));
+            _bus.Setup(x => x.Publish(It.IsAny<AuthCfg>(), It.IsAny<CancellationToken>()));
 
             //when
             await _producer.NotifyConfigurationUpdated(cfg);
 
             //then
-            _bus.Verify(v => v.Publish(It.IsAny<AuthCfg>(), new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token), Times.Once);
+            _bus.Verify(v => v.Publish(It.IsAny<AuthCfg>(), It.IsAny<CancellationToken>()), Times.Once);
             VerifyLogger(LogLevel.Information, 2);
         }
 
@@ -60,13 +60,13 @@ namespace MarvelousConfigs.BLL.Tests
         {
             //given
             Config cfg = new Config() { Id = 3, Created = DateTime.Now, Key = "Key", Value = "Value", ServiceId = 100000 };
-            _bus.Setup(x => x.Publish(It.IsAny<AuthCfg>(), new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token));
+            _bus.Setup(x => x.Publish(It.IsAny<AuthCfg>(), It.IsAny<CancellationToken>()));
 
             //when       
 
             //then
             Assert.ThrowsAsync<Exception>(async () => await _producer.NotifyConfigurationUpdated(cfg));
-            _bus.Verify(v => v.Publish(It.IsAny<AuthCfg>(), new CancellationTokenSource(TimeSpan.FromSeconds(10)).Token), Times.Never);
+            _bus.Verify(v => v.Publish(It.IsAny<AuthCfg>(), It.IsAny<CancellationToken>()), Times.Never);
             VerifyLogger(LogLevel.Information, 1);
         }
     }
