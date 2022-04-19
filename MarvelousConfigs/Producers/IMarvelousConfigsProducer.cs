@@ -3,6 +3,7 @@ namespace MarvelousConfigs.API.RMQ.Producers
 {
     public interface IMarvelousConfigsProducer
     {
-        Task NotifyConfigurationAddedOrUpdated(int id);
+        Task NotifyAdminAboutErrorToEmail(string mess);
+        Task NotifyConfigurationUpdated(int id);
     }
 }

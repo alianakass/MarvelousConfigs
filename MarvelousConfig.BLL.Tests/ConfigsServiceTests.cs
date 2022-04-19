@@ -1,30 +1,31 @@
 using AutoMapper;
-using MarvelousConfigs.BLL.AuthRequestClient;
-using MarvelousConfigs.BLL.Cache;
 using MarvelousConfigs.BLL.Configuration;
-using MarvelousConfigs.BLL.Exeptions;
+using MarvelousConfigs.BLL.Infrastructure;
+using MarvelousConfigs.BLL.Infrastructure.Exceptions;
 using MarvelousConfigs.BLL.Models;
 using MarvelousConfigs.BLL.Services;
+using MarvelousConfigs.BLL.Tests;
 using MarvelousConfigs.DAL.Entities;
 using MarvelousConfigs.DAL.Repositories;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MarvelousConfig.BLL.Tests
 {
-    public class ConfigsServiceTests
+    public class ConfigsServiceTests : BaseVerifyTest<ConfigsService>
     {
         private Mock<IConfigsRepository> _repositoryMock;
         private IMapper _map;
         private IConfigsService _service;
         private IMemoryCache _cache;
-        private Mock<ILogger<ConfigsService>> _logger;
         private Mock<IAuthRequestClient> _auth;
         private Mock<IMemoryCacheExtentions> _memory;
+        private Mock<IMarvelousConfigsProducer> _producer;
 
         [SetUp]
         public void Setup()
@@ -34,23 +35,11 @@ namespace MarvelousConfig.BLL.Tests
             _logger = new Mock<ILogger<ConfigsService>>();
             _auth = new Mock<IAuthRequestClient>();
             _memory = new Mock<IMemoryCacheExtentions>();
+            _producer = new Mock<IMarvelousConfigsProducer>();
             _map = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile<CustomMapperBLL>()));
             _service = new ConfigsService(_repositoryMock.Object, _map, _cache, _memory.Object,
-                _logger.Object, _auth.Object);
+                _logger.Object, _auth.Object, _producer.Object);
 
-        }
-
-        [TestCaseSource(typeof(AddConfigTestCaseSource))]
-        public async Task AddConfigTest(ConfigModel model)
-        {
-            //given
-            _repositoryMock.Setup(x => x.AddConfig(It.IsAny<Config>())).ReturnsAsync(It.IsAny<int>);
-
-            //then
-            int actual = await _service.AddConfig(model);
-
-            //when
-            _repositoryMock.Verify(x => x.AddConfig(It.IsAny<Config>()), Times.Once);
         }
 
         [Test]
@@ -60,10 +49,11 @@ namespace MarvelousConfig.BLL.Tests
             _repositoryMock.Setup(x => x.GetAllConfigs()).ReturnsAsync(It.IsAny<List<Config>>());
 
             //then
-            var actual = await _service.GetAllConfigs();
+            List<ConfigModel>? actual = await _service.GetAllConfigs();
 
             //when
             _repositoryMock.Verify(x => x.GetAllConfigs(), Times.Once);
+            VerifyLogger(LogLevel.Information, 2);
         }
 
         [TestCaseSource(typeof(UpdateConfigByIdTestCaseSource))]
@@ -72,11 +62,15 @@ namespace MarvelousConfig.BLL.Tests
             //given
             _repositoryMock.Setup(x => x.GetConfigById(id)).ReturnsAsync(config);
             _repositoryMock.Setup(x => x.UpdateConfigById(id, config));
-            //then
-            await _service.UpdateConfigById(id, model);
+            _producer.Setup(x => x.NotifyConfigurationUpdated(config));
 
             //when
+            await _service.UpdateConfigById(id, model);
+
+            //then
+            VerifyLogger(LogLevel.Information, 3);
             _repositoryMock.Verify(x => x.GetConfigById(id));
+            _producer.Verify(x => x.NotifyConfigurationUpdated(config), Times.Once);
             _repositoryMock.Verify(x => x.UpdateConfigById(id, It.IsAny<Config>()), Times.Once);
         }
 
@@ -85,74 +79,89 @@ namespace MarvelousConfig.BLL.Tests
         {
             //given
             _repositoryMock.Setup(x => x.UpdateConfigById(id, It.IsAny<Config>()));
-            //then
 
             //when
+
+            //then
             Assert.ThrowsAsync<EntityNotFoundException>(async () => await _service.UpdateConfigById(id, It.IsAny<ConfigModel>()));
             _repositoryMock.Verify(x => x.GetConfigById(It.IsAny<int>()), Times.Once);
             _repositoryMock.Verify(x => x.UpdateConfigById(It.IsAny<int>(), It.IsAny<Config>()), Times.Never);
         }
 
-        [TestCaseSource(typeof(DeleteOrRestoreConfigTestCaseSource))]
-        public async Task DeleteConfigByIdTest(Config config)
+        [TestCase(1)]
+        public async Task GetConfigByIdTest(int id)
         {
             //given
-            _repositoryMock.Setup(x => x.GetConfigById(It.IsAny<int>())).ReturnsAsync(config);
-            _repositoryMock.Setup(x => x.DeleteOrRestoreConfigById(It.IsAny<int>(), true));
+            Config config = new Config() { Id = 1, Key = "Key", Value = "Value", Created = System.DateTime.Now, ServiceId = 3 };
+            _repositoryMock.Setup(x => x.GetConfigById(id)).ReturnsAsync(config);
 
             //then
-            await _service.DeleteConfigById(It.IsAny<int>());
+            ConfigModel? actual = await _service.GetConfigById(id);
 
             //when
-            _repositoryMock.Verify(x => x.GetConfigById(It.IsAny<int>()), Times.Once);
-            _repositoryMock.Verify(x => x.DeleteOrRestoreConfigById(It.IsAny<int>(), true), Times.Once);
+            _repositoryMock.Verify(x => x.GetConfigById(id), Times.Once);
+            VerifyLogger(LogLevel.Information, 2);
         }
 
-        [Test]
-        public void DeleteConfigByIdTest_WhenConfigNotFound_ShouldThrowEntityNotFoundException()
+        [TestCase(1)]
+        public async Task GetConfigByIdTest_WhenConfigNotFound_ShouldThrowEntityNotFoundException(int id)
         {
             //given
-            _repositoryMock.Setup(x => x.GetConfigById(It.IsAny<int>()));
-            _repositoryMock.Setup(x => x.DeleteOrRestoreConfigById(It.IsAny<int>(), true));
+            _repositoryMock.Setup(x => x.GetConfigById(id));
 
             //then
 
-
             //when
-            Assert.ThrowsAsync<EntityNotFoundException>(async () => await _service.DeleteConfigById(It.IsAny<int>()));
-            _repositoryMock.Verify(x => x.GetConfigById(It.IsAny<int>()), Times.Once);
-            _repositoryMock.Verify(x => x.DeleteOrRestoreConfigById(It.IsAny<int>(), true), Times.Never);
+            Assert.ThrowsAsync<EntityNotFoundException>(async () => await _service.GetConfigById(id));
+            _repositoryMock.Verify(x => x.GetConfigById(id), Times.Once);
+            VerifyLogger(LogLevel.Information, 1);
         }
 
-        [TestCaseSource(typeof(DeleteOrRestoreConfigTestCaseSource))]
-        public async Task RestoreConfigByIdTest(Config config)
+        [TestCase(1)]
+        public async Task GetConfigsByServiceIdTest(int id)
         {
             //given
-            _repositoryMock.Setup(x => x.GetConfigById(It.IsAny<int>())).ReturnsAsync(config);
-            _repositoryMock.Setup(x => x.DeleteOrRestoreConfigById(It.IsAny<int>(), false));
+            List<Config> configs = new List<Config>() { new Config() { Id = 1, Key = "Key", Value = "Value", Created = System.DateTime.Now, ServiceId = 3 } };
+            _repositoryMock.Setup(x => x.GetConfigsByServiceId(id)).ReturnsAsync(configs);
 
             //then
-            await _service.RestoreConfigById(It.IsAny<int>());
+            List<ConfigModel> actual = await _service.GetConfigsByServiceId(id);
 
             //when
-            _repositoryMock.Verify(x => x.GetConfigById(It.IsAny<int>()), Times.Once);
-            _repositoryMock.Verify(x => x.DeleteOrRestoreConfigById(It.IsAny<int>(), false), Times.Once);
+            _repositoryMock.Verify(x => x.GetConfigsByServiceId(id), Times.Once);
+            VerifyLogger(LogLevel.Information, 2);
         }
 
-        [Test]
-        public void RestoreConfigByIdTest_WhenConfigNotFound_ShouldThrowEntityNotFoundException()
+        [TestCase("name", "token")]
+        public async Task GetConfigsByServiceTest(string name, string token)
         {
             //given
-            _repositoryMock.Setup(x => x.GetConfigById(It.IsAny<int>()));
-            _repositoryMock.Setup(x => x.DeleteOrRestoreConfigById(It.IsAny<int>(), false));
+            List<Config> configs = new List<Config>() { new Config() { Id = 1, Key = "Key", Value = "Value", Created = System.DateTime.Now, ServiceId = 3 } };
+            _repositoryMock.Setup(x => x.GetConfigsByService(name)).ReturnsAsync(configs);
+            _auth.Setup(x => x.SendRequestWithToken(token)).Returns(Task.CompletedTask);
+
+            //then
+            List<ConfigModel> actual = await _service.GetConfigsByService(token, name);
+
+            //when
+            _repositoryMock.Verify(x => x.GetConfigsByService(name), Times.Once);
+            _auth.Verify(x => x.SendRequestWithToken(token), Times.Once);
+            VerifyLogger(LogLevel.Information, 2);
+        }
+
+        [TestCase("name", "token")]
+        public async Task GetConfigsByServiceTest_WhenTokenIsNotValid_ShouldThrowForbiddenException(string name, string token)
+        {
+            //given
+            _repositoryMock.Setup(x => x.GetConfigsByService(name));
+            _auth.Setup(x => x.SendRequestWithToken(token)).Returns(Task.FromException(new Exception(It.IsAny<string>())));
 
             //then
 
-
             //when
-            Assert.ThrowsAsync<EntityNotFoundException>(async () => await _service.RestoreConfigById(It.IsAny<int>()));
-            _repositoryMock.Verify(x => x.GetConfigById(It.IsAny<int>()), Times.Once);
-            _repositoryMock.Verify(x => x.DeleteOrRestoreConfigById(It.IsAny<int>(), false), Times.Never);
+            Assert.ThrowsAsync<Exception>(async () => await _service.GetConfigsByService(token, name));
+            _repositoryMock.Verify(x => x.GetConfigsByService(name), Times.Never);
+            _auth.Verify(x => x.SendRequestWithToken(token), Times.Once);
         }
     }
 }
