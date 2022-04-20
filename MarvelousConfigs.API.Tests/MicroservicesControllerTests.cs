@@ -56,7 +56,7 @@ namespace MarvelousConfigs.API.Tests
         }
 
         [TestCaseSource(typeof(GetAllMicroservicesShould403TestCaseSource))]
-        public async Task GetAllMicroservicesTest_Should403Forbidden(List<MicroserviceModel> services, IdentityResponseModel model)
+        public void GetAllMicroservicesTest_Should403Forbidden(List<MicroserviceModel> services, IdentityResponseModel model)
         {
             //given
             string token = "token";
@@ -78,7 +78,7 @@ namespace MarvelousConfigs.API.Tests
         }
 
         [TestCaseSource(typeof(GetAllMicroservicesShould401TestCaseSource))]
-        public async Task GetAllMicroservicesTest_Should401Unauthorized(List<MicroserviceModel> services, IdentityResponseModel model)
+        public void GetAllMicroservicesTest_Should401Unauthorized(List<MicroserviceModel> services, IdentityResponseModel model)
         {
             //given
             var context = new DefaultHttpContext();
@@ -117,7 +117,7 @@ namespace MarvelousConfigs.API.Tests
         }
 
         [TestCaseSource(typeof(UpdateMicroserviceShould403TestCaseSource))]
-        public async Task UpdateMicroserviceTest_Should403Forbidden(MicroserviceInputModel input,
+        public void UpdateMicroserviceTest_Should403Forbidden(MicroserviceInputModel input,
             IdentityResponseModel model, int id)
         {
             //given
@@ -138,7 +138,7 @@ namespace MarvelousConfigs.API.Tests
         }
 
         [TestCaseSource(typeof(UpdateMicroserviceShould401TestCaseSource))]
-        public async Task UpdateMicroserviceTest_Should401Unauthorized(MicroserviceInputModel input,
+        public void UpdateMicroserviceTest_Should401Unauthorized(MicroserviceInputModel input,
             IdentityResponseModel model, int id)
         {
             //given
@@ -180,7 +180,7 @@ namespace MarvelousConfigs.API.Tests
         }
 
         [TestCaseSource(typeof(GetMicroserviceWithConfigsByIdShould403TestCaseSource))]
-        public async Task GetMicroserviceWithConfigsByIdTest_Should403Forbidden(MicroserviceWithConfigsModel service, IdentityResponseModel model,
+        public void GetMicroserviceWithConfigsByIdTest_Should403Forbidden(MicroserviceWithConfigsModel service, IdentityResponseModel model,
             int id)
         {
             //given
@@ -201,7 +201,7 @@ namespace MarvelousConfigs.API.Tests
         }
 
         [TestCaseSource(typeof(GetMicroserviceWithConfigsByIdShould401TestCaseSource))]
-        public async Task GetMicroserviceWithConfigsByIdTest_Should401Unauthorized(MicroserviceWithConfigsModel service, IdentityResponseModel model,
+        public void GetMicroserviceWithConfigsByIdTest_Should401Unauthorized(MicroserviceWithConfigsModel service, IdentityResponseModel model,
             int id)
         {
             //given
