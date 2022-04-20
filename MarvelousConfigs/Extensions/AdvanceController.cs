@@ -23,6 +23,7 @@ namespace MarvelousConfigs.API.Extensions
             if (token is null)
                 throw new UnauthorizedException($"Request attempt from unauthorized user");
             var lead = await _auth.SendRequestToValidateToken(token);
+
             if (!roles.Select(r => r.ToString()).Contains(lead.Role))
             {
                 throw new ForbiddenException($"Request attempt from user with role:{lead.Role}. User doesn't have access");

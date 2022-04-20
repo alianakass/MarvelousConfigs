@@ -87,7 +87,7 @@ namespace MarvelousConfigs.BLL.Tests
             //then
             _repositoryMock.Verify(x => x.UpdateMicroserviceById(id, It.IsAny<Microservice>()), Times.Once);
             _repositoryMock.Verify(x => x.GetMicroserviceById(id));
-            VerifyLogger(LogLevel.Information, 3);
+            VerifyLogger(LogLevel.Information, 4);
         }
 
         [Test]

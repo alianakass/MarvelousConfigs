@@ -34,7 +34,7 @@ namespace MarvelousConfigs.BLL.Infrastructure
         {
             var source = new CancellationTokenSource(TimeSpan.FromSeconds(10));
 
-            _logger.LogInformation($"Try publish config id{config.Id} for {((Marvelous.Contracts.Enums.Microservice)config.ServiceId)}");
+            _logger.LogInformation($"Try publish updated config id{config.Id} for {((Marvelous.Contracts.Enums.Microservice)config.ServiceId)}");
 
             await CheckMicroserviceAndPublish(config, source);
             _logger.LogInformation($"Config id{config.Id} for {((Marvelous.Contracts.Enums.Microservice)config.ServiceId)} published");
@@ -108,7 +108,9 @@ namespace MarvelousConfigs.BLL.Infrastructure
                     break;
 
                 default:
-                    throw new Exception($"Unable to send configurations {config.Id} for {(Marvelous.Contracts.Enums.Microservice)config.ServiceId}");
+                    await NotifyAdminAboutErrorToEmail($"Error for sending updated configuration {config.Id} over RMQ. " +
+                        $"Send request for a service {config.ServiceId}, there is no information about this recipient");
+                    throw new Exception($"Unable to send configurations {config.Id}. Unknown recipient");
 
             }
         }

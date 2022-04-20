@@ -34,6 +34,7 @@ namespace MarvelousConfigs.API.Tests
             await _controller.Login(model);
 
             _auth.Verify(x => x.GetToken(model), Times.Once);
+            VerifyLogger(LogLevel.Information, 2);
         }
     }
 }

@@ -68,7 +68,7 @@ namespace MarvelousConfig.BLL.Tests
             await _service.UpdateConfigById(id, model);
 
             //then
-            VerifyLogger(LogLevel.Information, 3);
+            VerifyLogger(LogLevel.Information, 4);
             _repositoryMock.Verify(x => x.GetConfigById(id));
             _producer.Verify(x => x.NotifyConfigurationUpdated(config), Times.Once);
             _repositoryMock.Verify(x => x.UpdateConfigById(id, It.IsAny<Config>()), Times.Once);
