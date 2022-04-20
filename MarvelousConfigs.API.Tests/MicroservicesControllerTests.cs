@@ -53,7 +53,7 @@ namespace MarvelousConfigs.API.Tests
             Assert.IsInstanceOf<OkObjectResult>(result.Result);
             _service.Verify(x => x.GetAllMicroservices(), Times.Once);
             _auth.Verify(x => x.SendRequestToValidateToken(It.IsAny<string>()), Times.Once);
-
+            VerifyLogger(LogLevel.Information, 3);
         }
 
         [TestCaseSource(typeof(GetAllMicroservicesShould403TestCaseSource))]
@@ -75,7 +75,7 @@ namespace MarvelousConfigs.API.Tests
             Assert.ThrowsAsync<ForbiddenException>(async () => await _controller.GetAllMicroservices());
             _service.Verify(x => x.GetAllMicroservices(), Times.Never);
             _auth.Verify(x => x.SendRequestToValidateToken(It.IsAny<string>()), Times.Once);
-
+            VerifyLogger(LogLevel.Information, 1);
         }
 
         [TestCaseSource(typeof(GetAllMicroservicesShould401TestCaseSource))]
@@ -93,6 +93,7 @@ namespace MarvelousConfigs.API.Tests
             Assert.ThrowsAsync<UnauthorizedException>(async () => await _controller.GetAllMicroservices());
             _service.Verify(x => x.GetAllMicroservices(), Times.Never);
             _auth.Verify(x => x.SendRequestToValidateToken(It.IsAny<string>()), Times.Never);
+            VerifyLogger(LogLevel.Information, 1);
         }
 
         [TestCaseSource(typeof(UpdateMicroserviceTestCaseSource))]
@@ -113,6 +114,7 @@ namespace MarvelousConfigs.API.Tests
             //then
             _service.Verify(x => x.UpdateMicroservice(id, It.IsAny<MicroserviceModel>()), Times.Once);
             _auth.Verify(x => x.SendRequestToValidateToken(It.IsAny<string>()), Times.Once);
+            VerifyLogger(LogLevel.Information, 3);
         }
 
         [TestCaseSource(typeof(UpdateMicroserviceShould403TestCaseSource))]
@@ -133,7 +135,7 @@ namespace MarvelousConfigs.API.Tests
             Assert.ThrowsAsync<ForbiddenException>(async () => await _controller.UpdateMicroserviceById(id, input));
             _service.Verify(x => x.UpdateMicroservice(id, It.IsAny<MicroserviceModel>()), Times.Never);
             _auth.Verify(x => x.SendRequestToValidateToken(It.IsAny<string>()), Times.Once);
-
+            VerifyLogger(LogLevel.Information, 1);
         }
 
         [TestCaseSource(typeof(UpdateMicroserviceShould401TestCaseSource))]
@@ -152,7 +154,7 @@ namespace MarvelousConfigs.API.Tests
             Assert.ThrowsAsync<UnauthorizedException>(async () => await _controller.UpdateMicroserviceById(id, input));
             _service.Verify(x => x.UpdateMicroservice(id, It.IsAny<MicroserviceModel>()), Times.Never);
             _auth.Verify(x => x.SendRequestToValidateToken(It.IsAny<string>()), Times.Never);
-
+            VerifyLogger(LogLevel.Information, 1);
         }
 
         [TestCaseSource(typeof(GetMicroserviceWithConfigsByIdTestCaseSource))]
@@ -175,7 +177,7 @@ namespace MarvelousConfigs.API.Tests
             Assert.IsInstanceOf<OkObjectResult>(result.Result);
             _service.Verify(x => x.GetMicroserviceWithConfigsById(id), Times.Once);
             _auth.Verify(x => x.SendRequestToValidateToken(It.IsAny<string>()), Times.Once);
-
+            VerifyLogger(LogLevel.Information, 3);
         }
 
         [TestCaseSource(typeof(GetMicroserviceWithConfigsByIdShould403TestCaseSource))]
@@ -196,7 +198,7 @@ namespace MarvelousConfigs.API.Tests
             Assert.ThrowsAsync<ForbiddenException>(async () => await _controller.GetMicroserviceWithConfigsById(id));
             _service.Verify(x => x.GetMicroserviceWithConfigsById(id), Times.Never);
             _auth.Verify(x => x.SendRequestToValidateToken(It.IsAny<string>()), Times.Once);
-
+            VerifyLogger(LogLevel.Information, 1);
         }
 
         [TestCaseSource(typeof(GetMicroserviceWithConfigsByIdShould401TestCaseSource))]
@@ -215,7 +217,7 @@ namespace MarvelousConfigs.API.Tests
             Assert.ThrowsAsync<UnauthorizedException>(async () => await _controller.GetMicroserviceWithConfigsById(id));
             _service.Verify(x => x.GetMicroserviceWithConfigsById(id), Times.Never);
             _auth.Verify(x => x.SendRequestToValidateToken(It.IsAny<string>()), Times.Never);
-
+            VerifyLogger(LogLevel.Information, 1);
         }
     }
 }

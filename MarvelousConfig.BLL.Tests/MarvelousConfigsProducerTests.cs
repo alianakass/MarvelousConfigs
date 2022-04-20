@@ -61,13 +61,15 @@ namespace MarvelousConfigs.BLL.Tests
             //given
             Config cfg = new Config() { Id = 3, Created = DateTime.Now, Key = "Key", Value = "Value", ServiceId = 100000 };
             _bus.Setup(x => x.Publish(It.IsAny<AuthCfg>(), It.IsAny<CancellationToken>()));
+            _bus.Setup(x => x.Publish(It.IsAny<EmailErrorMessage>(), It.IsAny<CancellationToken>()));
 
             //when       
 
             //then
             Assert.ThrowsAsync<Exception>(async () => await _producer.NotifyConfigurationUpdated(cfg));
             _bus.Verify(v => v.Publish(It.IsAny<AuthCfg>(), It.IsAny<CancellationToken>()), Times.Never);
-            VerifyLogger(LogLevel.Information, 1);
+            _bus.Verify(v => v.Publish(It.IsAny<EmailErrorMessage>(), It.IsAny<CancellationToken>()), Times.Once);
+            VerifyLogger(LogLevel.Information, 3);
         }
     }
 }
