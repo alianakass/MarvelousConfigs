@@ -7,10 +7,10 @@ namespace MarvelousConfigs.API.Extensions
 {
     public class AdvanceController : ControllerBase
     {
-        public IAuthRequestClient _auth { get; set; }
-        public ILogger _logger { get; set; }
+        protected IAuthRequestClient _auth { get; set; }
+        protected ILogger _logger { get; set; }
 
-        public AdvanceController(IAuthRequestClient auth, ILogger logger)
+        protected AdvanceController(IAuthRequestClient auth, ILogger logger)
         {
             _auth = auth;
             _logger = logger;

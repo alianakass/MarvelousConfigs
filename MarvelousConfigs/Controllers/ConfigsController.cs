@@ -20,8 +20,6 @@ namespace MarvelousConfigs.API.Controllers
     {
         private readonly IConfigsService _service;
         private readonly IMapper _map;
-        private readonly ILogger<ConfigsController> _logger;
-        private readonly IAuthRequestClient _auth;
         private readonly IValidator<ConfigInputModel> _validator;
 
         public ConfigsController(IMapper mapper, IConfigsService service,

@@ -183,7 +183,7 @@ namespace MarvelousConfigs.BLL.Tests
         public async Task SendRequestToValidateTokenTest_WhenAuthServiceReturnedHttpCode401Unauthorized_ShouldThrowUnauthorizedException()
         {
             string token = "token";
-            var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode == 
+            var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode ==
             HttpStatusCode.Unauthorized && x.ErrorException == new Exception(_mess));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
