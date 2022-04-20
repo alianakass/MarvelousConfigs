@@ -87,6 +87,10 @@ namespace MarvelousConfigs.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
         [SwaggerOperation("Get configs by service address")]
         public async Task<ActionResult<List<ConfigResponseModel>>> GetConfigsByService()
         {
@@ -95,7 +99,7 @@ namespace MarvelousConfigs.API.Controllers
             var name = HttpContext.Request.Headers[nameof(Microservice)].FirstOrDefault();
             if (string.IsNullOrWhiteSpace(name))
             {
-                throw new UnauthorizedException("");
+                throw new UnauthorizedException("Request attempt from unauthorized client");
             }
             _logger.LogInformation($"Call belongs to the service {$"{name}"}");
             List<ConfigResponseModel>? configs = _map.Map<List<ConfigResponseModel>>(await _service.GetConfigsByService(token, name));
