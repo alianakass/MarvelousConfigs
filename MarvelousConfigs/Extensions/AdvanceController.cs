@@ -1,4 +1,5 @@
-﻿using Marvelous.Contracts.Enums;
+﻿using AutoMapper;
+using Marvelous.Contracts.Enums;
 using MarvelousConfigs.BLL.Infrastructure;
 using MarvelousConfigs.BLL.Infrastructure.Exceptions;
 using Microsoft.AspNetCore.Mvc;
@@ -9,11 +10,13 @@ namespace MarvelousConfigs.API.Extensions
     {
         protected IAuthRequestClient _auth { get; set; }
         protected ILogger _logger { get; set; }
+        protected IMapper _map { get; set; }
 
-        protected AdvanceController(IAuthRequestClient auth, ILogger logger)
+        protected AdvanceController(IAuthRequestClient auth, ILogger logger, IMapper mapper)
         {
             _auth = auth;
             _logger = logger;
+            _map = mapper;
         }
 
         protected async Task CheckRole(params Role[] roles)

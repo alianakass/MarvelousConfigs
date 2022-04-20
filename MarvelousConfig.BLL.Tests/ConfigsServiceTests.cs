@@ -20,9 +20,7 @@ namespace MarvelousConfig.BLL.Tests
     public class ConfigsServiceTests : BaseVerifyTest<ConfigsService>
     {
         private Mock<IConfigsRepository> _repositoryMock;
-        private IMapper _map;
         private IConfigsService _service;
-        private IMemoryCache _cache;
         private Mock<IAuthRequestClient> _auth;
         private Mock<IMemoryCacheExtentions> _memory;
         private Mock<IMarvelousConfigsProducer> _producer;

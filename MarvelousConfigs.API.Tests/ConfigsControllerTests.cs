@@ -22,7 +22,6 @@ namespace MarvelousConfigs.API.Tests
 {
     public class ConfigsControllerTests : BaseVerifyTest<ConfigsController>
     {
-        private IMapper _map;
         private IValidator<ConfigInputModel> _validator;
         private Mock<IConfigsService> _service;
         private Mock<IAuthRequestClient> _auth;

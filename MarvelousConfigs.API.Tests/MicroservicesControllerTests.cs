@@ -19,7 +19,6 @@ namespace MarvelousConfigs.API.Tests
 {
     public class MicroservicesControllerTests : BaseVerifyTest<MicroservicesController>
     {
-        private IMapper _map;
         private Mock<IMicroservicesService> _service;
         private Mock<IAuthRequestClient> _auth;
         private MicroservicesController _controller;

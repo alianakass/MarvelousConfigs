@@ -13,7 +13,6 @@ namespace MarvelousConfigs.BLL.Tests
 {
     internal class MemoryCacheExtentionsTests : BaseVerifyTest<MemoryCacheExtentions>
     {
-        private IMemoryCache _cache;
         private Mock<IMarvelousConfigsProducer> _prod;
         private Mock<IConfigsRepository> _config;
         private Mock<IMicroserviceRepository> _microservice;
@@ -30,57 +29,17 @@ namespace MarvelousConfigs.BLL.Tests
             _extentions = new MemoryCacheExtentions(_cache, _microservice.Object, _config.Object, _logger.Object, _prod.Object);
         }
 
-        [Test]
-        public async Task SetMemoryCacheTest()
+        [TestCaseSource(typeof(SetMemoryCacheTestCaseSource))]
+        public async Task SetMemoryCacheTest(List<Config> configs, List<Microservice> services)
         {
-            List<Config> configs = new List<Config>() {
-            new Config()
-            {
-                Id = 1,
-                Key = "KEY",
-                Value = "VALUE",
-                ServiceId = 1
-            },
-            new Config()
-            {
-                Id = 2,
-                Key = "KEY",
-                Value = "VALUE",
-                ServiceId = 1
-            },
-            new Config()
-            {
-                Id = 3,
-                Key = "KEY",
-                Value = "VALUE",
-                ServiceId = 2
-            }};
-
-            List<Microservice> services = new List<Microservice>() {
-            new Microservice()
-            {
-                Id = 1,
-                ServiceName = "Name1",
-                Url = "URL1"
-            },
-            new Microservice()
-            {
-                Id = 2,
-                ServiceName = "Name2",
-                Url = "URL2"
-            },
-            new Microservice()
-            {
-                Id = 3,
-                ServiceName = "Name3",
-                Url = "URL3"
-            }};
-
+            //given
             _microservice.Setup(x => x.GetAllMicroservices()).ReturnsAsync(services);
             _config.Setup(x => x.GetAllConfigs()).ReturnsAsync(configs);
 
+            //when
             await _extentions.SetMemoryCache();
 
+            //then
             _microservice.Verify(x => x.GetAllMicroservices(), Times.Once);
             _config.Verify(x => x.GetAllConfigs(), Times.Once);
             VerifyLogger(LogLevel.Information, 2);
@@ -95,97 +54,35 @@ namespace MarvelousConfigs.BLL.Tests
             }
         }
 
-        [Test]
-        public async Task SetMemoryCacheTest_WhenExceptionOccurredWhileCacheLoading_ShouldThrowCacheLoadingException()
+        [TestCaseSource(typeof(SetMemoryCacheNegativeTestCaseSource))]
+        public async Task SetMemoryCacheTest_WhenExceptionOccurredWhileCacheLoading_ShouldThrowCacheLoadingException(List<Config> configs, List<Microservice> services)
         {
-            List<Config> configs = new List<Config>() {
-            new Config()
-            {
-                Id = 1,
-                Key = "KEY",
-                Value = "VALUE",
-                ServiceId = 1
-            },
-            new Config()
-            {
-                Id = 2,
-                Key = "KEY",
-                Value = "VALUE",
-            },
-            new Config()
-            {
-                Key = "KEY",
-                Value = "VALUE",
-                ServiceId = 2
-            }};
-
-            List<Microservice> services = new List<Microservice>() {
-            new Microservice()
-            {
-                Id = 14567890,
-                Url = "URL1"
-            },
-            new Microservice()
-            {
-                ServiceName = "Name2",
-                Url = "URL2"
-            },
-            new Microservice()
-            {
-                Id = 3,
-                ServiceName = "Name3",
-            }};
-
+            //given
             _microservice.Setup(x => x.GetAllMicroservices()).ReturnsAsync(services);
             _config.Setup(x => x.GetAllConfigs()).ReturnsAsync(configs);
             _prod.Setup(x => x.NotifyAdminAboutErrorToEmail(It.IsAny<string>()));
 
+            //when
+
+            //then
             Assert.ThrowsAsync<CacheLoadingException>(async () => await _extentions.SetMemoryCache());
             _microservice.Verify(x => x.GetAllMicroservices(), Times.Once);
             _config.Verify(x => x.GetAllConfigs(), Times.Once);
             _prod.Verify(x => x.NotifyAdminAboutErrorToEmail(It.IsAny<string>()), Times.Once);
             VerifyLogger(LogLevel.Information, 1);
-
         }
 
-        [TestCase(3)]
-        public async Task RefreshConfigByServiceIdTest(int id)
+        [TestCaseSource(typeof(RefreshConfigByServiceIdTestCaseSource))]
+        public async Task RefreshConfigByServiceIdTest(int id, List<Config> configs, Microservice service)
         {
-            List<Config> configs = new List<Config>() {
-            new Config()
-            {
-                Id = 1,
-                Key = "KEY",
-                Value = "VALUE",
-                ServiceId = 3
-            },
-            new Config()
-            {
-                Id = 2,
-                Key = "KEY",
-                Value = "VALUE",
-                ServiceId = 3
-            },
-            new Config()
-            {
-                Id = 3,
-                Key = "KEY",
-                Value = "VALUE",
-                ServiceId = 3
-            }};
-
-            Microservice service = new Microservice()
-            {
-                Id = 3,
-                ServiceName = "Name1",
-                Url = "URL1"
-            };
-
+            //given
             _microservice.Setup(x => x.GetMicroserviceById(id)).ReturnsAsync(service);
             _config.Setup(x => x.GetConfigsByService(service.ServiceName)).ReturnsAsync(configs);
 
+            //when
             await _extentions.RefreshConfigByServiceId(id);
 
+            //then
             _microservice.Verify(x => x.GetMicroserviceById(id), Times.Once);
             _config.Verify(x => x.GetConfigsByService(service.ServiceName), Times.Once);
             VerifyLogger(LogLevel.Information, 2);
@@ -197,46 +94,22 @@ namespace MarvelousConfigs.BLL.Tests
             }
         }
 
-        [TestCase(3)]
-        public async Task RefreshConfigByServiceIdTest_WhenExceptionOccurredWhileCacheLoading_ShouldThrowCacheLoadingException(int id)
+        [TestCaseSource(typeof(RefreshConfigByServiceIdNegativeTestCaseSource))]
+        public async Task RefreshConfigByServiceIdTest_WhenExceptionOccurredWhileCacheLoading_ShouldThrowCacheLoadingException(int id, List<Config> configs, Microservice service)
         {
-            List<Config> configs = new List<Config>() {
-            new Config()
-            {
-                Id = 1,
-                Key = "KEY",
-                Value = "VALUE",
-                ServiceId = 1
-            },
-            new Config()
-            {
-                Id = 2,
-                Key = "KEY",
-                Value = "VALUE",
-            },
-            new Config()
-            {
-                Key = "KEY",
-                Value = "VALUE",
-                ServiceId = 2
-            }};
-
-            Microservice service = new Microservice()
-            {
-                Id = 3,
-                Url = "URL1"
-            };
-
+            //given
             _microservice.Setup(x => x.GetMicroserviceById(id)).ReturnsAsync(service);
             _config.Setup(x => x.GetConfigsByService(service.ServiceName)).ReturnsAsync(configs);
             _prod.Setup(x => x.NotifyAdminAboutErrorToEmail(It.IsAny<string>()));
 
+            //when
+
+            //then
             Assert.ThrowsAsync<CacheLoadingException>(async () => await _extentions.RefreshConfigByServiceId(id));
             _microservice.Verify(x => x.GetMicroserviceById(id), Times.Once);
             _config.Verify(x => x.GetConfigsByService(service.ServiceName), Times.Once);
             _prod.Verify(x => x.NotifyAdminAboutErrorToEmail(It.IsAny<string>()), Times.Once);
             VerifyLogger(LogLevel.Information, 1);
-
         }
     }
 }

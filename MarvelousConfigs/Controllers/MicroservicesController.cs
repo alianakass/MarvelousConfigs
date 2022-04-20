@@ -15,13 +15,12 @@ namespace MarvelousConfigs.API.Controllers
     public class MicroservicesController : AdvanceController
     {
         private readonly IMicroservicesService _service;
-        private readonly IMapper _map;
 
         public MicroservicesController(
             IMapper mapper,
             IMicroservicesService service,
             IAuthRequestClient auth,
-            ILogger<MicroservicesController> logger) : base(auth, logger)
+            ILogger<MicroservicesController> logger) : base(auth, logger, mapper)
         {
             _map = mapper;
             _service = service;
