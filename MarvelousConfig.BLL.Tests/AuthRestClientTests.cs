@@ -289,6 +289,8 @@ namespace MarvelousConfigs.BLL.Tests
 
         #endregion
 
+        #region send request with token
+
         [Test]
         public async Task SendRequestWithTokenTest_WhenAuthServiceReturnedHttpCode200Ok()
         {
@@ -397,5 +399,7 @@ namespace MarvelousConfigs.BLL.Tests
             Assert.ThrowsAsync<BadGatewayException>(async () => await _authRequestClient.SendRequestWithToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
         }
+
+        #endregion
     }
 }
