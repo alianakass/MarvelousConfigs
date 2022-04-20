@@ -12,8 +12,8 @@ namespace MarvelousConfigs.API.Controllers
     [AllowAnonymous]
     public class AuthController : Controller
     {
-        private readonly ILogger<AuthController> _logger;
         private readonly IAuthRequestClient _auth;
+        private readonly ILogger<AuthController> _logger;
         private readonly IValidator<AuthRequestModel> _validator;
 
         public AuthController(ILogger<AuthController> logger, IAuthRequestClient service, IValidator<AuthRequestModel> validator)

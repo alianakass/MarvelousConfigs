@@ -1,5 +1,7 @@
 ﻿using Auth.BusinessLayer.Helpers;
+using AutoMapper;
 using Marvelous.Contracts.Enums;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Moq;
 using RestSharp;
@@ -11,6 +13,8 @@ namespace MarvelousConfigs.BLL.Tests
     public class BaseVerifyTest<T>
     {
         protected Mock<ILogger<T>> _logger;
+        protected IMapper _map;
+        protected IMemoryCache _cache;
 
         protected void VerifyLogger(LogLevel level, int times)
         {

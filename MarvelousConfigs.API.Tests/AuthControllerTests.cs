@@ -28,11 +28,14 @@ namespace MarvelousConfigs.API.Tests
         [TestCaseSource(typeof(LoginTestCaseSource))]
         public async Task LoginTest_Should200Ok(AuthRequestModel model)
         {
+            //given
             var token = "token";
             _auth.Setup(x => x.GetToken(model)).ReturnsAsync(token);
 
+            //when
             await _controller.Login(model);
 
+            //then
             _auth.Verify(x => x.GetToken(model), Times.Once);
             VerifyLogger(LogLevel.Information, 2);
         }

@@ -40,11 +40,15 @@ namespace MarvelousConfigs.BLL.Tests
         [TestCaseSource(typeof(GetTokenTestCaseSource))]
         public async Task GetTokenTest_WhenAuthServiceReturnedHttpCode401Unauthorized_ShouldThrowUnauthorizedException(AuthRequestModel auth)
         {
+            //given
             string token = "token";
             var responce = Mock.Of<RestResponse<string>>(x => x.Content == token && x.StatusCode ==
             HttpStatusCode.Unauthorized && x.ErrorException == new Exception(_mess));
             _client.Setup(x => x.ExecuteAsync<string>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
+            //when
+
+            //then
             Assert.ThrowsAsync<UnauthorizedException>(async () => await _authRequestClient.GetToken(auth));
             VerifyRequestTests<string>(_client);
             VerifyLogger(LogLevel.Information, 2);
@@ -53,11 +57,15 @@ namespace MarvelousConfigs.BLL.Tests
         [TestCaseSource(typeof(GetTokenTestCaseSource))]
         public async Task GetTokenTest_WhenAuthServiceReturnedHttpCode403Forbidden_ShouldThrowForbiddenException(AuthRequestModel auth)
         {
+            //given
             string token = "token";
             var responce = Mock.Of<RestResponse<string>>(x => x.Content == token && x.StatusCode ==
             HttpStatusCode.Forbidden && x.ErrorException == new Exception(_mess));
             _client.Setup(x => x.ExecuteAsync<string>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
+            //when
+
+            //then
             Assert.ThrowsAsync<ForbiddenException>(async () => await _authRequestClient.GetToken(auth));
             VerifyRequestTests<string>(_client);
             VerifyLogger(LogLevel.Information, 2);
@@ -66,11 +74,15 @@ namespace MarvelousConfigs.BLL.Tests
         [TestCaseSource(typeof(GetTokenTestCaseSource))]
         public async Task GetTokenTest_WhenAuthServiceReturnedHttpCode400BadRequest_ShouldThrowBadRequestException(AuthRequestModel auth)
         {
+            //given
             string token = "token";
             var responce = Mock.Of<RestResponse<string>>(x => x.Content == token && x.StatusCode ==
             HttpStatusCode.BadRequest && x.ErrorException == new Exception(_mess));
             _client.Setup(x => x.ExecuteAsync<string>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
+            //when
+
+            //then
             Assert.ThrowsAsync<BadRequestException>(async () => await _authRequestClient.GetToken(auth));
             VerifyRequestTests<string>(_client);
             VerifyLogger(LogLevel.Information, 2);
@@ -79,11 +91,15 @@ namespace MarvelousConfigs.BLL.Tests
         [TestCaseSource(typeof(GetTokenTestCaseSource))]
         public async Task GetTokenTest_WhenAuthServiceReturnedHttpCode404NotFound_ShouldThrowEntityNotFoundException(AuthRequestModel auth)
         {
+            //given
             string token = "token";
             var responce = Mock.Of<RestResponse<string>>(x => x.Content == token && x.StatusCode ==
             HttpStatusCode.NotFound && x.ErrorException == new Exception(_mess));
             _client.Setup(x => x.ExecuteAsync<string>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
+            //when
+
+            //then
             Assert.ThrowsAsync<EntityNotFoundException>(async () => await _authRequestClient.GetToken(auth));
             VerifyRequestTests<string>(_client);
             VerifyLogger(LogLevel.Information, 2);
@@ -92,11 +108,15 @@ namespace MarvelousConfigs.BLL.Tests
         [TestCaseSource(typeof(GetTokenTestCaseSource))]
         public async Task GetTokenTest_WhenAuthServiceReturnedHttpCode409Conflict_ShouldThrowConflictException(AuthRequestModel auth)
         {
+            //given
             string token = "token";
             var responce = Mock.Of<RestResponse<string>>(x => x.Content == token && x.StatusCode ==
             HttpStatusCode.Conflict && x.ErrorException == new Exception(_mess));
             _client.Setup(x => x.ExecuteAsync<string>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
+            //when
+
+            //then
             Assert.ThrowsAsync<ConflictException>(async () => await _authRequestClient.GetToken(auth));
             VerifyRequestTests<string>(_client);
             VerifyLogger(LogLevel.Information, 2);
@@ -105,11 +125,15 @@ namespace MarvelousConfigs.BLL.Tests
         [TestCaseSource(typeof(GetTokenTestCaseSource))]
         public async Task GetTokenTest_WhenAuthServiceReturnedHttpCode422UnprocessableEntity_ShouldThrowValidationException(AuthRequestModel auth)
         {
+            //given
             string token = "token";
             var responce = Mock.Of<RestResponse<string>>(x => x.Content == token && x.StatusCode ==
             HttpStatusCode.UnprocessableEntity && x.ErrorException == new Exception(_mess));
             _client.Setup(x => x.ExecuteAsync<string>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
+            //when
+
+            //then
             Assert.ThrowsAsync<ValidationException>(async () => await _authRequestClient.GetToken(auth));
             VerifyRequestTests<string>(_client);
             VerifyLogger(LogLevel.Information, 2);
@@ -118,11 +142,15 @@ namespace MarvelousConfigs.BLL.Tests
         [TestCaseSource(typeof(GetTokenTestCaseSource))]
         public async Task GetTokenTest_WhenAuthServiceReturnedHttpCode503ServiceUnavailable_ShouldThrowServiceUnavailableException(AuthRequestModel auth)
         {
+            //given
             string token = "token";
             var responce = Mock.Of<RestResponse<string>>(x => x.Content == token && x.StatusCode ==
             HttpStatusCode.ServiceUnavailable && x.ErrorException == new Exception(_mess));
             _client.Setup(x => x.ExecuteAsync<string>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
+            //when
+
+            //then
             Assert.ThrowsAsync<ServiceUnavailableException>(async () => await _authRequestClient.GetToken(auth));
             VerifyRequestTests<string>(_client);
             VerifyLogger(LogLevel.Information, 2);
@@ -131,11 +159,15 @@ namespace MarvelousConfigs.BLL.Tests
         [TestCaseSource(typeof(GetTokenTestCaseSource))]
         public async Task GetTokenTest_WhenAuthServiceReturnedNotProvidedHttpCode_ShouldThrowServiceBadGatewayException(AuthRequestModel auth)
         {
+            //given
             string token = "token";
             var responce = Mock.Of<RestResponse<string>>(x => x.Content == token && x.StatusCode ==
             HttpStatusCode.Unused && x.ErrorException == new Exception(_mess));
             _client.Setup(x => x.ExecuteAsync<string>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
+            //when
+
+            //then
             Assert.ThrowsAsync<BadGatewayException>(async () => await _authRequestClient.GetToken(auth));
             VerifyRequestTests<string>(_client);
             VerifyLogger(LogLevel.Information, 2);
@@ -144,9 +176,13 @@ namespace MarvelousConfigs.BLL.Tests
         [TestCaseSource(typeof(GetTokenTestCaseSource))]
         public async Task GetTokenTest_WhenAuthServiceAnswerIsEmpty_ShouldThrowServiceBadGatewayException(AuthRequestModel auth)
         {
+            //given
             var responce = Mock.Of<RestResponse<string>>(x => x.StatusCode == HttpStatusCode.OK);
             _client.Setup(x => x.ExecuteAsync<string>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
+            //when
+
+            //then
             Assert.ThrowsAsync<BadGatewayException>(async () => await _authRequestClient.GetToken(auth));
             VerifyRequestTests<string>(_client);
             VerifyLogger(LogLevel.Information, 2);
@@ -155,12 +191,15 @@ namespace MarvelousConfigs.BLL.Tests
         [TestCaseSource(typeof(GetTokenTestCaseSource))]
         public async Task GetTokenTest_WhenAuthServiceReturnedHttpCode200Ok(AuthRequestModel auth)
         {
+            //given
             string token = "token";
             var responce = Mock.Of<RestResponse<string>>(x => x.Content == token && x.StatusCode == HttpStatusCode.OK);
             _client.Setup(x => x.ExecuteAsync<string>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
+            //when
             var actual = await _authRequestClient.GetToken(auth);
 
+            //then
             Assert.AreEqual(token, actual);
             VerifyRequestTests<string>(_client);
             VerifyLogger(LogLevel.Information, 2);
@@ -173,6 +212,7 @@ namespace MarvelousConfigs.BLL.Tests
         [Test]
         public async Task SendRequestToValidateTokenTest_WhenAuthServiceReturnedHttpCode200Ok()
         {
+            //given
             IdentityResponseModel model = new IdentityResponseModel()
             {
                 Id = 1,
@@ -184,8 +224,10 @@ namespace MarvelousConfigs.BLL.Tests
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == model && x.StatusCode == HttpStatusCode.OK);
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
+            //when
             var actual = await _authRequestClient.SendRequestToValidateToken(token);
 
+            //then
             VerifyRequestTests<IdentityResponseModel>(_client);
             Assert.AreEqual(model, actual);
             VerifyLogger(LogLevel.Information, 2);
@@ -194,11 +236,15 @@ namespace MarvelousConfigs.BLL.Tests
         [Test]
         public async Task SendRequestToValidateTokenTest_WhenAuthServiceReturnedHttpCode401Unauthorized_ShouldThrowUnauthorizedException()
         {
+            //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode ==
             HttpStatusCode.Unauthorized && x.ErrorException == new Exception(_mess));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
+            //when
+
+            //then
             Assert.ThrowsAsync<UnauthorizedException>(async () => await _authRequestClient.SendRequestToValidateToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
             VerifyLogger(LogLevel.Information, 2);
@@ -207,11 +253,15 @@ namespace MarvelousConfigs.BLL.Tests
         [Test]
         public async Task SendRequestToValidateTokenTest_WhenAuthServiceReturnedHttpCode403Forbidden_ShouldThrowForbiddenException()
         {
+            //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode ==
             HttpStatusCode.Forbidden && x.ErrorException == new Exception(_mess));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
+            //when
+
+            //then
             Assert.ThrowsAsync<ForbiddenException>(async () => await _authRequestClient.SendRequestToValidateToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
             VerifyLogger(LogLevel.Information, 2);
@@ -220,11 +270,15 @@ namespace MarvelousConfigs.BLL.Tests
         [Test]
         public async Task SendRequestToValidateTokenTest_WhenAuthServiceReturnedHttpCode400BadRequest_ShouldThrowBadRequestException()
         {
+            //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode ==
             HttpStatusCode.BadRequest && x.ErrorException == new Exception(_mess));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
+            //when
+
+            //then
             Assert.ThrowsAsync<BadRequestException>(async () => await _authRequestClient.SendRequestToValidateToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
             VerifyLogger(LogLevel.Information, 2);
@@ -233,11 +287,15 @@ namespace MarvelousConfigs.BLL.Tests
         [Test]
         public async Task SendRequestToValidateTokenTest_WhenAuthServiceReturnedHttpCode404NotFound_ShouldThrowEntityNotFoundException()
         {
+            //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode ==
             HttpStatusCode.NotFound && x.ErrorException == new Exception(_mess));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
+            //when
+
+            //then
             Assert.ThrowsAsync<EntityNotFoundException>(async () => await _authRequestClient.SendRequestToValidateToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
             VerifyLogger(LogLevel.Information, 2);
@@ -246,11 +304,15 @@ namespace MarvelousConfigs.BLL.Tests
         [Test]
         public async Task SendRequestToValidateTokenTest_WhenAuthServiceReturnedHttpCode409Conflict_ShouldThrowConflictException()
         {
+            //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode ==
             HttpStatusCode.Conflict && x.ErrorException == new Exception(_mess));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
+            //when
+
+            //then
             Assert.ThrowsAsync<ConflictException>(async () => await _authRequestClient.SendRequestToValidateToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
             VerifyLogger(LogLevel.Information, 2);
@@ -259,11 +321,15 @@ namespace MarvelousConfigs.BLL.Tests
         [Test]
         public async Task SendRequestToValidateTokenTest_WhenAuthServiceReturnedHttpCode422UnprocessableEntity_ShouldThrowValidationException()
         {
+            //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode ==
             HttpStatusCode.UnprocessableEntity && x.ErrorException == new Exception(_mess));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
+            //when
+
+            //then
             Assert.ThrowsAsync<ValidationException>(async () => await _authRequestClient.SendRequestToValidateToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
             VerifyLogger(LogLevel.Information, 2);
@@ -272,11 +338,15 @@ namespace MarvelousConfigs.BLL.Tests
         [Test]
         public async Task SendRequestToValidateTokenTest_WhenAuthServiceReturnedHttpCode503ServiceUnavailable_ShouldThrowServiceUnavailableException()
         {
+            //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode ==
             HttpStatusCode.ServiceUnavailable && x.ErrorException == new Exception(_mess));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
+            //when
+
+            //then
             Assert.ThrowsAsync<ServiceUnavailableException>(async () => await _authRequestClient.SendRequestToValidateToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
             VerifyLogger(LogLevel.Information, 2);
@@ -285,11 +355,15 @@ namespace MarvelousConfigs.BLL.Tests
         [Test]
         public async Task SendRequestToValidateTokenTest_WhenAuthServiceReturnedNotProvidedHttpCode_ShouldThrowServiceBadGatewayException()
         {
+            //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode ==
             HttpStatusCode.AlreadyReported && x.ErrorException == new Exception(_mess));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
+            //when
+
+            //then
             Assert.ThrowsAsync<BadGatewayException>(async () => await _authRequestClient.SendRequestToValidateToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
             VerifyLogger(LogLevel.Information, 2);
@@ -298,11 +372,15 @@ namespace MarvelousConfigs.BLL.Tests
         [Test]
         public async Task SendRequestToValidateTokenTest_WhenAuthServiceAnswerIsEmpty_ShouldThrowServiceBadGatewayException()
         {
+            //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == default && x.StatusCode ==
             HttpStatusCode.OK && x.ErrorException == new Exception(_mess));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
+            //when
+
+            //then
             Assert.ThrowsAsync<BadGatewayException>(async () => await _authRequestClient.SendRequestToValidateToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
             VerifyLogger(LogLevel.Information, 2);
@@ -315,12 +393,15 @@ namespace MarvelousConfigs.BLL.Tests
         [Test]
         public async Task SendRequestWithTokenTest_WhenAuthServiceReturnedHttpCode200Ok()
         {
+            //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode == HttpStatusCode.OK);
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
+            //when
             await _authRequestClient.SendRequestWithToken(token);
 
+            //then
             VerifyRequestTests<IdentityResponseModel>(_client);
             VerifyLogger(LogLevel.Information, 2);
         }
@@ -328,11 +409,15 @@ namespace MarvelousConfigs.BLL.Tests
         [Test]
         public async Task SendRequestWithTokenTest_WhenAuthServiceReturnedHttpCode401Unauthorized_ShouldThrowUnauthorizedException()
         {
+            //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode ==
             HttpStatusCode.Unauthorized && x.ErrorException == new Exception(_mess));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
+            //when
+
+            //then
             Assert.ThrowsAsync<UnauthorizedException>(async () => await _authRequestClient.SendRequestWithToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
             VerifyLogger(LogLevel.Information, 2);
@@ -342,11 +427,15 @@ namespace MarvelousConfigs.BLL.Tests
         [Test]
         public async Task SendRequestWithTokenTest_WhenAuthServiceReturnedHttpCode403Forbidden_ShouldThrowForbiddenException()
         {
+            //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode ==
             HttpStatusCode.Forbidden && x.ErrorException == new Exception(_mess));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
+            //when
+
+            //then
             Assert.ThrowsAsync<ForbiddenException>(async () => await _authRequestClient.SendRequestWithToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
             VerifyLogger(LogLevel.Information, 2);
@@ -355,11 +444,15 @@ namespace MarvelousConfigs.BLL.Tests
         [Test]
         public async Task SendRequestWithTokenTest_WhenAuthServiceReturnedHttpCode400BadRequest_ShouldThrowBadRequestException()
         {
+            //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode ==
             HttpStatusCode.BadRequest && x.ErrorException == new Exception(_mess));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
+            //when
+
+            //then
             Assert.ThrowsAsync<BadRequestException>(async () => await _authRequestClient.SendRequestWithToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
             VerifyLogger(LogLevel.Information, 2);
@@ -368,11 +461,15 @@ namespace MarvelousConfigs.BLL.Tests
         [Test]
         public async Task SendRequestWithTokenTest_WhenAuthServiceReturnedHttpCode404NotFound_ShouldThrowEntityNotFoundException()
         {
+            //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode ==
             HttpStatusCode.NotFound && x.ErrorException == new Exception(_mess));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
+            //when
+
+            //then
             Assert.ThrowsAsync<EntityNotFoundException>(async () => await _authRequestClient.SendRequestWithToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
             VerifyLogger(LogLevel.Information, 2);
@@ -381,11 +478,15 @@ namespace MarvelousConfigs.BLL.Tests
         [Test]
         public async Task SendRequestWithTokenTest_WhenAuthServiceReturned409Conflict_ShouldThrowConflictException()
         {
+            //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode ==
             HttpStatusCode.Conflict && x.ErrorException == new Exception(_mess));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
+            //when
+
+            //then
             Assert.ThrowsAsync<ConflictException>(async () => await _authRequestClient.SendRequestWithToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
             VerifyLogger(LogLevel.Information, 2);
@@ -394,11 +495,15 @@ namespace MarvelousConfigs.BLL.Tests
         [Test]
         public async Task SendRequestWithTokenTest_WhenAuthServiceReturnedHttpCode422UnprocessableEntity_ShouldThrowValidationException()
         {
+            //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode ==
             HttpStatusCode.UnprocessableEntity && x.ErrorException == new Exception(_mess));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
+            //when
+
+            //then
             Assert.ThrowsAsync<ValidationException>(async () => await _authRequestClient.SendRequestWithToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
             VerifyLogger(LogLevel.Information, 2);
@@ -407,11 +512,15 @@ namespace MarvelousConfigs.BLL.Tests
         [Test]
         public async Task SendRequestWithTokenTest_WhenAuthServiceReturnedHttpCode503ServiceUnavailable_ShouldThrowServiceUnavailableException()
         {
+            //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode ==
             HttpStatusCode.ServiceUnavailable && x.ErrorException == new Exception(_mess));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
+            //when
+
+            //then
             Assert.ThrowsAsync<ServiceUnavailableException>(async () => await _authRequestClient.SendRequestWithToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
             VerifyLogger(LogLevel.Information, 2);
@@ -420,11 +529,15 @@ namespace MarvelousConfigs.BLL.Tests
         [Test]
         public async Task SendRequestWithTokenTest_WhenAuthServiceReturnedNotProvidedHttpCode_ShouldThrowServiceBadGatewayException()
         {
+            //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode ==
             HttpStatusCode.BadGateway && x.ErrorException == new Exception(_mess));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
+            //when
+
+            //then
             Assert.ThrowsAsync<BadGatewayException>(async () => await _authRequestClient.SendRequestWithToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
             VerifyLogger(LogLevel.Information, 2);

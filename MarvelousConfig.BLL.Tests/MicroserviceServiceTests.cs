@@ -18,9 +18,7 @@ namespace MarvelousConfigs.BLL.Tests
     public class MicroserviceServiceTests : BaseVerifyTest<MicroservicesService>
     {
         private Mock<IMicroserviceRepository> _repositoryMock;
-        private IMapper _map;
         private IMicroservicesService _service;
-        private IMemoryCache _cache;
 
         [SetUp]
         public void Setup()

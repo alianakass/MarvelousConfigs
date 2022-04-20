@@ -1,3 +1,4 @@
+using AutoMapper;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System;
@@ -8,6 +9,7 @@ namespace MarvelousConfigs.API.Tests
     public class BaseVerifyTest<T>
     {
         protected Mock<ILogger<T>> _logger;
+        protected IMapper _map;
 
         protected void VerifyLogger(LogLevel level, int times)
         {
