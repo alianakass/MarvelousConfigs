@@ -33,12 +33,12 @@ namespace MarvelousConfigs.BLL.Infrastructure
             _client.AddMicroservice(Microservice.MarvelousConfigs);
             var request = new RestRequest($"{_authUrl}{AuthEndpoints.Login}", Method.Post);
             request.AddBody(auth);
-            _logger.LogInformation($"Getting a response from {Microservice.MarvelousAuth}");
+            _logger.LogInformation($"Getting a response to receive a token from {Microservice.MarvelousAuth}");
             var response = await _client.ExecuteAsync<string>(request);
             _logger.LogInformation($"Response from {Microservice.MarvelousAuth} received");
             CheckTransactionError(response);
             if (string.IsNullOrEmpty(response.Content))
-                throw new BadGatewayException($"Failed to convert responce data");
+                throw new BadGatewayException($"Failed to convert responce data when receiving a token");
             return response.Content!;
         }
 
@@ -47,12 +47,12 @@ namespace MarvelousConfigs.BLL.Infrastructure
             _client.Authenticator = new MarvelousAuthenticator(jwtToken);
             _client.AddMicroservice(Microservice.MarvelousConfigs);
             var request = new RestRequest($"{_authUrl}{AuthEndpoints.ValidationFront}");
-            _logger.LogInformation($"Getting a response from {Microservice.MarvelousAuth}");
+            _logger.LogInformation($"Getting a response for token validation from {Microservice.MarvelousAuth}");
             var response = await _client.ExecuteAsync<IdentityResponseModel>(request);
             _logger.LogInformation($"Response from {Microservice.MarvelousAuth} received");
             CheckTransactionError(response);
             if (response.Data is null)
-                throw new BadGatewayException($"Failed to convert responce data");
+                throw new BadGatewayException($"Failed to convert responce data when receiving a response to token validation");
             return response.Data!;
         }
 
@@ -61,7 +61,7 @@ namespace MarvelousConfigs.BLL.Infrastructure
             _client.Authenticator = new MarvelousAuthenticator(token);
             _client.AddMicroservice(Microservice.MarvelousConfigs);
             var request = new RestRequest($"{_authUrl}{AuthEndpoints.ValidationMicroservice}", Method.Get);
-            _logger.LogInformation($"Getting a response from {Microservice.MarvelousAuth}");
+            _logger.LogInformation($"Getting a response for token validation from {Microservice.MarvelousAuth}");
             var response = await _client.ExecuteAsync<IdentityResponseModel>(request);
             _logger.LogInformation($"Response from {Microservice.MarvelousAuth} received");
             CheckTransactionError(response);

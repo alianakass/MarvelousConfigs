@@ -41,9 +41,11 @@ namespace MarvelousConfigs.BLL.Services
             {
                 throw new EntityNotFoundException($"Configuration { id } not found");
             }
+
             _logger.LogInformation($"Start update configuration { id }");
             await _rep.UpdateConfigById(id, _map.Map<Config>(config));
             _logger.LogInformation($"Configuration { id } has been updated");
+            _logger.LogInformation($"Start caching updated configuration { id }");
             Config newCfg = await _rep.GetConfigById(id);
             _cache.Set(id, newCfg);
             await _prod.NotifyConfigurationUpdated(newCfg);
@@ -61,6 +63,7 @@ namespace MarvelousConfigs.BLL.Services
             {
                 throw new EntityNotFoundException($"Configuration { id } not found");
             }
+
             _logger.LogInformation($"Configuration { id } has been received");
             return _map.Map<ConfigModel>(conf);
         }

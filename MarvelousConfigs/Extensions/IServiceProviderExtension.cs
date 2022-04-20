@@ -95,16 +95,12 @@ namespace MarvelousConfigs.API.Extensions
 
         public static void AddFluentValidation(this IServiceCollection services)
         {
-            //Добавление FluentValidation
             services.AddFluentValidation(fv =>
             {
-                //Регистрация валидаторов по сборке с временем жизни = Singleton
                 fv.RegisterValidatorsFromAssemblyContaining<AuthRequestModelValidator>(lifetime: ServiceLifetime.Singleton);
                 fv.RegisterValidatorsFromAssemblyContaining<ConfigInputModelValidator>(lifetime: ServiceLifetime.Singleton);
-                //Отключение валидации с помощью DataAnnotations
                 fv.DisableDataAnnotationsValidation = true;
             });
-            //Отключение стандартного валидатора
             services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
         }
     }

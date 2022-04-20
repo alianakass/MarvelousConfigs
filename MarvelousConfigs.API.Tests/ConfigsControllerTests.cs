@@ -58,7 +58,7 @@ namespace MarvelousConfigs.API.Tests
             Assert.IsInstanceOf<OkObjectResult>(result.Result);
             _service.Verify(x => x.GetAllConfigs(), Times.Once);
             _auth.Verify(x => x.SendRequestToValidateToken(It.IsAny<string>()), Times.Once);
-
+            VerifyLogger(LogLevel.Information, 3);
         }
 
         [TestCaseSource(typeof(GetAllConfigsShould403TestCaseSource))]
@@ -80,7 +80,7 @@ namespace MarvelousConfigs.API.Tests
             Assert.ThrowsAsync<ForbiddenException>(async () => await _controller.GetAllConfigs());
             _service.Verify(x => x.GetAllConfigs(), Times.Never);
             _auth.Verify(x => x.SendRequestToValidateToken(It.IsAny<string>()), Times.Once);
-
+            VerifyLogger(LogLevel.Information, 1);
         }
 
         [TestCaseSource(typeof(GetAllConfigsShould401TestCaseSource))]
@@ -98,6 +98,7 @@ namespace MarvelousConfigs.API.Tests
             Assert.ThrowsAsync<UnauthorizedException>(async () => await _controller.GetAllConfigs());
             _service.Verify(x => x.GetAllConfigs(), Times.Never);
             _auth.Verify(x => x.SendRequestToValidateToken(It.IsAny<string>()), Times.Never);
+            VerifyLogger(LogLevel.Information, 1);
         }
 
         [TestCaseSource(typeof(UpdateConfigTestCaseSource))]
@@ -118,6 +119,7 @@ namespace MarvelousConfigs.API.Tests
             //then
             _service.Verify(x => x.UpdateConfigById(id, It.IsAny<ConfigModel>()), Times.Once);
             _auth.Verify(x => x.SendRequestToValidateToken(It.IsAny<string>()), Times.Once);
+            VerifyLogger(LogLevel.Information, 3);
         }
 
         [TestCaseSource(typeof(UpdateConfigShould403TestCaseSource))]
@@ -138,7 +140,7 @@ namespace MarvelousConfigs.API.Tests
             Assert.ThrowsAsync<ForbiddenException>(async () => await _controller.UpdateConfigById(id, input));
             _service.Verify(x => x.UpdateConfigById(id, It.IsAny<ConfigModel>()), Times.Never);
             _auth.Verify(x => x.SendRequestToValidateToken(It.IsAny<string>()), Times.Once);
-
+            VerifyLogger(LogLevel.Information, 1);
         }
 
         [TestCaseSource(typeof(UpdateConfigShould401TestCaseSource))]
@@ -157,7 +159,7 @@ namespace MarvelousConfigs.API.Tests
             Assert.ThrowsAsync<UnauthorizedException>(async () => await _controller.UpdateConfigById(id, input));
             _service.Verify(x => x.UpdateConfigById(id, It.IsAny<ConfigModel>()), Times.Never);
             _auth.Verify(x => x.SendRequestToValidateToken(It.IsAny<string>()), Times.Never);
-
+            VerifyLogger(LogLevel.Information, 1);
         }
 
         [TestCaseSource(typeof(GetConfigsByServiceIdTestCaseSource))]
@@ -180,7 +182,7 @@ namespace MarvelousConfigs.API.Tests
             Assert.IsInstanceOf<OkObjectResult>(result.Result);
             _service.Verify(x => x.GetConfigsByServiceId(id), Times.Once);
             _auth.Verify(x => x.SendRequestToValidateToken(It.IsAny<string>()), Times.Once);
-
+            VerifyLogger(LogLevel.Information, 3);
         }
 
         [TestCaseSource(typeof(GetConfigsByServiceIdShould403TestCaseSource))]
@@ -201,7 +203,7 @@ namespace MarvelousConfigs.API.Tests
             Assert.ThrowsAsync<ForbiddenException>(async () => await _controller.GetConfigsByServiceId(id));
             _service.Verify(x => x.GetConfigsByServiceId(id), Times.Never);
             _auth.Verify(x => x.SendRequestToValidateToken(It.IsAny<string>()), Times.Once);
-
+            VerifyLogger(LogLevel.Information, 1);
         }
 
         [TestCaseSource(typeof(GetConfigsByServiceIdShould401TestCaseSource))]
@@ -220,6 +222,7 @@ namespace MarvelousConfigs.API.Tests
             Assert.ThrowsAsync<UnauthorizedException>(async () => await _controller.GetConfigsByServiceId(id));
             _service.Verify(x => x.GetConfigsByServiceId(id), Times.Never);
             _auth.Verify(x => x.SendRequestToValidateToken(It.IsAny<string>()), Times.Never);
+            VerifyLogger(LogLevel.Information, 1);
         }
 
         [TestCaseSource(typeof(GetConfigsByServiceTestCaseSource))]
@@ -240,7 +243,7 @@ namespace MarvelousConfigs.API.Tests
             Assert.IsNotNull(result);
             Assert.IsInstanceOf<OkObjectResult>(result.Result);
             _service.Verify(x => x.GetConfigsByService(token, microservice.ToString()), Times.Once);
-
+            VerifyLogger(LogLevel.Information, 3);
         }
 
         [Test]
@@ -256,6 +259,7 @@ namespace MarvelousConfigs.API.Tests
             //then
             Assert.ThrowsAsync<UnauthorizedException>(async () => await _controller.GetConfigsByService());
             _service.Verify(x => x.GetConfigsByService(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            VerifyLogger(LogLevel.Information, 1);
         }
     }
 }
