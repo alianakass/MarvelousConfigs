@@ -35,8 +35,7 @@ builder.Services.AddControllers()
                 });
 
 builder.Services.AddMemoryCache();
-builder.Services.RegisterRepositories();
-builder.Services.RegisterServices();
+builder.Services.RegisterDependencies();
 builder.Services.RegisterLogger(config);
 builder.Services.AddMassTransit();
 
