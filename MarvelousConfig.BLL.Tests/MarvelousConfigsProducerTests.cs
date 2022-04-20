@@ -40,8 +40,8 @@ namespace MarvelousConfigs.BLL.Tests
             VerifyLogger(LogLevel.Information, 2);
         }
 
-        [TestCase(3)]
-        public async Task NotifyConfigurationUpdatedTest(int id)
+        [TestCase]
+        public async Task NotifyConfigurationUpdatedTest()
         {
             //given
             Config cfg = new Config() { Id = 3, Created = DateTime.Now, Key = "Key", Value = "Value", ServiceId = 9 };
@@ -55,8 +55,8 @@ namespace MarvelousConfigs.BLL.Tests
             VerifyLogger(LogLevel.Information, 2);
         }
 
-        [TestCase(3)]
-        public async Task NotifyConfigurationUpdatedTest_WhenMicroserviceNotFound_ShouldThrowException(int id)
+        [TestCase]
+        public async Task NotifyConfigurationUpdatedTest_WhenMicroserviceNotFound_ShouldThrowException()
         {
             //given
             Config cfg = new Config() { Id = 3, Created = DateTime.Now, Key = "Key", Value = "Value", ServiceId = 100000 };

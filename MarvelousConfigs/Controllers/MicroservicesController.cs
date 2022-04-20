@@ -16,8 +16,6 @@ namespace MarvelousConfigs.API.Controllers
     {
         private readonly IMicroservicesService _service;
         private readonly IMapper _map;
-        private readonly ILogger<MicroservicesController> _logger;
-        private readonly IAuthRequestClient _auth;
 
         public MicroservicesController(
             IMapper mapper,

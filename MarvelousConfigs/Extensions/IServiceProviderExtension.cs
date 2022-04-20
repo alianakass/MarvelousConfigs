@@ -1,4 +1,5 @@
-﻿using FluentValidation.AspNetCore;
+﻿using Auth.BusinessLayer.Helpers;
+using FluentValidation.AspNetCore;
 using MarvelousConfigs.API.Models.Validation;
 using MarvelousConfigs.BLL.Infrastructure;
 using MarvelousConfigs.BLL.Services;
@@ -13,19 +14,20 @@ namespace MarvelousConfigs.API.Extensions
 {
     public static class IServiceProviderExtension
     {
-        public static void RegisterServices(this IServiceCollection services)
+        public static void RegisterDependencies(this IServiceCollection services)
         {
             services.AddScoped<IMicroservicesService, MicroservicesService>();
             services.AddScoped<IConfigsService, ConfigsService>();
-            services.AddScoped<IAuthRequestClient, AuthRequestClient>();
-            services.AddScoped<IMarvelousConfigsProducer, MarvelousConfigsProducer>();
-            services.AddTransient<IMemoryCacheExtentions, MemoryCacheExtentions>();
-        }
 
-        public static void RegisterRepositories(this IServiceCollection services)
-        {
             services.AddScoped<IMicroserviceRepository, MicroservicesRepository>();
             services.AddScoped<IConfigsRepository, ConfigsRepository>();
+
+            services.AddScoped<IAuthRequestClient, AuthRequestClient>();
+            services.AddScoped<IRestClient, MarvelousRestClient>();
+
+            services.AddScoped<IMarvelousConfigsProducer, MarvelousConfigsProducer>();
+
+            services.AddTransient<IMemoryCacheExtentions, MemoryCacheExtentions>();
         }
 
         public static void SetMemoryCache(this WebApplication app)

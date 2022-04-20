@@ -33,7 +33,9 @@ namespace MarvelousConfigs.BLL.Infrastructure
             _client.AddMicroservice(Microservice.MarvelousConfigs);
             var request = new RestRequest($"{_authUrl}{AuthEndpoints.Login}", Method.Post);
             request.AddBody(auth);
+            _logger.LogInformation($"Getting a response from {Microservice.MarvelousAuth}");
             var response = await _client.ExecuteAsync<string>(request);
+            _logger.LogInformation($"Response from {Microservice.MarvelousAuth} received");
             CheckTransactionError(response);
             if (string.IsNullOrEmpty(response.Content))
                 throw new BadGatewayException($"Failed to convert responce data");
@@ -47,7 +49,10 @@ namespace MarvelousConfigs.BLL.Infrastructure
             var request = new RestRequest($"{_authUrl}{AuthEndpoints.ValidationFront}");
             _logger.LogInformation($"Getting a response from {Microservice.MarvelousAuth}");
             var response = await _client.ExecuteAsync<IdentityResponseModel>(request);
+            _logger.LogInformation($"Response from {Microservice.MarvelousAuth} received");
             CheckTransactionError(response);
+            if (response.Data is null)
+                throw new BadGatewayException($"Failed to convert responce data");
             return response.Data!;
         }
 
@@ -58,10 +63,11 @@ namespace MarvelousConfigs.BLL.Infrastructure
             var request = new RestRequest($"{_authUrl}{AuthEndpoints.ValidationMicroservice}", Method.Get);
             _logger.LogInformation($"Getting a response from {Microservice.MarvelousAuth}");
             var response = await _client.ExecuteAsync<IdentityResponseModel>(request);
+            _logger.LogInformation($"Response from {Microservice.MarvelousAuth} received");
             CheckTransactionError(response);
         }
 
-        private void CheckTransactionError(RestResponse response)
+        private static void CheckTransactionError(RestResponse response)
         {
             switch (response.StatusCode)
             {
