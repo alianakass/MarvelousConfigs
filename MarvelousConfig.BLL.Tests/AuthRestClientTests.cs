@@ -47,6 +47,7 @@ namespace MarvelousConfigs.BLL.Tests
 
             Assert.ThrowsAsync<UnauthorizedException>(async () => await _authRequestClient.GetToken(auth));
             VerifyRequestTests<string>(_client);
+            VerifyLogger(LogLevel.Information, 2);
         }
 
         [TestCaseSource(typeof(GetTokenTestCaseSource))]
@@ -59,6 +60,7 @@ namespace MarvelousConfigs.BLL.Tests
 
             Assert.ThrowsAsync<ForbiddenException>(async () => await _authRequestClient.GetToken(auth));
             VerifyRequestTests<string>(_client);
+            VerifyLogger(LogLevel.Information, 2);
         }
 
         [TestCaseSource(typeof(GetTokenTestCaseSource))]
@@ -71,6 +73,7 @@ namespace MarvelousConfigs.BLL.Tests
 
             Assert.ThrowsAsync<BadRequestException>(async () => await _authRequestClient.GetToken(auth));
             VerifyRequestTests<string>(_client);
+            VerifyLogger(LogLevel.Information, 2);
         }
 
         [TestCaseSource(typeof(GetTokenTestCaseSource))]
@@ -83,6 +86,7 @@ namespace MarvelousConfigs.BLL.Tests
 
             Assert.ThrowsAsync<EntityNotFoundException>(async () => await _authRequestClient.GetToken(auth));
             VerifyRequestTests<string>(_client);
+            VerifyLogger(LogLevel.Information, 2);
         }
 
         [TestCaseSource(typeof(GetTokenTestCaseSource))]
@@ -95,6 +99,7 @@ namespace MarvelousConfigs.BLL.Tests
 
             Assert.ThrowsAsync<ConflictException>(async () => await _authRequestClient.GetToken(auth));
             VerifyRequestTests<string>(_client);
+            VerifyLogger(LogLevel.Information, 2);
         }
 
         [TestCaseSource(typeof(GetTokenTestCaseSource))]
@@ -107,6 +112,7 @@ namespace MarvelousConfigs.BLL.Tests
 
             Assert.ThrowsAsync<ValidationException>(async () => await _authRequestClient.GetToken(auth));
             VerifyRequestTests<string>(_client);
+            VerifyLogger(LogLevel.Information, 2);
         }
 
         [TestCaseSource(typeof(GetTokenTestCaseSource))]
@@ -119,6 +125,7 @@ namespace MarvelousConfigs.BLL.Tests
 
             Assert.ThrowsAsync<ServiceUnavailableException>(async () => await _authRequestClient.GetToken(auth));
             VerifyRequestTests<string>(_client);
+            VerifyLogger(LogLevel.Information, 2);
         }
 
         [TestCaseSource(typeof(GetTokenTestCaseSource))]
@@ -131,6 +138,7 @@ namespace MarvelousConfigs.BLL.Tests
 
             Assert.ThrowsAsync<BadGatewayException>(async () => await _authRequestClient.GetToken(auth));
             VerifyRequestTests<string>(_client);
+            VerifyLogger(LogLevel.Information, 2);
         }
 
         [TestCaseSource(typeof(GetTokenTestCaseSource))]
@@ -141,6 +149,7 @@ namespace MarvelousConfigs.BLL.Tests
 
             Assert.ThrowsAsync<BadGatewayException>(async () => await _authRequestClient.GetToken(auth));
             VerifyRequestTests<string>(_client);
+            VerifyLogger(LogLevel.Information, 2);
         }
 
         [TestCaseSource(typeof(GetTokenTestCaseSource))]
@@ -154,6 +163,7 @@ namespace MarvelousConfigs.BLL.Tests
 
             Assert.AreEqual(token, actual);
             VerifyRequestTests<string>(_client);
+            VerifyLogger(LogLevel.Information, 2);
         }
 
         #endregion
@@ -177,6 +187,8 @@ namespace MarvelousConfigs.BLL.Tests
             var actual = await _authRequestClient.SendRequestToValidateToken(token);
 
             VerifyRequestTests<IdentityResponseModel>(_client);
+            Assert.AreEqual(model, actual);
+            VerifyLogger(LogLevel.Information, 2);
         }
 
         [Test]
@@ -189,6 +201,7 @@ namespace MarvelousConfigs.BLL.Tests
 
             Assert.ThrowsAsync<UnauthorizedException>(async () => await _authRequestClient.SendRequestToValidateToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
+            VerifyLogger(LogLevel.Information, 2);
         }
 
         [Test]
@@ -201,6 +214,7 @@ namespace MarvelousConfigs.BLL.Tests
 
             Assert.ThrowsAsync<ForbiddenException>(async () => await _authRequestClient.SendRequestToValidateToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
+            VerifyLogger(LogLevel.Information, 2);
         }
 
         [Test]
@@ -213,6 +227,7 @@ namespace MarvelousConfigs.BLL.Tests
 
             Assert.ThrowsAsync<BadRequestException>(async () => await _authRequestClient.SendRequestToValidateToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
+            VerifyLogger(LogLevel.Information, 2);
         }
 
         [Test]
@@ -225,6 +240,7 @@ namespace MarvelousConfigs.BLL.Tests
 
             Assert.ThrowsAsync<EntityNotFoundException>(async () => await _authRequestClient.SendRequestToValidateToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
+            VerifyLogger(LogLevel.Information, 2);
         }
 
         [Test]
@@ -237,6 +253,7 @@ namespace MarvelousConfigs.BLL.Tests
 
             Assert.ThrowsAsync<ConflictException>(async () => await _authRequestClient.SendRequestToValidateToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
+            VerifyLogger(LogLevel.Information, 2);
         }
 
         [Test]
@@ -249,6 +266,7 @@ namespace MarvelousConfigs.BLL.Tests
 
             Assert.ThrowsAsync<ValidationException>(async () => await _authRequestClient.SendRequestToValidateToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
+            VerifyLogger(LogLevel.Information, 2);
         }
 
         [Test]
@@ -261,6 +279,7 @@ namespace MarvelousConfigs.BLL.Tests
 
             Assert.ThrowsAsync<ServiceUnavailableException>(async () => await _authRequestClient.SendRequestToValidateToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
+            VerifyLogger(LogLevel.Information, 2);
         }
 
         [Test]
@@ -273,6 +292,7 @@ namespace MarvelousConfigs.BLL.Tests
 
             Assert.ThrowsAsync<BadGatewayException>(async () => await _authRequestClient.SendRequestToValidateToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
+            VerifyLogger(LogLevel.Information, 2);
         }
 
         [Test]
@@ -285,6 +305,7 @@ namespace MarvelousConfigs.BLL.Tests
 
             Assert.ThrowsAsync<BadGatewayException>(async () => await _authRequestClient.SendRequestToValidateToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
+            VerifyLogger(LogLevel.Information, 2);
         }
 
         #endregion
@@ -301,6 +322,7 @@ namespace MarvelousConfigs.BLL.Tests
             await _authRequestClient.SendRequestWithToken(token);
 
             VerifyRequestTests<IdentityResponseModel>(_client);
+            VerifyLogger(LogLevel.Information, 2);
         }
 
         [Test]
@@ -313,6 +335,7 @@ namespace MarvelousConfigs.BLL.Tests
 
             Assert.ThrowsAsync<UnauthorizedException>(async () => await _authRequestClient.SendRequestWithToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
+            VerifyLogger(LogLevel.Information, 2);
 
         }
 
@@ -326,6 +349,7 @@ namespace MarvelousConfigs.BLL.Tests
 
             Assert.ThrowsAsync<ForbiddenException>(async () => await _authRequestClient.SendRequestWithToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
+            VerifyLogger(LogLevel.Information, 2);
         }
 
         [Test]
@@ -338,6 +362,7 @@ namespace MarvelousConfigs.BLL.Tests
 
             Assert.ThrowsAsync<BadRequestException>(async () => await _authRequestClient.SendRequestWithToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
+            VerifyLogger(LogLevel.Information, 2);
         }
 
         [Test]
@@ -350,6 +375,7 @@ namespace MarvelousConfigs.BLL.Tests
 
             Assert.ThrowsAsync<EntityNotFoundException>(async () => await _authRequestClient.SendRequestWithToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
+            VerifyLogger(LogLevel.Information, 2);
         }
 
         [Test]
@@ -362,6 +388,7 @@ namespace MarvelousConfigs.BLL.Tests
 
             Assert.ThrowsAsync<ConflictException>(async () => await _authRequestClient.SendRequestWithToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
+            VerifyLogger(LogLevel.Information, 2);
         }
 
         [Test]
@@ -374,6 +401,7 @@ namespace MarvelousConfigs.BLL.Tests
 
             Assert.ThrowsAsync<ValidationException>(async () => await _authRequestClient.SendRequestWithToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
+            VerifyLogger(LogLevel.Information, 2);
         }
 
         [Test]
@@ -386,6 +414,7 @@ namespace MarvelousConfigs.BLL.Tests
 
             Assert.ThrowsAsync<ServiceUnavailableException>(async () => await _authRequestClient.SendRequestWithToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
+            VerifyLogger(LogLevel.Information, 2);
         }
 
         [Test]
@@ -398,6 +427,7 @@ namespace MarvelousConfigs.BLL.Tests
 
             Assert.ThrowsAsync<BadGatewayException>(async () => await _authRequestClient.SendRequestWithToken(token));
             VerifyRequestTests<IdentityResponseModel>(_client);
+            VerifyLogger(LogLevel.Information, 2);
         }
 
         #endregion
