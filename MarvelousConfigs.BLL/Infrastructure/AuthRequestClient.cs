@@ -48,6 +48,8 @@ namespace MarvelousConfigs.BLL.Infrastructure
             _logger.LogInformation($"Getting a response from {Microservice.MarvelousAuth}");
             var response = await _client.ExecuteAsync<IdentityResponseModel>(request);
             CheckTransactionError(response);
+            if(response.Data is null)
+                throw new BadGatewayException($"Failed to convert responce data");
             return response.Data!;
         }
 

@@ -22,10 +22,10 @@ namespace MarvelousConfigs.BLL.Tests
                 Times.Exactly(times));
         }
 
-        protected static void VerifyRequestTests(Mock<IRestClient> client)
+        protected static void VerifyRequestTests<T>(Mock<IRestClient> client)
         {
             client.Verify(x => x.AddMicroservice(Microservice.MarvelousConfigs), Times.Once);
-            client.Verify(x => x.ExecuteAsync<string>(IsAny<RestRequest>(), default), Times.Once);
+            client.Verify(x => x.ExecuteAsync<T>(IsAny<RestRequest>(), default), Times.Once);
         }
     }
 }
