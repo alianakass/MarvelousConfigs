@@ -55,7 +55,7 @@ namespace MarvelousConfigs.BLL.Tests
         }
 
         [TestCaseSource(typeof(SetMemoryCacheNegativeTestCaseSource))]
-        public async Task SetMemoryCacheTest_WhenExceptionOccurredWhileCacheLoading_ShouldThrowCacheLoadingException(List<Config> configs, List<Microservice> services)
+        public void SetMemoryCacheTest_WhenExceptionOccurredWhileCacheLoading_ShouldThrowCacheLoadingException(List<Config> configs, List<Microservice> services)
         {
             //given
             _microservice.Setup(x => x.GetAllMicroservices()).ReturnsAsync(services);
@@ -95,7 +95,7 @@ namespace MarvelousConfigs.BLL.Tests
         }
 
         [TestCaseSource(typeof(RefreshConfigByServiceIdNegativeTestCaseSource))]
-        public async Task RefreshConfigByServiceIdTest_WhenExceptionOccurredWhileCacheLoading_ShouldThrowCacheLoadingException(int id, List<Config> configs, Microservice service)
+        public void RefreshConfigByServiceIdTest_WhenExceptionOccurredWhileCacheLoading_ShouldThrowCacheLoadingException(int id, List<Config> configs, Microservice service)
         {
             //given
             _microservice.Setup(x => x.GetMicroserviceById(id)).ReturnsAsync(service);

@@ -56,7 +56,7 @@ namespace MarvelousConfigs.BLL.Tests
         }
 
         [TestCase]
-        public async Task NotifyConfigurationUpdatedTest_WhenMicroserviceNotFound_ShouldThrowException()
+        public void NotifyConfigurationUpdatedTest_WhenMicroserviceNotFound_ShouldThrowException()
         {
             //given
             Config cfg = new Config() { Id = 3, Created = DateTime.Now, Key = "Key", Value = "Value", ServiceId = 100000 };

@@ -38,7 +38,7 @@ namespace MarvelousConfigs.BLL.Tests
         #region get token test
 
         [TestCaseSource(typeof(GetTokenTestCaseSource))]
-        public async Task GetTokenTest_WhenAuthServiceReturnedHttpCode401Unauthorized_ShouldThrowUnauthorizedException(AuthRequestModel auth)
+        public void GetTokenTest_WhenAuthServiceReturnedHttpCode401Unauthorized_ShouldThrowUnauthorizedException(AuthRequestModel auth)
         {
             //given
             string token = "token";
@@ -55,7 +55,7 @@ namespace MarvelousConfigs.BLL.Tests
         }
 
         [TestCaseSource(typeof(GetTokenTestCaseSource))]
-        public async Task GetTokenTest_WhenAuthServiceReturnedHttpCode403Forbidden_ShouldThrowForbiddenException(AuthRequestModel auth)
+        public void GetTokenTest_WhenAuthServiceReturnedHttpCode403Forbidden_ShouldThrowForbiddenException(AuthRequestModel auth)
         {
             //given
             string token = "token";
@@ -72,7 +72,7 @@ namespace MarvelousConfigs.BLL.Tests
         }
 
         [TestCaseSource(typeof(GetTokenTestCaseSource))]
-        public async Task GetTokenTest_WhenAuthServiceReturnedHttpCode400BadRequest_ShouldThrowBadRequestException(AuthRequestModel auth)
+        public void GetTokenTest_WhenAuthServiceReturnedHttpCode400BadRequest_ShouldThrowBadRequestException(AuthRequestModel auth)
         {
             //given
             string token = "token";
@@ -89,7 +89,7 @@ namespace MarvelousConfigs.BLL.Tests
         }
 
         [TestCaseSource(typeof(GetTokenTestCaseSource))]
-        public async Task GetTokenTest_WhenAuthServiceReturnedHttpCode404NotFound_ShouldThrowEntityNotFoundException(AuthRequestModel auth)
+        public void GetTokenTest_WhenAuthServiceReturnedHttpCode404NotFound_ShouldThrowEntityNotFoundException(AuthRequestModel auth)
         {
             //given
             string token = "token";
@@ -106,7 +106,7 @@ namespace MarvelousConfigs.BLL.Tests
         }
 
         [TestCaseSource(typeof(GetTokenTestCaseSource))]
-        public async Task GetTokenTest_WhenAuthServiceReturnedHttpCode409Conflict_ShouldThrowConflictException(AuthRequestModel auth)
+        public void GetTokenTest_WhenAuthServiceReturnedHttpCode409Conflict_ShouldThrowConflictException(AuthRequestModel auth)
         {
             //given
             string token = "token";
@@ -123,7 +123,7 @@ namespace MarvelousConfigs.BLL.Tests
         }
 
         [TestCaseSource(typeof(GetTokenTestCaseSource))]
-        public async Task GetTokenTest_WhenAuthServiceReturnedHttpCode422UnprocessableEntity_ShouldThrowValidationException(AuthRequestModel auth)
+        public void GetTokenTest_WhenAuthServiceReturnedHttpCode422UnprocessableEntity_ShouldThrowValidationException(AuthRequestModel auth)
         {
             //given
             string token = "token";
@@ -140,7 +140,7 @@ namespace MarvelousConfigs.BLL.Tests
         }
 
         [TestCaseSource(typeof(GetTokenTestCaseSource))]
-        public async Task GetTokenTest_WhenAuthServiceReturnedHttpCode503ServiceUnavailable_ShouldThrowServiceUnavailableException(AuthRequestModel auth)
+        public void GetTokenTest_WhenAuthServiceReturnedHttpCode503ServiceUnavailable_ShouldThrowServiceUnavailableException(AuthRequestModel auth)
         {
             //given
             string token = "token";
@@ -157,7 +157,7 @@ namespace MarvelousConfigs.BLL.Tests
         }
 
         [TestCaseSource(typeof(GetTokenTestCaseSource))]
-        public async Task GetTokenTest_WhenAuthServiceReturnedNotProvidedHttpCode_ShouldThrowServiceBadGatewayException(AuthRequestModel auth)
+        public void GetTokenTest_WhenAuthServiceReturnedNotProvidedHttpCode_ShouldThrowServiceBadGatewayException(AuthRequestModel auth)
         {
             //given
             string token = "token";
@@ -174,7 +174,7 @@ namespace MarvelousConfigs.BLL.Tests
         }
 
         [TestCaseSource(typeof(GetTokenTestCaseSource))]
-        public async Task GetTokenTest_WhenAuthServiceAnswerIsEmpty_ShouldThrowServiceBadGatewayException(AuthRequestModel auth)
+        public void GetTokenTest_WhenAuthServiceAnswerIsEmpty_ShouldThrowServiceBadGatewayException(AuthRequestModel auth)
         {
             //given
             var responce = Mock.Of<RestResponse<string>>(x => x.StatusCode == HttpStatusCode.OK);
@@ -234,7 +234,7 @@ namespace MarvelousConfigs.BLL.Tests
         }
 
         [Test]
-        public async Task SendRequestToValidateTokenTest_WhenAuthServiceReturnedHttpCode401Unauthorized_ShouldThrowUnauthorizedException()
+        public void SendRequestToValidateTokenTest_WhenAuthServiceReturnedHttpCode401Unauthorized_ShouldThrowUnauthorizedException()
         {
             //given
             string token = "token";
@@ -251,7 +251,7 @@ namespace MarvelousConfigs.BLL.Tests
         }
 
         [Test]
-        public async Task SendRequestToValidateTokenTest_WhenAuthServiceReturnedHttpCode403Forbidden_ShouldThrowForbiddenException()
+        public void SendRequestToValidateTokenTest_WhenAuthServiceReturnedHttpCode403Forbidden_ShouldThrowForbiddenException()
         {
             //given
             string token = "token";
@@ -268,7 +268,7 @@ namespace MarvelousConfigs.BLL.Tests
         }
 
         [Test]
-        public async Task SendRequestToValidateTokenTest_WhenAuthServiceReturnedHttpCode400BadRequest_ShouldThrowBadRequestException()
+        public void SendRequestToValidateTokenTest_WhenAuthServiceReturnedHttpCode400BadRequest_ShouldThrowBadRequestException()
         {
             //given
             string token = "token";
@@ -285,7 +285,7 @@ namespace MarvelousConfigs.BLL.Tests
         }
 
         [Test]
-        public async Task SendRequestToValidateTokenTest_WhenAuthServiceReturnedHttpCode404NotFound_ShouldThrowEntityNotFoundException()
+        public void SendRequestToValidateTokenTest_WhenAuthServiceReturnedHttpCode404NotFound_ShouldThrowEntityNotFoundException()
         {
             //given
             string token = "token";
@@ -302,7 +302,7 @@ namespace MarvelousConfigs.BLL.Tests
         }
 
         [Test]
-        public async Task SendRequestToValidateTokenTest_WhenAuthServiceReturnedHttpCode409Conflict_ShouldThrowConflictException()
+        public void SendRequestToValidateTokenTest_WhenAuthServiceReturnedHttpCode409Conflict_ShouldThrowConflictException()
         {
             //given
             string token = "token";
@@ -319,7 +319,7 @@ namespace MarvelousConfigs.BLL.Tests
         }
 
         [Test]
-        public async Task SendRequestToValidateTokenTest_WhenAuthServiceReturnedHttpCode422UnprocessableEntity_ShouldThrowValidationException()
+        public void SendRequestToValidateTokenTest_WhenAuthServiceReturnedHttpCode422UnprocessableEntity_ShouldThrowValidationException()
         {
             //given
             string token = "token";
@@ -336,7 +336,7 @@ namespace MarvelousConfigs.BLL.Tests
         }
 
         [Test]
-        public async Task SendRequestToValidateTokenTest_WhenAuthServiceReturnedHttpCode503ServiceUnavailable_ShouldThrowServiceUnavailableException()
+        public void SendRequestToValidateTokenTest_WhenAuthServiceReturnedHttpCode503ServiceUnavailable_ShouldThrowServiceUnavailableException()
         {
             //given
             string token = "token";
@@ -353,7 +353,7 @@ namespace MarvelousConfigs.BLL.Tests
         }
 
         [Test]
-        public async Task SendRequestToValidateTokenTest_WhenAuthServiceReturnedNotProvidedHttpCode_ShouldThrowServiceBadGatewayException()
+        public void SendRequestToValidateTokenTest_WhenAuthServiceReturnedNotProvidedHttpCode_ShouldThrowServiceBadGatewayException()
         {
             //given
             string token = "token";
@@ -370,7 +370,7 @@ namespace MarvelousConfigs.BLL.Tests
         }
 
         [Test]
-        public async Task SendRequestToValidateTokenTest_WhenAuthServiceAnswerIsEmpty_ShouldThrowServiceBadGatewayException()
+        public void SendRequestToValidateTokenTest_WhenAuthServiceAnswerIsEmpty_ShouldThrowServiceBadGatewayException()
         {
             //given
             string token = "token";
@@ -407,7 +407,7 @@ namespace MarvelousConfigs.BLL.Tests
         }
 
         [Test]
-        public async Task SendRequestWithTokenTest_WhenAuthServiceReturnedHttpCode401Unauthorized_ShouldThrowUnauthorizedException()
+        public void SendRequestWithTokenTest_WhenAuthServiceReturnedHttpCode401Unauthorized_ShouldThrowUnauthorizedException()
         {
             //given
             string token = "token";
@@ -425,7 +425,7 @@ namespace MarvelousConfigs.BLL.Tests
         }
 
         [Test]
-        public async Task SendRequestWithTokenTest_WhenAuthServiceReturnedHttpCode403Forbidden_ShouldThrowForbiddenException()
+        public void SendRequestWithTokenTest_WhenAuthServiceReturnedHttpCode403Forbidden_ShouldThrowForbiddenException()
         {
             //given
             string token = "token";
@@ -442,7 +442,7 @@ namespace MarvelousConfigs.BLL.Tests
         }
 
         [Test]
-        public async Task SendRequestWithTokenTest_WhenAuthServiceReturnedHttpCode400BadRequest_ShouldThrowBadRequestException()
+        public void SendRequestWithTokenTest_WhenAuthServiceReturnedHttpCode400BadRequest_ShouldThrowBadRequestException()
         {
             //given
             string token = "token";
@@ -459,7 +459,7 @@ namespace MarvelousConfigs.BLL.Tests
         }
 
         [Test]
-        public async Task SendRequestWithTokenTest_WhenAuthServiceReturnedHttpCode404NotFound_ShouldThrowEntityNotFoundException()
+        public void SendRequestWithTokenTest_WhenAuthServiceReturnedHttpCode404NotFound_ShouldThrowEntityNotFoundException()
         {
             //given
             string token = "token";
@@ -476,7 +476,7 @@ namespace MarvelousConfigs.BLL.Tests
         }
 
         [Test]
-        public async Task SendRequestWithTokenTest_WhenAuthServiceReturned409Conflict_ShouldThrowConflictException()
+        public void SendRequestWithTokenTest_WhenAuthServiceReturned409Conflict_ShouldThrowConflictException()
         {
             //given
             string token = "token";
@@ -493,7 +493,7 @@ namespace MarvelousConfigs.BLL.Tests
         }
 
         [Test]
-        public async Task SendRequestWithTokenTest_WhenAuthServiceReturnedHttpCode422UnprocessableEntity_ShouldThrowValidationException()
+        public void SendRequestWithTokenTest_WhenAuthServiceReturnedHttpCode422UnprocessableEntity_ShouldThrowValidationException()
         {
             //given
             string token = "token";
@@ -510,7 +510,7 @@ namespace MarvelousConfigs.BLL.Tests
         }
 
         [Test]
-        public async Task SendRequestWithTokenTest_WhenAuthServiceReturnedHttpCode503ServiceUnavailable_ShouldThrowServiceUnavailableException()
+        public void SendRequestWithTokenTest_WhenAuthServiceReturnedHttpCode503ServiceUnavailable_ShouldThrowServiceUnavailableException()
         {
             //given
             string token = "token";
@@ -527,7 +527,7 @@ namespace MarvelousConfigs.BLL.Tests
         }
 
         [Test]
-        public async Task SendRequestWithTokenTest_WhenAuthServiceReturnedNotProvidedHttpCode_ShouldThrowServiceBadGatewayException()
+        public void SendRequestWithTokenTest_WhenAuthServiceReturnedNotProvidedHttpCode_ShouldThrowServiceBadGatewayException()
         {
             //given
             string token = "token";

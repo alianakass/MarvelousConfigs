@@ -61,7 +61,7 @@ namespace MarvelousConfigs.API.Tests
         }
 
         [TestCaseSource(typeof(GetAllConfigsShould403TestCaseSource))]
-        public async Task GetAllConfigsTest_Should403Forbidden(List<ConfigModel> configs, IdentityResponseModel model)
+        public void GetAllConfigsTest_Should403Forbidden(List<ConfigModel> configs, IdentityResponseModel model)
         {
             //given
             string token = "token";
@@ -83,7 +83,7 @@ namespace MarvelousConfigs.API.Tests
         }
 
         [TestCaseSource(typeof(GetAllConfigsShould401TestCaseSource))]
-        public async Task GetAllConfigsTest_Should401Unauthorized(List<ConfigModel> configs, IdentityResponseModel model)
+        public void GetAllConfigsTest_Should401Unauthorized(List<ConfigModel> configs, IdentityResponseModel model)
         {
             //given
             var context = new DefaultHttpContext();
@@ -122,7 +122,7 @@ namespace MarvelousConfigs.API.Tests
         }
 
         [TestCaseSource(typeof(UpdateConfigShould403TestCaseSource))]
-        public async Task UpdateConfigTest_Should403Forbidden(ConfigInputModel input,
+        public void UpdateConfigTest_Should403Forbidden(ConfigInputModel input,
             IdentityResponseModel model, int id)
         {
             //given
@@ -143,7 +143,7 @@ namespace MarvelousConfigs.API.Tests
         }
 
         [TestCaseSource(typeof(UpdateConfigShould401TestCaseSource))]
-        public async Task UpdateConfigTest_Should401Unauthorized(ConfigInputModel input,
+        public void UpdateConfigTest_Should401Unauthorized(ConfigInputModel input,
             IdentityResponseModel model, int id)
         {
             //given
@@ -185,7 +185,7 @@ namespace MarvelousConfigs.API.Tests
         }
 
         [TestCaseSource(typeof(GetConfigsByServiceIdShould403TestCaseSource))]
-        public async Task GetConfigsByServiceIdTest_Should403Forbidden(List<ConfigModel> configs, IdentityResponseModel model,
+        public void GetConfigsByServiceIdTest_Should403Forbidden(List<ConfigModel> configs, IdentityResponseModel model,
             int id)
         {
             //given
@@ -206,7 +206,7 @@ namespace MarvelousConfigs.API.Tests
         }
 
         [TestCaseSource(typeof(GetConfigsByServiceIdShould401TestCaseSource))]
-        public async Task GetConfigsByServiceIdTest_Should401Unauthorized(List<ConfigModel> configs, IdentityResponseModel model,
+        public void GetConfigsByServiceIdTest_Should401Unauthorized(List<ConfigModel> configs, IdentityResponseModel model,
             int id)
         {
             //given
@@ -246,7 +246,7 @@ namespace MarvelousConfigs.API.Tests
         }
 
         [Test]
-        public async Task GetConfigsByServiceTest_Should401Unauthorized()
+        public void GetConfigsByServiceTest_Should401Unauthorized()
         {
             //given
             var context = new DefaultHttpContext();
