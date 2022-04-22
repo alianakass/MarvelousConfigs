@@ -1,5 +1,5 @@
-﻿using Auth.BusinessLayer.Helpers;
-using AutoMapper;
+﻿using AutoMapper;
+using Marvelous.Contracts.Client;
 using Marvelous.Contracts.Enums;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;

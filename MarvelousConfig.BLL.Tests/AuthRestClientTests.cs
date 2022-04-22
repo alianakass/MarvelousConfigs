@@ -1,5 +1,5 @@
-﻿using Auth.BusinessLayer.Helpers;
-using FluentValidation;
+﻿using FluentValidation;
+using Marvelous.Contracts.Client;
 using Marvelous.Contracts.Enums;
 using Marvelous.Contracts.RequestModels;
 using Marvelous.Contracts.ResponseModels;
