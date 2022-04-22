@@ -85,7 +85,7 @@ namespace MarvelousConfigs.BLL.Tests
             //then
             _microservice.Verify(x => x.GetMicroserviceById(id), Times.Once);
             _config.Verify(x => x.GetConfigsByService(service.ServiceName), Times.Once);
-            VerifyLogger(LogLevel.Information, 2);
+            VerifyLogger(LogLevel.Information, 3);
 
             List<Config> actualCfg = (List<Config>)_cache.Get(service.ServiceName);
             foreach (var a in actualCfg)
@@ -109,7 +109,7 @@ namespace MarvelousConfigs.BLL.Tests
             _microservice.Verify(x => x.GetMicroserviceById(id), Times.Once);
             _config.Verify(x => x.GetConfigsByService(service.ServiceName), Times.Once);
             _prod.Verify(x => x.NotifyAdminAboutErrorToEmail(It.IsAny<string>()), Times.Once);
-            VerifyLogger(LogLevel.Information, 1);
+            VerifyLogger(LogLevel.Information, 2);
         }
 
         [Test]
