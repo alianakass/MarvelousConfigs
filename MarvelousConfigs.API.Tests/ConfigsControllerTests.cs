@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 
 namespace MarvelousConfigs.API.Tests
 {
-    public class ConfigsControllerTests : BaseVerifyTest<ConfigsController>
+    internal class ConfigsControllerTests : BaseVerifyTest<ConfigsController>
     {
         private IValidator<ConfigInputModel> _validator;
         private Mock<IConfigsService> _service;

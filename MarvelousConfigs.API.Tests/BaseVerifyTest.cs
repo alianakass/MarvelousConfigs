@@ -6,7 +6,7 @@ using static Moq.It;
 
 namespace MarvelousConfigs.API.Tests
 {
-    public class BaseVerifyTest<T>
+    internal class BaseVerifyTest<T>
     {
         protected Mock<ILogger<T>> _logger;
         protected IMapper _map;

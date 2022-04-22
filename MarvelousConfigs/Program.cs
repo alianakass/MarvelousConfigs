@@ -51,7 +51,7 @@ app.Configuration[Microservice.MarvelousAuth.ToString()] = authUrl;
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseMiddleware<GlobalExeptionHandler>();
+app.UseMiddleware<GlobalExceptionHandler>();
 
 app.UseHttpsRedirection();
 
