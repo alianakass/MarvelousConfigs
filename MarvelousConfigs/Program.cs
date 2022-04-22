@@ -38,17 +38,15 @@ builder.Services.AddMemoryCache();
 builder.Services.RegisterDependencies();
 builder.Services.RegisterLogger(config);
 builder.Services.AddMassTransit();
+builder.Services.AddFluentValidation();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwagger();
-builder.Services.AddFluentValidation();
 
 var app = builder.Build();
 
 app.Configuration[Microservice.MarvelousAuth.ToString()] = authUrl;
-
-// Configure the HTTP request pipeline.
 
 app.UseSwagger();
 app.UseSwaggerUI();

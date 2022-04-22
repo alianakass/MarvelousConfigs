@@ -25,12 +25,12 @@ namespace MarvelousConfigs.BLL.Infrastructure
             _logger = logger;
             _config = configuration;
             _client = client;
+            _client.AddMicroservice(Microservice.MarvelousConfigs);
             _authUrl = _config[Microservice.MarvelousAuth.ToString()] + AuthEndpoints.ApiAuth;
         }
 
         public async Task<string> GetToken(AuthRequestModel auth)
         {
-            _client.AddMicroservice(Microservice.MarvelousConfigs);
             var request = new RestRequest($"{_authUrl}{AuthEndpoints.Login}", Method.Post);
             request.AddBody(auth);
             _logger.LogInformation($"Getting a response to receive a token from {Microservice.MarvelousAuth}");
@@ -42,10 +42,9 @@ namespace MarvelousConfigs.BLL.Infrastructure
             return response.Content!;
         }
 
-        public async Task<IdentityResponseModel> SendRequestToValidateToken(string jwtToken)
+        public async Task<IdentityResponseModel> SendRequestToValidateToken(string token)
         {
-            _client.Authenticator = new MarvelousAuthenticator(jwtToken);
-            _client.AddMicroservice(Microservice.MarvelousConfigs);
+            _client.Authenticator = new MarvelousAuthenticator(token);
             var request = new RestRequest($"{_authUrl}{AuthEndpoints.ValidationFront}");
             _logger.LogInformation($"Getting a response for token validation from {Microservice.MarvelousAuth}");
             var response = await _client.ExecuteAsync<IdentityResponseModel>(request);
@@ -59,7 +58,6 @@ namespace MarvelousConfigs.BLL.Infrastructure
         public async Task SendRequestWithToken(string token)
         {
             _client.Authenticator = new MarvelousAuthenticator(token);
-            _client.AddMicroservice(Microservice.MarvelousConfigs);
             var request = new RestRequest($"{_authUrl}{AuthEndpoints.ValidationMicroservice}", Method.Get);
             _logger.LogInformation($"Getting a response for token validation from {Microservice.MarvelousAuth}");
             var response = await _client.ExecuteAsync<IdentityResponseModel>(request);
