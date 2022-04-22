@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace MarvelousConfigs.API.Tests
 {
-    public class MicroservicesControllerTests : BaseVerifyTest<MicroservicesController>
+    internal class MicroservicesControllerTests : BaseVerifyTest<MicroservicesController>
     {
         private Mock<IMicroservicesService> _service;
         private Mock<IAuthRequestClient> _auth;

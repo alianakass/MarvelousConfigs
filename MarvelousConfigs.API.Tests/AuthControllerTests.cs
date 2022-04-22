@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MarvelousConfigs.API.Tests
 {
-    public class AuthControllerTests : BaseVerifyTest<AuthController>
+    internal class AuthControllerTests : BaseVerifyTest<AuthController>
     {
         private Mock<IAuthRequestClient> _auth;
         private AuthController _controller;
@@ -38,6 +38,26 @@ namespace MarvelousConfigs.API.Tests
             //then
             _auth.Verify(x => x.GetToken(model), Times.Once);
             VerifyLogger(LogLevel.Information, 2);
+        }
+
+        [Test]
+        public async Task LoginTest_WhenEmailOrPasspoworNotValid_ShouldThrowValidationException()
+        {
+            //given
+            var token = "token";
+            AuthRequestModel model = new AuthRequestModel()
+            {
+                Email = default,
+                Password = default,
+            };
+            _auth.Setup(x => x.GetToken(model)).ReturnsAsync(token);
+
+            //when
+
+            //then
+            Assert.ThrowsAsync<ValidationException>(async () => await _controller.Login(model));
+            _auth.Verify(x => x.GetToken(model), Times.Never);
+            VerifyLogger(LogLevel.Information, 1);
         }
     }
 }

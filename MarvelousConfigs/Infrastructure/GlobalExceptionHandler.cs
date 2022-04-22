@@ -5,12 +5,12 @@ using System.Text.Json;
 
 namespace MarvelousConfigs.API.Infrastructure
 {
-    public class GlobalExeptionHandler
+    public class GlobalExceptionHandler
     {
         private readonly RequestDelegate _next;
-        private readonly ILogger<GlobalExeptionHandler> _logger;
+        private readonly ILogger<GlobalExceptionHandler> _logger;
 
-        public GlobalExeptionHandler(RequestDelegate next, ILogger<GlobalExeptionHandler> logger)
+        public GlobalExceptionHandler(RequestDelegate next, ILogger<GlobalExceptionHandler> logger)
         {
             _next = next;
             _logger = logger;
@@ -73,8 +73,8 @@ namespace MarvelousConfigs.API.Infrastructure
             var result = JsonSerializer.Serialize(new { error = message });
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)code;
-            _logger.LogError($"Eror {code} : {message}");
             await context.Response.WriteAsync(result);
+            _logger.LogError($"Eror {code} : {message}");
         }
     }
 }

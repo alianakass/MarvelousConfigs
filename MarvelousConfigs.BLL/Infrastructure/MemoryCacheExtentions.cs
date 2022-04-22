@@ -66,6 +66,7 @@ namespace MarvelousConfigs.BLL.Infrastructure
         {
             try
             {
+                _logger.LogInformation($"Start try update configurations into the cache for service {id}");
                 var service = await _cache.GetOrCreateAsync(id, (ICacheEntry _)
                     => _microservice.GetMicroserviceById(id));
 
@@ -82,6 +83,12 @@ namespace MarvelousConfigs.BLL.Infrastructure
                 _cache.Set(service.ServiceName, cfgs);
                 _logger.LogInformation("New configurations were successfully loaded into the cache");
             }
+            catch(EntityNotFoundException ex)
+            {
+                await _prod.NotifyAdminAboutErrorToEmail($"Сache loading error when trying to update cached configurations for service " +
+                    $"because {ex}");
+                throw;
+            }        
             catch (Exception ex)
             {
                 await _prod.NotifyAdminAboutErrorToEmail($"Сache loading error when trying to update cached configurations for service " +

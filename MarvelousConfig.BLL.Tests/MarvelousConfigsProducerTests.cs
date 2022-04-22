@@ -40,7 +40,7 @@ namespace MarvelousConfigs.BLL.Tests
             VerifyLogger(LogLevel.Information, 2);
         }
 
-        [TestCase]
+        [Test]
         public async Task NotifyConfigurationUpdatedTest()
         {
             //given
@@ -55,7 +55,7 @@ namespace MarvelousConfigs.BLL.Tests
             VerifyLogger(LogLevel.Information, 2);
         }
 
-        [TestCase]
+        [Test]
         public void NotifyConfigurationUpdatedTest_WhenMicroserviceNotFound_ShouldThrowException()
         {
             //given

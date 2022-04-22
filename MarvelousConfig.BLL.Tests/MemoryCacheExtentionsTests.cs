@@ -111,5 +111,21 @@ namespace MarvelousConfigs.BLL.Tests
             _prod.Verify(x => x.NotifyAdminAboutErrorToEmail(It.IsAny<string>()), Times.Once);
             VerifyLogger(LogLevel.Information, 1);
         }
+
+        [Test]
+        public void RefreshConfigByServiceIdTest_WhenServiceNotFound_ShouldThrowEntityNotFoundException()
+        {
+            //given
+            _microservice.Setup(x => x.GetMicroserviceById(It.IsAny<int>()));
+
+            //when
+
+            //then
+            Assert.ThrowsAsync<EntityNotFoundException>(async () => await _extentions.RefreshConfigByServiceId(It.IsAny<int>()));
+            _microservice.Verify(x => x.GetMicroserviceById(It.IsAny<int>()), Times.Once);
+            _config.Verify(x => x.GetConfigsByService(It.IsAny<string>()), Times.Never);
+            _prod.Verify(x => x.NotifyAdminAboutErrorToEmail(It.IsAny<string>()), Times.Once);
+            VerifyLogger(LogLevel.Information, 1);
+        }
     }
 }

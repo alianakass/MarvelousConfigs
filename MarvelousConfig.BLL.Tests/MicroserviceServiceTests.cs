@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace MarvelousConfigs.BLL.Tests
 {
-    public class MicroserviceServiceTests : BaseVerifyTest<MicroservicesService>
+    internal class MicroserviceServiceTests : BaseVerifyTest<MicroservicesService>
     {
         private Mock<IMicroserviceRepository> _repositoryMock;
         private IMicroservicesService _service;
