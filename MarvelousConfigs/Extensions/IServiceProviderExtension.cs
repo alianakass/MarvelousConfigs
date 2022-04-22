@@ -1,5 +1,5 @@
-﻿using Auth.BusinessLayer.Helpers;
-using FluentValidation.AspNetCore;
+﻿using FluentValidation.AspNetCore;
+using Marvelous.Contracts.Client;
 using MarvelousConfigs.API.Models.Validation;
 using MarvelousConfigs.BLL.Infrastructure;
 using MarvelousConfigs.BLL.Services;

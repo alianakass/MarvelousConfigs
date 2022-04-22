@@ -1,6 +1,6 @@
-using Auth.BusinessLayer.Helpers;
 using FluentValidation;
 using Marvelous.Contracts.Autentificator;
+using Marvelous.Contracts.Client;
 using Marvelous.Contracts.Endpoints;
 using Marvelous.Contracts.Enums;
 using Marvelous.Contracts.RequestModels;
