@@ -83,18 +83,12 @@ namespace MarvelousConfigs.BLL.Infrastructure
                 _cache.Set(service.ServiceName, cfgs);
                 _logger.LogInformation("New configurations were successfully loaded into the cache");
             }
-            catch(EntityNotFoundException ex)
+            catch (Exception exception)
             {
-                await _prod.NotifyAdminAboutErrorToEmail($"Сache loading error when trying to update cached configurations for service " +
-                    $"because {ex}");
-                throw;
-            }        
-            catch (Exception ex)
-            {
-                await _prod.NotifyAdminAboutErrorToEmail($"Сache loading error when trying to update cached configurations for service " +
-                    $"{(Marvelous.Contracts.Enums.Microservice)id}. {ex}");
-                throw new CacheLoadingException($"Сache loading error when trying to update cached configurations for service " +
-                    $"{(Marvelous.Contracts.Enums.Microservice)id}. {ex}");
+                var ex = new CacheLoadingException($"Сache loading error when trying to update cached configurations for service " +
+                    $"{(Marvelous.Contracts.Enums.Microservice)id}. {exception.Message}");
+                await _prod.NotifyAdminAboutErrorToEmail(ex.Message);
+                throw ex;
             }
         }
     }

@@ -113,7 +113,7 @@ namespace MarvelousConfigs.BLL.Tests
         }
 
         [Test]
-        public void RefreshConfigByServiceIdTest_WhenServiceNotFound_ShouldThrowEntityNotFoundException()
+        public void RefreshConfigByServiceIdTest_WhenServiceNotFoundAndThrowEntityNotFoundException_ShouldThrowCacheLoadingException()
         {
             //given
             _microservice.Setup(x => x.GetMicroserviceById(It.IsAny<int>()));
@@ -121,7 +121,7 @@ namespace MarvelousConfigs.BLL.Tests
             //when
 
             //then
-            Assert.ThrowsAsync<EntityNotFoundException>(async () => await _extentions.RefreshConfigByServiceId(It.IsAny<int>()));
+            Assert.ThrowsAsync<CacheLoadingException>(async () => await _extentions.RefreshConfigByServiceId(It.IsAny<int>()));
             _microservice.Verify(x => x.GetMicroserviceById(It.IsAny<int>()), Times.Once);
             _config.Verify(x => x.GetConfigsByService(It.IsAny<string>()), Times.Never);
             _prod.Verify(x => x.NotifyAdminAboutErrorToEmail(It.IsAny<string>()), Times.Once);
