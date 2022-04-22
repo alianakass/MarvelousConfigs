@@ -90,10 +90,10 @@ namespace MarvelousConfigs.API.Controllers
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
-        [SwaggerOperation("Get configs by service address")]
+        [SwaggerOperation("Get configs for service(only services can use)")]
         public async Task<ActionResult<List<ConfigResponseModel>>> GetConfigsByService()
         {
-            _logger.LogInformation($"Request to get configs by service");
+            _logger.LogInformation($"Request to get configs for service");
             var token = HttpContext.Request.Headers.Authorization;
             var name = HttpContext.Request.Headers[nameof(Microservice)].FirstOrDefault();
             if (string.IsNullOrWhiteSpace(name))
@@ -102,7 +102,7 @@ namespace MarvelousConfigs.API.Controllers
             }
             _logger.LogInformation($"Call belongs to the service {$"{name}"}");
             List<ConfigResponseModel>? configs = _map.Map<List<ConfigResponseModel>>(await _service.GetConfigsByService(token, name));
-            _logger.LogInformation($"Response to a request for get configs by service {name}");
+            _logger.LogInformation($"Response to a request for get configs for service {name}");
             return Ok(configs);
         }
 

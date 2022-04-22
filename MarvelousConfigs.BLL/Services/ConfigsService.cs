@@ -87,7 +87,7 @@ namespace MarvelousConfigs.BLL.Services
         public async Task<List<ConfigModel>> GetConfigsByService(string token, string name)
         {
             await _auth.SendRequestWithToken(token);
-            _logger.LogInformation($"Getting configurations by service address { name }");
+            _logger.LogInformation($"Getting configurations for service { name }");
             List<Config> configs = await _cache.GetOrCreateAsync(name, (ICacheEntry _)
                => _rep.GetConfigsByService(name));
             _logger.LogInformation($"Configurations has been received");
