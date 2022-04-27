@@ -23,7 +23,7 @@ namespace MarvelousConfigs.BLL.Tests
         private IConfiguration _config;
         private Mock<IRestClient> _client;
         private IAuthRequestClient _authRequestClient;
-        private const string _mess = "test exception message";
+        private const string _message = "test exception message";
 
         [SetUp]
         public void SetUp()
@@ -43,7 +43,7 @@ namespace MarvelousConfigs.BLL.Tests
             //given
             string token = "token";
             var responce = Mock.Of<RestResponse<string>>(x => x.Content == token && x.StatusCode ==
-            HttpStatusCode.Unauthorized && x.ErrorException == new Exception(_mess));
+            HttpStatusCode.Unauthorized && x.ErrorException == new Exception(_message));
             _client.Setup(x => x.ExecuteAsync<string>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
             //when
@@ -60,7 +60,7 @@ namespace MarvelousConfigs.BLL.Tests
             //given
             string token = "token";
             var responce = Mock.Of<RestResponse<string>>(x => x.Content == token && x.StatusCode ==
-            HttpStatusCode.Forbidden && x.ErrorException == new Exception(_mess));
+            HttpStatusCode.Forbidden && x.ErrorException == new Exception(_message));
             _client.Setup(x => x.ExecuteAsync<string>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
             //when
@@ -77,7 +77,7 @@ namespace MarvelousConfigs.BLL.Tests
             //given
             string token = "token";
             var responce = Mock.Of<RestResponse<string>>(x => x.Content == token && x.StatusCode ==
-            HttpStatusCode.BadRequest && x.ErrorException == new Exception(_mess));
+            HttpStatusCode.BadRequest && x.ErrorException == new Exception(_message));
             _client.Setup(x => x.ExecuteAsync<string>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
             //when
@@ -94,7 +94,7 @@ namespace MarvelousConfigs.BLL.Tests
             //given
             string token = "token";
             var responce = Mock.Of<RestResponse<string>>(x => x.Content == token && x.StatusCode ==
-            HttpStatusCode.NotFound && x.ErrorException == new Exception(_mess));
+            HttpStatusCode.NotFound && x.ErrorException == new Exception(_message));
             _client.Setup(x => x.ExecuteAsync<string>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
             //when
@@ -111,7 +111,7 @@ namespace MarvelousConfigs.BLL.Tests
             //given
             string token = "token";
             var responce = Mock.Of<RestResponse<string>>(x => x.Content == token && x.StatusCode ==
-            HttpStatusCode.Conflict && x.ErrorException == new Exception(_mess));
+            HttpStatusCode.Conflict && x.ErrorException == new Exception(_message));
             _client.Setup(x => x.ExecuteAsync<string>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
             //when
@@ -128,7 +128,7 @@ namespace MarvelousConfigs.BLL.Tests
             //given
             string token = "token";
             var responce = Mock.Of<RestResponse<string>>(x => x.Content == token && x.StatusCode ==
-            HttpStatusCode.UnprocessableEntity && x.ErrorException == new Exception(_mess));
+            HttpStatusCode.UnprocessableEntity && x.ErrorException == new Exception(_message));
             _client.Setup(x => x.ExecuteAsync<string>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
             //when
@@ -145,7 +145,7 @@ namespace MarvelousConfigs.BLL.Tests
             //given
             string token = "token";
             var responce = Mock.Of<RestResponse<string>>(x => x.Content == token && x.StatusCode ==
-            HttpStatusCode.ServiceUnavailable && x.ErrorException == new Exception(_mess));
+            HttpStatusCode.ServiceUnavailable && x.ErrorException == new Exception(_message));
             _client.Setup(x => x.ExecuteAsync<string>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
             //when
@@ -162,7 +162,7 @@ namespace MarvelousConfigs.BLL.Tests
             //given
             string token = "token";
             var responce = Mock.Of<RestResponse<string>>(x => x.Content == token && x.StatusCode ==
-            HttpStatusCode.Unused && x.ErrorException == new Exception(_mess));
+            HttpStatusCode.Unused && x.ErrorException == new Exception(_message));
             _client.Setup(x => x.ExecuteAsync<string>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
             //when
@@ -239,7 +239,7 @@ namespace MarvelousConfigs.BLL.Tests
             //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode ==
-            HttpStatusCode.Unauthorized && x.ErrorException == new Exception(_mess));
+            HttpStatusCode.Unauthorized && x.ErrorException == new Exception(_message));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
             //when
@@ -256,7 +256,7 @@ namespace MarvelousConfigs.BLL.Tests
             //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode ==
-            HttpStatusCode.Forbidden && x.ErrorException == new Exception(_mess));
+            HttpStatusCode.Forbidden && x.ErrorException == new Exception(_message));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
             //when
@@ -273,7 +273,7 @@ namespace MarvelousConfigs.BLL.Tests
             //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode ==
-            HttpStatusCode.BadRequest && x.ErrorException == new Exception(_mess));
+            HttpStatusCode.BadRequest && x.ErrorException == new Exception(_message));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
             //when
@@ -290,7 +290,7 @@ namespace MarvelousConfigs.BLL.Tests
             //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode ==
-            HttpStatusCode.NotFound && x.ErrorException == new Exception(_mess));
+            HttpStatusCode.NotFound && x.ErrorException == new Exception(_message));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
             //when
@@ -307,7 +307,7 @@ namespace MarvelousConfigs.BLL.Tests
             //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode ==
-            HttpStatusCode.Conflict && x.ErrorException == new Exception(_mess));
+            HttpStatusCode.Conflict && x.ErrorException == new Exception(_message));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
             //when
@@ -324,7 +324,7 @@ namespace MarvelousConfigs.BLL.Tests
             //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode ==
-            HttpStatusCode.UnprocessableEntity && x.ErrorException == new Exception(_mess));
+            HttpStatusCode.UnprocessableEntity && x.ErrorException == new Exception(_message));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
             //when
@@ -341,7 +341,7 @@ namespace MarvelousConfigs.BLL.Tests
             //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode ==
-            HttpStatusCode.ServiceUnavailable && x.ErrorException == new Exception(_mess));
+            HttpStatusCode.ServiceUnavailable && x.ErrorException == new Exception(_message));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
             //when
@@ -358,7 +358,7 @@ namespace MarvelousConfigs.BLL.Tests
             //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode ==
-            HttpStatusCode.AlreadyReported && x.ErrorException == new Exception(_mess));
+            HttpStatusCode.AlreadyReported && x.ErrorException == new Exception(_message));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
             //when
@@ -375,7 +375,7 @@ namespace MarvelousConfigs.BLL.Tests
             //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == default && x.StatusCode ==
-            HttpStatusCode.OK && x.ErrorException == new Exception(_mess));
+            HttpStatusCode.OK && x.ErrorException == new Exception(_message));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
             //when
@@ -412,7 +412,7 @@ namespace MarvelousConfigs.BLL.Tests
             //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode ==
-            HttpStatusCode.Unauthorized && x.ErrorException == new Exception(_mess));
+            HttpStatusCode.Unauthorized && x.ErrorException == new Exception(_message));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
             //when
@@ -430,7 +430,7 @@ namespace MarvelousConfigs.BLL.Tests
             //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode ==
-            HttpStatusCode.Forbidden && x.ErrorException == new Exception(_mess));
+            HttpStatusCode.Forbidden && x.ErrorException == new Exception(_message));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
             //when
@@ -447,7 +447,7 @@ namespace MarvelousConfigs.BLL.Tests
             //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode ==
-            HttpStatusCode.BadRequest && x.ErrorException == new Exception(_mess));
+            HttpStatusCode.BadRequest && x.ErrorException == new Exception(_message));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
             //when
@@ -464,7 +464,7 @@ namespace MarvelousConfigs.BLL.Tests
             //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode ==
-            HttpStatusCode.NotFound && x.ErrorException == new Exception(_mess));
+            HttpStatusCode.NotFound && x.ErrorException == new Exception(_message));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
             //when
@@ -481,7 +481,7 @@ namespace MarvelousConfigs.BLL.Tests
             //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode ==
-            HttpStatusCode.Conflict && x.ErrorException == new Exception(_mess));
+            HttpStatusCode.Conflict && x.ErrorException == new Exception(_message));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
             //when
@@ -498,7 +498,7 @@ namespace MarvelousConfigs.BLL.Tests
             //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode ==
-            HttpStatusCode.UnprocessableEntity && x.ErrorException == new Exception(_mess));
+            HttpStatusCode.UnprocessableEntity && x.ErrorException == new Exception(_message));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
             //when
@@ -515,7 +515,7 @@ namespace MarvelousConfigs.BLL.Tests
             //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode ==
-            HttpStatusCode.ServiceUnavailable && x.ErrorException == new Exception(_mess));
+            HttpStatusCode.ServiceUnavailable && x.ErrorException == new Exception(_message));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
             //when
@@ -532,7 +532,7 @@ namespace MarvelousConfigs.BLL.Tests
             //given
             string token = "token";
             var responce = Mock.Of<RestResponse<IdentityResponseModel>>(x => x.Data == It.IsAny<IdentityResponseModel>() && x.StatusCode ==
-            HttpStatusCode.BadGateway && x.ErrorException == new Exception(_mess));
+            HttpStatusCode.BadGateway && x.ErrorException == new Exception(_message));
             _client.Setup(x => x.ExecuteAsync<IdentityResponseModel>(It.IsAny<RestRequest>(), It.IsAny<CancellationToken>())).ReturnsAsync(responce);
 
             //when
