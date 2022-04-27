@@ -16,7 +16,7 @@ namespace MarvelousConfigs.API.Tests
     internal class GlobalExceptionHandlerTests : BaseVerifyTest<GlobalExceptionHandler>
     {
         private DefaultHttpContext _context;
-        private const string Message = "Exception test message";
+        private const string _message = "test exception _message";
 
         [SetUp]
         public void SetUp()
@@ -54,7 +54,7 @@ namespace MarvelousConfigs.API.Tests
         {
             //given
             var expected = GetJsonExceptionResponseModel(502);
-            var exceptionHandler = new GlobalExceptionHandler(_ => throw new CacheLoadingException(Message), _logger.Object);
+            var exceptionHandler = new GlobalExceptionHandler(_ => throw new CacheLoadingException(_message), _logger.Object);
 
             //when
             await exceptionHandler.InvokeAsync(_context);
@@ -70,7 +70,7 @@ namespace MarvelousConfigs.API.Tests
         {
             //given
             var expected = GetJsonExceptionResponseModel(401);
-            var exceptionHandler = new GlobalExceptionHandler(_ => throw new UnauthorizedException(Message), _logger.Object);
+            var exceptionHandler = new GlobalExceptionHandler(_ => throw new UnauthorizedException(_message), _logger.Object);
 
             //when
             await exceptionHandler.InvokeAsync(_context);
@@ -86,7 +86,7 @@ namespace MarvelousConfigs.API.Tests
         {
             //given
             var expected = GetJsonExceptionResponseModel(403);
-            var exceptionHandler = new GlobalExceptionHandler(_ => throw new ForbiddenException(Message), _logger.Object);
+            var exceptionHandler = new GlobalExceptionHandler(_ => throw new ForbiddenException(_message), _logger.Object);
 
             //when
             await exceptionHandler.InvokeAsync(_context);
@@ -102,7 +102,7 @@ namespace MarvelousConfigs.API.Tests
         {
             //given
             var expected = GetJsonExceptionResponseModel(404);
-            var exceptionHandler = new GlobalExceptionHandler(_ => throw new EntityNotFoundException(Message), _logger.Object);
+            var exceptionHandler = new GlobalExceptionHandler(_ => throw new EntityNotFoundException(_message), _logger.Object);
 
             //when
             await exceptionHandler.InvokeAsync(_context);
@@ -118,7 +118,7 @@ namespace MarvelousConfigs.API.Tests
         {
             //given
             var expected = GetJsonExceptionResponseModel(422);
-            var exceptionHandler = new GlobalExceptionHandler(_ => throw new ValidationException(Message), _logger.Object);
+            var exceptionHandler = new GlobalExceptionHandler(_ => throw new ValidationException(_message), _logger.Object);
 
             //when
             await exceptionHandler.InvokeAsync(_context);
@@ -134,7 +134,7 @@ namespace MarvelousConfigs.API.Tests
         {
             //given
             var expected = GetJsonExceptionResponseModel(502);
-            var exceptionHandler = new GlobalExceptionHandler(_ => throw new BadGatewayException(Message), _logger.Object);
+            var exceptionHandler = new GlobalExceptionHandler(_ => throw new BadGatewayException(_message), _logger.Object);
 
             //when
             await exceptionHandler.InvokeAsync(_context);
@@ -150,7 +150,7 @@ namespace MarvelousConfigs.API.Tests
         {
             //given
             var expected = GetJsonExceptionResponseModel(400);
-            var exceptionHandler = new GlobalExceptionHandler(_ => throw new BadRequestException(Message), _logger.Object);
+            var exceptionHandler = new GlobalExceptionHandler(_ => throw new BadRequestException(_message), _logger.Object);
 
             //when
             await exceptionHandler.InvokeAsync(_context);
@@ -166,7 +166,7 @@ namespace MarvelousConfigs.API.Tests
         {
             //given
             var expected = GetJsonExceptionResponseModel(409);
-            var exceptionHandler = new GlobalExceptionHandler(_ => throw new ConflictException(Message), _logger.Object);
+            var exceptionHandler = new GlobalExceptionHandler(_ => throw new ConflictException(_message), _logger.Object);
 
             //when
             await exceptionHandler.InvokeAsync(_context);
@@ -182,7 +182,7 @@ namespace MarvelousConfigs.API.Tests
         {
             //given
             var expected = GetJsonExceptionResponseModel(503);
-            var exceptionHandler = new GlobalExceptionHandler(_ => throw new ServiceUnavailableException(Message), _logger.Object);
+            var exceptionHandler = new GlobalExceptionHandler(_ => throw new ServiceUnavailableException(_message), _logger.Object);
 
             //when
             await exceptionHandler.InvokeAsync(_context);
@@ -198,7 +198,7 @@ namespace MarvelousConfigs.API.Tests
         {
             //given
             var expected = GetJsonExceptionResponseModel(400);
-            var exceptionHandler = new GlobalExceptionHandler(_ => throw new Exception(Message), _logger.Object);
+            var exceptionHandler = new GlobalExceptionHandler(_ => throw new Exception(_message), _logger.Object);
 
             //when
             await exceptionHandler.InvokeAsync(_context);
@@ -210,7 +210,7 @@ namespace MarvelousConfigs.API.Tests
         }
 
         private static string GetJsonExceptionResponseModel(int statusCode) =>
-            JsonSerializer.Serialize(new ExceptionResponseModel { Code = statusCode, Message = Message });
+            JsonSerializer.Serialize(new ExceptionResponseModel { Code = statusCode, Message = _message });
 
         private string GetResponseBody()
         {
