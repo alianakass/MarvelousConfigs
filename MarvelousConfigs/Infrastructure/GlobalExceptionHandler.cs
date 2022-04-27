@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Marvelous.Contracts.ResponseModels;
 using MarvelousConfigs.BLL.Infrastructure.Exceptions;
 using System.Net;
 using System.Text.Json;
@@ -58,10 +59,6 @@ namespace MarvelousConfigs.API.Infrastructure
             {
                 await HandleExceptionAsync(context, HttpStatusCode.ServiceUnavailable, ex.Message);
             }
-            catch (Microsoft.Data.SqlClient.SqlException ex)
-            {
-                await HandleExceptionAsync(context, HttpStatusCode.ServiceUnavailable, ex.Message);
-            }
             catch (Exception ex)
             {
                 await HandleExceptionAsync(context, HttpStatusCode.BadRequest, ex.Message);
@@ -70,9 +67,10 @@ namespace MarvelousConfigs.API.Infrastructure
 
         private async Task HandleExceptionAsync(HttpContext context, HttpStatusCode code, string message)
         {
-            var result = JsonSerializer.Serialize(new { error = message });
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)code;
+            var exceptionModel = new ExceptionResponseModel { Code = (int)code, Message = message };
+            var result = JsonSerializer.Serialize(exceptionModel);
             await context.Response.WriteAsync(result);
             _logger.LogError($"Eror {code} : {message}");
         }

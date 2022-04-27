@@ -37,11 +37,11 @@ namespace MarvelousConfigs.API.Tests
 
             //then
             _auth.Verify(x => x.GetToken(model), Times.Once);
-            VerifyLogger(LogLevel.Information, 2);
+            VerifyLogger(LogLevel.Information, 3);
         }
 
         [Test]
-        public async Task LoginTest_WhenEmailOrPasspoworNotValid_ShouldThrowValidationException()
+        public void LoginTest_WhenEmailOrPasspoworNotValid_ShouldThrowValidationException()
         {
             //given
             var token = "token";

@@ -85,7 +85,7 @@ namespace MarvelousConfigs.BLL.Tests
             //then
             _microservice.Verify(x => x.GetMicroserviceById(id), Times.Once);
             _config.Verify(x => x.GetConfigsByService(service.ServiceName), Times.Once);
-            VerifyLogger(LogLevel.Information, 2);
+            VerifyLogger(LogLevel.Information, 3);
 
             List<Config> actualCfg = (List<Config>)_cache.Get(service.ServiceName);
             foreach (var a in actualCfg)
@@ -109,11 +109,11 @@ namespace MarvelousConfigs.BLL.Tests
             _microservice.Verify(x => x.GetMicroserviceById(id), Times.Once);
             _config.Verify(x => x.GetConfigsByService(service.ServiceName), Times.Once);
             _prod.Verify(x => x.NotifyAdminAboutErrorToEmail(It.IsAny<string>()), Times.Once);
-            VerifyLogger(LogLevel.Information, 1);
+            VerifyLogger(LogLevel.Information, 2);
         }
 
         [Test]
-        public void RefreshConfigByServiceIdTest_WhenServiceNotFound_ShouldThrowEntityNotFoundException()
+        public void RefreshConfigByServiceIdTest_WhenServiceNotFoundAndThrowEntityNotFoundException_ShouldThrowCacheLoadingException()
         {
             //given
             _microservice.Setup(x => x.GetMicroserviceById(It.IsAny<int>()));
@@ -121,7 +121,7 @@ namespace MarvelousConfigs.BLL.Tests
             //when
 
             //then
-            Assert.ThrowsAsync<EntityNotFoundException>(async () => await _extentions.RefreshConfigByServiceId(It.IsAny<int>()));
+            Assert.ThrowsAsync<CacheLoadingException>(async () => await _extentions.RefreshConfigByServiceId(It.IsAny<int>()));
             _microservice.Verify(x => x.GetMicroserviceById(It.IsAny<int>()), Times.Once);
             _config.Verify(x => x.GetConfigsByService(It.IsAny<string>()), Times.Never);
             _prod.Verify(x => x.NotifyAdminAboutErrorToEmail(It.IsAny<string>()), Times.Once);
