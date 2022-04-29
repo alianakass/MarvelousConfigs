@@ -96,10 +96,12 @@ namespace MarvelousConfigs.API.Controllers
             _logger.LogInformation($"Request to get configs for service");
             var token = HttpContext.Request.Headers.Authorization;
             var name = HttpContext.Request.Headers[nameof(Microservice)].FirstOrDefault();
+
             if (string.IsNullOrWhiteSpace(name))
             {
-                throw new UnauthorizedException("Request attempt from unauthorized ");
+                throw new UnauthorizedException("Request attempt from unauthorized");
             }
+
             _logger.LogInformation($"Call belongs to the service {$"{name}"}");
             List<ConfigResponseModel>? configs = _map.Map<List<ConfigResponseModel>>(await _service.GetConfigsByService(token, name));
             _logger.LogInformation($"Response to a request for get configs for service {name}");

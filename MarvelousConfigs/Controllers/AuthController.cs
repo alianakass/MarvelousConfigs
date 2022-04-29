@@ -30,7 +30,8 @@ namespace MarvelousConfigs.API.Controllers
         {
             _logger.LogInformation($"Trying to login");
             if (auth == null)
-                throw new Exception("You must specify the table details in the request body");
+                throw new Exception("You must specify details in the request body");
+
             var validationResult = _validator.Validate(auth);
             if (!validationResult.IsValid)
             {
@@ -39,7 +40,7 @@ namespace MarvelousConfigs.API.Controllers
 
             _logger.LogInformation($"Call belongs to user with email {auth.Email}");
             var token = await _auth.GetToken(auth);
-            _logger.LogInformation($"Admin with email {auth.Email} successfully logged in");
+            _logger.LogInformation($"User with email {auth.Email} successfully logged in");
             return Ok(token);
         }
     }

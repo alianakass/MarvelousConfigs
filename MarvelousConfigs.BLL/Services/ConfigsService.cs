@@ -49,7 +49,7 @@ namespace MarvelousConfigs.BLL.Services
             Config newCfg = await _rep.GetConfigById(id);
             _cache.Set(id, newCfg);
             await _prod.NotifyConfigurationUpdated(newCfg);
-            await _memory.RefreshConfigByServiceId(config.ServiceId);
+            await _memory.RefreshConfigByServiceId(newCfg.ServiceId);
             _logger.LogInformation($"Configuration { id } caching");
         }
 
@@ -92,7 +92,6 @@ namespace MarvelousConfigs.BLL.Services
                => _rep.GetConfigsByService(name));
             _logger.LogInformation($"Configurations has been received");
             return _map.Map<List<ConfigModel>>(configs);
-
         }
     }
 }
