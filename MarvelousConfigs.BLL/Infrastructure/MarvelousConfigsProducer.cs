@@ -45,7 +45,7 @@ namespace MarvelousConfigs.BLL.Infrastructure
         {
             switch ((Microservice)config.ServiceId)
             {
-                case Marvelous.Contracts.Enums.Microservice.MarvelousAccountChecking:
+                case Microservice.MarvelousAccountChecking:
                     await _bus.Publish(new AccountCheckingCfg
                     {
                         Key = config.Key,

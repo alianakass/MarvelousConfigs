@@ -35,7 +35,7 @@ namespace MarvelousConfigs.BLL.Tests
             _authRequestClient = new AuthRequestClient(_logger.Object, _config, _client.Object);
         }
 
-        #region get token test
+        #region GetTokenTests
 
         [TestCaseSource(typeof(GetTokenTestCaseSource))]
         public void GetTokenTest_WhenAuthServiceReturnedHttpCode401Unauthorized_ShouldThrowUnauthorizedException(AuthRequestModel auth)
@@ -207,7 +207,7 @@ namespace MarvelousConfigs.BLL.Tests
 
         #endregion
 
-        #region send request to validate token test
+        #region SendRequestToValidateTokenTests
 
         [Test]
         public async Task SendRequestToValidateTokenTest_WhenAuthServiceReturnedHttpCode200Ok()
@@ -388,7 +388,7 @@ namespace MarvelousConfigs.BLL.Tests
 
         #endregion
 
-        #region send request with token
+        #region SendRequestWithToken
 
         [Test]
         public async Task SendRequestWithTokenTest_WhenAuthServiceReturnedHttpCode200Ok()
